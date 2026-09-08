@@ -1,0 +1,12 @@
+{
+  "runtimeCommit": "b7cd6237f5156da0cd35e01d48834f5d85b64d7f",
+  "productionUrl": "https://offline-vastness.vercel.app",
+  "deploymentUrl": "https://offline-event-horizon-4zvsi2p98-sf-i455.vercel.app",
+  "deploymentId": "dpl_B4wn1CyQrbMkg6a9uRa5sMiSSkM7",
+  "inspectorUrl": "https://vercel.com/sf-i455/offline-event-horizon/B4wn1CyQrbMkg6a9uRa5sMiSSkM7",
+  "readyState": "READY",
+  "target": "production",
+  "cliVersion": "59.11.7",
+  "githubBuildUrl": "https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34242403714",
+  "githubBuildConclusion": "success"
+}

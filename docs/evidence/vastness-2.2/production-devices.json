@@ -1,0 +1,43 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "checks": [
+    "laptop has no overflow",
+    "laptop canvas receives central input",
+    "laptop drawing buffer follows DPR",
+    "tablet has no overflow",
+    "tablet canvas receives central input",
+    "tablet drawing buffer follows DPR",
+    "tablet left thumb moves diagonally",
+    "tablet second thumb looks while moving",
+    "tablet pinch changes speed",
+    "tablet touch release settles",
+    "tablet tap selects planet",
+    "tablet orientation change preserves layout",
+    "mobile has no overflow",
+    "mobile canvas receives central input",
+    "mobile drawing buffer follows DPR",
+    "mobile left thumb moves diagonally",
+    "mobile second thumb looks while moving",
+    "mobile pinch changes speed",
+    "mobile touch release settles",
+    "mobile tap selects planet",
+    "mobile orientation change preserves layout",
+    "G enables an actual matter field",
+    "Releasing G dissipates the field",
+    "N creates a persistent star",
+    "Created star is visibly present in the scene",
+    "Created star survives reload",
+    "Visible creation control plants another star",
+    "Quiet hides interface",
+    "Audio is opt-in and mute is available",
+    "Missing WebGPU automatically selects WebGL2",
+    "WebGL2 remains navigable",
+    "WebGL2 runs reduced CPU gravity",
+    "Context loss gives a visible recovery path",
+    "Recovery link restarts WebGL2 with working keyboard input"
+  ],
+  "errors": [],
+  "expectedErrors": [
+    "THREE.THREE.WebGPURenderer: WebGL Device Lost:\n\nMessage: Unknown reason"
+  ]
+}

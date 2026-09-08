@@ -1,0 +1,40 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "assets": [
+    {
+      "path": "poster.jpg",
+      "status": 200,
+      "bytes": 196413,
+      "type": "image/jpeg",
+      "sha256": "e668b3f94e7d29e54b134b7f66e7cf1405d00be355f64953a12fcae0a615db27"
+    },
+    {
+      "path": "assets/cathedral.glb",
+      "status": 200,
+      "bytes": 863452,
+      "type": "model/gltf-binary",
+      "sha256": "882c7f871cffc66b5e226525588f9ce51aa2914b44a2f209da2266451be0f6a3"
+    },
+    {
+      "path": "assets/cathedral-low.glb",
+      "status": 200,
+      "bytes": 288196,
+      "type": "model/gltf-binary",
+      "sha256": "72a984ce24e358a180df8f575563a997403752db73402d75404fab8fea56e558"
+    },
+    {
+      "path": "fonts/dm-sans-latin.woff2",
+      "status": 200,
+      "bytes": 36932,
+      "type": "font/woff2",
+      "sha256": "9fea608a947e67020c33cad9a6fe3d60c54119dfb8cff87768a8117a15ed7543"
+    },
+    {
+      "path": "fonts/manrope-latin.woff2",
+      "status": 200,
+      "bytes": 24836,
+      "type": "font/woff2",
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+    }
+  ]
+}
