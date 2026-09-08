@@ -9,6 +9,7 @@ import { GravitationalAnomaly } from "./anomaly";
 import { QUALITY, seeded, sectorSeed, type Quality } from "./config";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { Sanctuaries } from "./sanctuaries";
+import { PlanetApproaches } from "./approaches";
 export type Body = Destination & {
   object: T.Group;
   color: number;
@@ -23,6 +24,7 @@ export class UniverseWorld {
   anomaly = new GravitationalAnomaly();
   stars: StarField;
   sanctuaries: Sanctuaries;
+  approaches: PlanetApproaches;
   private sectorMap = new Map<
     string,
     { group: T.Group; center: T.Vector3; bodies: Body[] }
@@ -164,6 +166,7 @@ export class UniverseWorld {
     }
     this.sanctuaries = new Sanctuaries(scene, this.nebulae.texture, gpu);
     this.bodies.push(...this.sanctuaries.places);
+    this.approaches = new PlanetApproaches(scene, this.bodies, this.nebulae);
     const sun = new T.DirectionalLight(0xffe4c4, 3.2);
     sun.position.set(-0.82, 0.38, 0.43);
     scene.add(sun);
@@ -373,13 +376,14 @@ export class UniverseWorld {
       }
     this.sectors = this.sectorMap.size;
   }
-  update(observer: T.Vector3, time: number, camera?: T.Camera) {
+  update(observer: T.Vector3, time: number, camera?: T.Camera, speed = 0) {
     this.stream(observer);
     this.planets.time.value = time;
     this.nebulae.time.value = time;
     for (const sector of this.sectorMap.values())
       placeRelative(sector.group, sector.center, observer);
     this.sanctuaries.update(observer, time);
+    this.approaches.update(observer, time, speed);
     this.nebulae.density.value =
       (1 - this.sanctuaries.presence * 0.72) * this.nebulaBoost;
     for (const b of this.bodies) {
@@ -390,7 +394,7 @@ export class UniverseWorld {
       if (![3, 4, 5].includes(b.archetype)) {
         b.object.rotation.set(
           b.archetype === 0 ? 0.5 : 0,
-          b.id === "orpheus" ? 0 : time * 0.003,
+          b.id === "orpheus" || b.approachArrival ? 0 : time * 0.003,
           b.archetype === 0 && b.id !== "orpheus" ? 0.8 : 0,
         );
         this.planets.update(
@@ -409,6 +413,7 @@ export class UniverseWorld {
     if (camera) this.anomaly.update(time, camera);
   }
   setQuality(quality: Quality) {
+    this.approaches.setQuality(quality);
     this.nebulae.setQuality(quality);
     this.sanctuaries.setQuality(quality);
     this.asteroids.count = QUALITY[quality].asteroids;
@@ -419,6 +424,7 @@ export class UniverseWorld {
   dispose() {
     this.disposed = true;
     this.nebulae.dispose();
+    this.approaches.dispose();
     this.sanctuaries.dispose();
   }
 }

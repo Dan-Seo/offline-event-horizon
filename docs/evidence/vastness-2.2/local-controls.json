@@ -1,0 +1,387 @@
+{
+  "url": "http://localhost:4173/?qa=1",
+  "browser": "152.0.7977.82",
+  "checks": [
+    "W moves immediately with a free cursor",
+    "W + D moves diagonally",
+    "Canvas click leaves the cursor unlocked and visible",
+    "L cannot confine the cursor",
+    "Moving the free cursor does not rotate the camera",
+    "Left-drag look responds while W is held",
+    "Wheel smoothly increases travel dial during flight",
+    "Shift gives a visible speed boost",
+    "Released motion settles",
+    "Releasing a drag stops mouse steering",
+    "UI is clickable immediately after a drag without Esc",
+    "Esc cancels automation with the cursor still free",
+    "Clicking the visible planet selects it",
+    "F starts a continuous approach",
+    "Manual W immediately overrides focus travel",
+    "Free cursor movement leaves WANDER undisturbed",
+    "A real drag interrupts WANDER in its pointer-down event",
+    "Drag look keeps manual control after interrupting WANDER",
+    "Right drag orbits the selection",
+    "Double click approaches the visible target with a free cursor",
+    "a movement works",
+    "s movement works",
+    "d movement works",
+    "Space movement works",
+    "x movement works",
+    "q roll works",
+    "e roll works",
+    "Ctrl precision slows movement",
+    "B enables WANDER",
+    "W interrupts WANDER immediately",
+    "H toggles help both ways",
+    "P pauses all environmental time",
+    "P resumes simulation",
+    "R restores the known safe view",
+    "Window blur clears held keys",
+    "Esc during a drag releases steering without a stuck gesture",
+    "Cancelled drag releases its capture for the next UI click",
+    "Moving near the sea leaves a simulated water wake",
+    "1366×768 canvas has no intercepting overlay",
+    "1366×768 has no horizontal overflow",
+    "1366×768 resize preserves controls",
+    "1024×768 canvas has no intercepting overlay",
+    "1024×768 has no horizontal overflow",
+    "1024×768 resize preserves controls",
+    "390×844 canvas has no intercepting overlay",
+    "390×844 has no horizontal overflow",
+    "390×844 resize preserves controls",
+    "No browser or shader errors"
+  ],
+  "errors": [],
+  "state": {
+    "ready": true,
+    "sanctuary": "last-light",
+    "backend": "WebGPU",
+    "paused": false,
+    "mode": "FREE",
+    "quiet": false,
+    "selected": null,
+    "selectedId": "",
+    "selectedKind": "",
+    "selectionX": 57.19902136331668,
+    "selectionY": 36.78658352476791,
+    "selectionVisible": false,
+    "nearest": "THE LAST LIGHT",
+    "quality": "HIGH",
+    "fps": 144,
+    "frameMs": 6.945833333333334,
+    "drawCalls": 103,
+    "triangles": 1693675,
+    "particles": 80000,
+    "dpr": 1,
+    "sectors": 27,
+    "distance": 24.459388392671826,
+    "velocity": 20.92190707762291,
+    "speedDial": 1,
+    "seeds": 0,
+    "field": false,
+    "time": 21.116766666667196,
+    "learning": {
+      "look": 0.1706324310415004,
+      "move": 153.48688409977623,
+      "speed": 0.6
+    },
+    "encounter": "",
+    "approach": "",
+    "relativity": {
+      "active": false,
+      "ended": false,
+      "radius": 6,
+      "properTime": 0,
+      "rate": 1,
+      "radialTide": 0,
+      "outwardLight": 0
+    },
+    "relativityLoading": false,
+    "relativityError": false,
+    "experiment": {
+      "active": 0,
+      "absorbed": 0,
+      "escaped": 0,
+      "launched": 0,
+      "gravity": 1
+    },
+    "assetFallback": false,
+    "generatedSectors": 114,
+    "createdVisible": 0,
+    "benchmark": "NONE",
+    "computeSubmitMs": 0,
+    "gpuRenderMs": null,
+    "gpuComputeMs": null,
+    "orbitSample": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "stillness": 0.02653729853094183,
+    "beautyEvent": "none",
+    "beautyEventTime": 0,
+    "eventsSeen": 0,
+    "livingParticles": 8192,
+    "waterWakes": 27,
+    "position": [
+      0,
+      22.34183552182511,
+      456.41256265925296
+    ],
+    "quaternion": [
+      0.04748214003577963,
+      0,
+      0,
+      0.9988720870950509
+    ],
+    "velocityVector": [
+      0,
+      2.0877420163305604,
+      -21.910080108825763
+    ],
+    "speed": 28,
+    "keys": [],
+    "bodies": [
+      {
+        "id": "orpheus",
+        "x": 195,
+        "y": -6610.007249379938,
+        "z": 1.0001219491961826
+      },
+      {
+        "id": "giant",
+        "x": 285.7970965640322,
+        "y": 317.354586616055,
+        "z": 0.9999972350749061
+      },
+      {
+        "id": "moon",
+        "x": 65.93073760010486,
+        "y": 419.5096564671283,
+        "z": 0.999996059084925
+      },
+      {
+        "id": "wound",
+        "x": -324.4377154372402,
+        "y": 712.7985647506113,
+        "z": 1.0000023393786799
+      },
+      {
+        "id": "cathedral",
+        "x": 1173.6480545390846,
+        "y": 118.04895780921738,
+        "z": 0.9999947868348716
+      },
+      {
+        "id": "bloom",
+        "x": 28.764903043675634,
+        "y": 345.9197740108229,
+        "z": 0.9999969602535309
+      },
+      {
+        "id": "ember",
+        "x": 963.8786765176833,
+        "y": 618.6249184297354,
+        "z": 0.9999936461533332
+      },
+      {
+        "id": "serein",
+        "x": -202.66872473857782,
+        "y": 565.8474478739715,
+        "z": 0.9999981667934179
+      },
+      {
+        "id": "nacre",
+        "x": 470.36999249751966,
+        "y": 408.3324730508309,
+        "z": 0.9999985795889852
+      },
+      {
+        "id": "last-light",
+        "x": 195,
+        "y": 509.33638072855496,
+        "z": 0.9988944057574015
+      },
+      {
+        "id": "moonfall",
+        "x": -162.69723666294468,
+        "y": 483.2500853247307,
+        "z": 0.9998587124815116
+      },
+      {
+        "id": "forest",
+        "x": 716.8365490405002,
+        "y": 485.5913156060151,
+        "z": 0.999772166497577
+      },
+      {
+        "id": "veil",
+        "x": 531.7662292750445,
+        "y": 409.70912843238614,
+        "z": 0.9999036831719861
+      },
+      {
+        "id": "living-sky",
+        "x": 119.78209366277709,
+        "y": 402.3862362328955,
+        "z": 0.9999306883144523
+      },
+      {
+        "id": "sector--1,-1,-1",
+        "x": -314.390703952363,
+        "y": 987.3866545913929,
+        "z": 0.9999982282589314
+      },
+      {
+        "id": "sector-0,-1,-1",
+        "x": 902.1246603026068,
+        "y": 796.3463348084146,
+        "z": 0.9999981944292597
+      },
+      {
+        "id": "sector--1,0,-1",
+        "x": -380.35522342050757,
+        "y": -65.74137088493032,
+        "z": 0.9999980801845157
+      },
+      {
+        "id": "sector-0,0,-1",
+        "x": 543.9673129843653,
+        "y": 156.20417833222538,
+        "z": 0.9999986437313308
+      },
+      {
+        "id": "sector-0,1,-1",
+        "x": 826.3611093453013,
+        "y": -1152.9023345683916,
+        "z": 0.9999976102022033
+      },
+      {
+        "id": "sector--1,-1,0",
+        "x": 720.1592674279852,
+        "y": 90.18494344214682,
+        "z": 1.0000015833012392
+      },
+      {
+        "id": "sector-0,-1,0",
+        "x": -583.7735850166737,
+        "y": -591.2329327109017,
+        "z": 1.0000026432585993
+      },
+      {
+        "id": "sector--1,0,0",
+        "x": 1496.2307220016617,
+        "y": 1605.8764357351229,
+        "z": 1.0000034789394436
+      },
+      {
+        "id": "cloud--1,0,0",
+        "x": 865.293457978812,
+        "y": 1152.7067466463664,
+        "z": 1.0000022494254306
+      },
+      {
+        "id": "sector-0,0,0",
+        "x": -659.7597507592159,
+        "y": 944.033446541539,
+        "z": 1.000002282981719
+      },
+      {
+        "id": "sector--1,1,0",
+        "x": 1953.8433436565574,
+        "y": 5058.570627811076,
+        "z": 1.000007306883002
+      },
+      {
+        "id": "cloud--1,1,0",
+        "x": 1044.5465445277919,
+        "y": 3039.547540266554,
+        "z": 1.0000039512633623
+      },
+      {
+        "id": "sector-0,1,0",
+        "x": -792.2417540786624,
+        "y": 5937.330952068918,
+        "z": 1.0000078105293047
+      },
+      {
+        "id": "sector-0,-1,1",
+        "x": -49.78817380127693,
+        "y": 341.78674129072954,
+        "z": 1.0000009269962975
+      },
+      {
+        "id": "sector--1,0,1",
+        "x": 479.93650252938863,
+        "y": 695.2909219858187,
+        "z": 1.0000010402231183
+      },
+      {
+        "id": "sector--1,1,1",
+        "x": 431.82278804514584,
+        "y": 1227.9888500101026,
+        "z": 1.0000013336038813
+      },
+      {
+        "id": "sector-0,1,1",
+        "x": -129.7281320473155,
+        "y": 1314.78438947297,
+        "z": 1.0000014025449044
+      },
+      {
+        "id": "sector-1,0,-1",
+        "x": 1477.4208693138858,
+        "y": 23.40476762852952,
+        "z": 0.9999979209737554
+      },
+      {
+        "id": "sector-1,1,-1",
+        "x": 1395.6667532159597,
+        "y": -729.4849854706788,
+        "z": 0.9999978339213543
+      },
+      {
+        "id": "sector-1,-1,0",
+        "x": -2206.9558375309875,
+        "y": -563.5067635132357,
+        "z": 1.0000037607809222
+      },
+      {
+        "id": "cloud-1,-1,0",
+        "x": -1465.5142746294123,
+        "y": -76.62596499880628,
+        "z": 1.0000025831171668
+      },
+      {
+        "id": "sector-1,0,0",
+        "x": -2951.6898901936775,
+        "y": 1328.0028736372835,
+        "z": 1.0000048312532894
+      },
+      {
+        "id": "sector-1,1,0",
+        "x": -1562.1191057108476,
+        "y": 2436.9548259718213,
+        "z": 1.0000034371933815
+      },
+      {
+        "id": "sector-1,-1,1",
+        "x": -449.0814034961092,
+        "y": 274.8360995840792,
+        "z": 1.0000011575747398
+      },
+      {
+        "id": "sector-1,0,1",
+        "x": -420.40456877478994,
+        "y": 660.7613515810824,
+        "z": 1.0000011354918374
+      }
+    ]
+  }
+}

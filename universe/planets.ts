@@ -24,7 +24,7 @@ import {
 } from "three/tsl";
 const sunDirection = vec3(-0.82, 0.38, 0.43).normalize();
 // UV bumpMap() cannot differentiate position-based noise. Use actual screen derivatives.
-function reliefNormal(height: T.Node<"float">) {
+export function reliefNormal(height: T.Node<"float">) {
   return Fn(() => {
     const h = height.mul(modelScale.x),
       dx = positionView.dFdx(),
@@ -310,7 +310,10 @@ export class PlanetLibrary {
           color(0xe4e8df),
           smoothstep(0.0, 0.6, cloud),
         );
-        m.opacityNode = (kind === 10 ? smoothstep(0.06, 0.43, cloud).mul(0.7) : smoothstep(0.18, 0.3, cloud).mul(0.8));
+        m.opacityNode =
+          kind === 10
+            ? smoothstep(0.06, 0.43, cloud).mul(0.7)
+            : smoothstep(0.18, 0.3, cloud).mul(0.8);
         m.normalNode = reliefNormal(cloud.mul(0.00035));
         material = m;
         this.clouds.set(kind, m);

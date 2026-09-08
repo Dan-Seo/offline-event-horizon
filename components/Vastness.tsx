@@ -15,6 +15,8 @@ import {
 } from "@/universe/language";
 import { ArrivalGuide, LanguageChoice } from "./ArrivalGuide";
 import GravityExperiment from "./GravityExperiment";
+import RelativityPanel from "./RelativityPanel";
+import { approachText } from "@/universe/approach-text";
 function Mark({
   kind,
 }: {
@@ -169,6 +171,8 @@ export default function Vastness() {
       data-seeds={state.seeds}
       data-sanctuary={state.sanctuary}
       data-encounter={state.encounter}
+      data-approach={state.approach}
+      data-observation={state.relativity.active}
     >
       <div ref={host} className="universe-canvas" />
       <div className="vignette" aria-hidden="true" />
@@ -193,7 +197,9 @@ export default function Vastness() {
         <>
           <div
             className={`arrival-thought${intro && !guideActive && !state.encounter && !panel && !help ? " visible" : ""}`}
-            aria-hidden={!intro || guideActive || !!state.encounter || !!panel || help}
+            aria-hidden={
+              !intro || guideActive || !!state.encounter || !!panel || help
+            }
           >
             <p>{c.thought}</p>
             <span>{c.stay}</span>
@@ -497,21 +503,61 @@ export default function Vastness() {
           {!guideActive &&
             !panel &&
             !help &&
+            !state.relativity.active &&
             state.encounter &&
             encounter.description && (
               <aside className="encounter-note" aria-label={encounter.name}>
                 <p className="eyebrow">{encounter.kind}</p>
-                <h2>{encounter.name}</h2>
-                <p>{encounter.description}</p>
+                <h2>
+                  {approachText(state.approach, language)?.[0] ??
+                    encounter.name}
+                </h2>
+                <p>
+                  {approachText(state.approach, language)?.[1] ??
+                    encounter.description}
+                </p>
                 {state.encounter === "wound" ? (
-                  <button onClick={() => action("experiment")}>
-                    {c.experiment} <span aria-hidden="true">↗</span>
-                  </button>
+                  <>
+                    <button
+                      disabled={state.relativityLoading}
+                      onClick={() => void engine.current?.beginObservation()}
+                    >
+                      {state.relativityLoading
+                        ? language === "ko"
+                          ? "광선 계산 준비 중…"
+                          : "Preparing light paths…"
+                        : language === "ko"
+                          ? "지평선 안으로 · 자유낙하 관측"
+                          : "Beyond the horizon · observe freefall"}{" "}
+                      ↗
+                    </button>
+                    {state.relativityError && (
+                      <small role="status">
+                        {language === "ko"
+                          ? "관측 화면을 열지 못했어요. 기존 우주는 계속 탐험할 수 있어요."
+                          : "The observation could not open. Exploration is still available."}
+                      </small>
+                    )}
+                    <button onClick={() => action("experiment")}>
+                      {c.experiment} <span aria-hidden="true">↗</span>
+                    </button>
+                  </>
                 ) : (
-                  <button onClick={() => action("orbit")}>
-                    {state.mode === "ORBIT" ? c.orbiting : c.orbit}{" "}
-                    <span aria-hidden="true">↻</span>
-                  </button>
+                  <>
+                    {approachText(state.encounter, language) &&
+                      !state.approach && (
+                        <button onClick={() => engine.current?.approach()}>
+                          {language === "ko"
+                            ? "더 가까이 · 풍경 속으로"
+                            : "Closer · into the landscape"}{" "}
+                          ↘
+                        </button>
+                      )}
+                    <button onClick={() => action("orbit")}>
+                      {state.mode === "ORBIT" ? c.orbiting : c.orbit}{" "}
+                      <span aria-hidden="true">↻</span>
+                    </button>
+                  </>
                 )}
                 <small>
                   {state.encounter === "wound"
@@ -520,6 +566,15 @@ export default function Vastness() {
                 </small>
               </aside>
             )}
+          {state.relativity.active && !panel && !help && (
+            <RelativityPanel
+              language={language}
+              state={state}
+              onExit={() => engine.current?.endObservation()}
+              onRate={(rate) => engine.current?.setObservationRate(rate)}
+              onPause={() => action("pause")}
+            />
+          )}
           <div
             className={`touch-zones${intro && !guideActive ? " visible" : ""}`}
             aria-hidden="true"

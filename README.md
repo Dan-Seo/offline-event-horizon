@@ -1,6 +1,6 @@
 # OFFLINE // VASTNESS
 
-A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.1 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
+A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.2 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. A small light you leave behind is saved on this device.
 
@@ -20,11 +20,15 @@ These places are spatial neighbors on one ocean world. **Explore** opens optiona
 
 ## Start comfortably
 
-Choose **한국어 / English** on arrival; the initial choice follows the browser language and a saved choice takes precedence. The optional movement guide responds to actual look, flight, and speed input, with separate touch instructions. It returns the cursor when the lesson ends. Skip it, choose Wander immediately, or replay it from Help at any time. Language remains available in Comfort settings.
+Choose **한국어 / English** on arrival; the initial choice follows the browser language and a saved choice takes precedence. The optional movement guide responds to actual look, flight, and speed input, with separate touch instructions. The cursor stays free throughout. Skip it, choose Wander immediately, or replay it from Help at any time. Language remains available in Comfort settings.
 
 Beyond the water, **Serein** has wind-shaped dunes and salt basins; **Nacre** has green oceans, pearl clouds, and luminous night coasts. Selene's ice basins and fractures, Ember's warm crustal seams, and the Silent Giant's slow storm bands distinguish the other worlds. Select a planet and use its orbit button or **O** to drift around it; manual input takes over immediately.
 
 At **The Wound**, choose **Release a little matter** or press **T**. Three initial speeds produce falling, bound, and escaping trajectories. Changing gravity affects particles already in flight. This optional experiment preserves the quiet default scene.
+
+Choose **Beyond the horizon · freefall observation** for a separate scientific observation. A radial infaller crosses an ideal Schwarzschild horizon while GPU-integrated null geodesics determine the visible disk and sky. Drag to look, P to pause, and WASD or Esc to restore the exterior flight position. The panel explains the proper-time clock, frequency transfer, and the chosen numerical stop. It makes no claim to show an observed interior or a physical escape. [Equations, references, and limits](docs/RELATIVITY.md).
+
+The five distant hero planets now offer **Closer · into the landscape**. Existing smooth flight continues into Selene's ice canyon, Serein's dune ridges, Ember's cooling caldera, Nacre's reflective lagoon and luminous canopy, or the Silent Giant's cloud tops beneath its rings. These regions stay attached to their planets and remain freely navigable. They are regional environments, not complete planet-wide landing systems. Manual movement interrupts the approach immediately.
 
 ## Run
 
@@ -48,23 +52,23 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 
 ## Fly
 
-| Input                | Action                                                           |
-| -------------------- | ---------------------------------------------------------------- |
-| W / A / S / D        | Forward / left / backward / right                                |
-| Left drag            | Look with damped angular motion; the cursor stays free           |
-| Wheel                | Smoothly change the travel-speed multiplier                      |
-| Shift / Ctrl         | Boost / precision                                                |
-| Q / E                | Roll                                                             |
-| Space / X            | Rise / descend                                                   |
-| Click / right drag   | Select a visible celestial body / orbit the selection            |
-| Double click / F     | Approach the selected body                                       |
-| R / Esc              | Return to the water / cancel automation                           |
-| P / H                | Pause simulation / controls help                                 |
-| M / O / T            | Explore / slow planetary orbit / nearby black-hole experiment    |
-| B / K                | Wander / quiet                                                   |
-| G / V                | Hold to attract / repel matter                                   |
-| N                    | Plant a star                                                     |
-| Backquote            | Technical observatory                                            |
+| Input              | Action                                                        |
+| ------------------ | ------------------------------------------------------------- |
+| W / A / S / D      | Forward / left / backward / right                             |
+| Left drag          | Look with damped angular motion; the cursor stays free        |
+| Wheel              | Smoothly change the travel-speed multiplier                   |
+| Shift / Ctrl       | Boost / precision                                             |
+| Q / E              | Roll                                                          |
+| Space / X          | Rise / descend                                                |
+| Click / right drag | Select a visible celestial body / orbit the selection         |
+| Double click / F   | Approach the selected body                                    |
+| R / Esc            | Return to the water / cancel automation                       |
+| P / H              | Pause simulation / controls help                              |
+| M / O / T          | Explore / slow planetary orbit / nearby black-hole experiment |
+| B / K              | Wander / quiet                                                |
+| G / V              | Hold to attract / repel matter                                |
+| N                  | Plant a star                                                  |
+| Backquote          | Technical observatory                                         |
 
 Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. The application never requests pointer lock. Hovering the free cursor leaves Wander undisturbed; an intentional drag or movement key takes control immediately.
 
@@ -74,7 +78,7 @@ Wander is optional and stays with a place instead of cycling through a destinati
 
 Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio. React owns the small interface; the renderer, input state, camera, and simulation run outside React's render loop. Raw Three.js gives direct control over GPU buffers, compilation, render passes, and streaming without another scene reconciler.
 
-- `universe/input.ts` centralizes keys, pointer capture/lock, touch, wheel, blur, and cancellation.
+- `universe/input.ts` centralizes keys, temporary drag capture, touch, wheel, blur, and cancellation.
 - `flight.ts` handles damped velocity and angular input, distance-aware speed, focus, orbit, forgiving surface clearance, and optional Wander.
 - `coordinates.ts` retains double-precision global positions on CPU, subtracts the observer, then compresses the far field logarithmically while preserving angular size.
 - `world.ts` maintains 27 neighboring seeded sectors. New sectors arrive as the observer travels; distant sector resources are released. Landmark bodies coexist in the same spatial system.
@@ -83,6 +87,8 @@ Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio.
 - `stars.ts` combines a distant clustered stellar population with sector stars and local matter for parallax.
 - `anomaly.ts` builds the accretion disk and lensed arcs; `engine.ts` adds bounded screen-space distortion and restrained bloom.
 - `orbit-model.ts` integrates up to 144 interactive test particles on CPU with fixed 1/120-second velocity-Verlet steps and softened inverse-square gravity. `orbit-experiment.ts` renders their measured position histories. Dense ambient matter remains on GPU; the small experiment uses the same force model on both render backends.
+- `relativity-model.ts` contains the Schwarzschild observer and null-ray reference model. The lazy-loaded `relativity.ts` traces the same equations per fragment through TSL, with a capped render target on both WebGPU and WebGL2. `RelativityPanel.tsx` keeps explanatory controls in English and Korean.
+- `approaches.ts`, `approach-terrain.ts`, and `approach-water.ts` attach deterministic regional geometry, collision clearance, reflective water, instanced organic forms, and three-dimensional cloud volumes to the existing planetary bodies. They reuse the current flight controller, materials, and floating origin.
 - `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels clears held input. Drag capture lasts only for the gesture and is also released on blur or cancellation; the cursor remains visible and unrestricted.
 - `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
 - `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
@@ -125,9 +131,9 @@ When WebGPU is unavailable, Three.js automatically uses WebGL2. Procedural shade
 
 ## Scientific and practical limits
 
-This is physics-inspired interactive art. Dust and released test particles respond to actual force integration. The black-hole experiment uses a prescribed absorbing sphere and a finite escape boundary; its gravity slider and starting speeds use artistic units. Gravitational lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. This is not general relativity, an N-body simulation, or a planet-formation model.
+The main universe is physics-inspired interactive art. Dust and released test particles respond to actual force integration. The Newtonian black-hole experiment uses a prescribed absorbing sphere and a finite escape boundary; its gravity slider and starting speeds use artistic units. Its ambient lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. The separate **freefall observation** solves ideal Schwarzschild light geodesics and frequency transfer; its sources, exposure, and color remain illustrative. It omits spin, collapse history, plasma dynamics, and quantum gravity. See the [model document](docs/RELATIVITY.md) for numerical boundaries and validation. Neither mode is an N-body or planet-formation simulation.
 
-The five local environments contain near-surface geometry and broad collision floors; trees remain permeable. Other planets support close orbital inspection, not full planetary terrain landing. The mirror is a tangent-plane reflection on a gently curved cap, not a physically exact curved-water reflection. Volumes clip against opaque scene depth, while transparent foliage and water use approximate compositing; there is no multiple-scattering solution. Waterfalls are animated geometric curtains rather than fluid simulation. The large visitor and rare-event timing are authored approximations; small creatures have integrated dynamic state. The distant galactic star field is an angular background population. Persistence is local to the browser and retains up to 24 created lights. Reduced motion softens navigation rather than eliminating all motion; P pauses the simulation. No UE5 edition was built.
+The five original sanctuaries and five added planetary regions contain near-surface geometry or cloud volumes and forgiving collision envelopes; vegetation remains permeable. Procedurally streamed planets outside those hero regions support orbital inspection, not full terrain landing. Mirrors use tangent-plane reflection on curved caps, not physically exact curved-water reflection. Sanctuary volumes clip against opaque scene depth, while transparent foliage and water use approximate compositing; the planetary cloud volumes are cheaper box ray marches. There is no multiple-scattering solution. Waterfalls are animated geometric curtains rather than fluid simulation. The large visitor and rare-event timing are authored approximations; small creatures have integrated dynamic state. The distant galactic star field is an angular background population. Persistence is local to the browser and retains up to 24 created lights. Reduced motion softens navigation rather than eliminating all motion; P pauses the simulation. No UE5 edition was built.
 
 This is designed for a restful experience. No therapeutic benefit has been established. No participant study or personally photographed reconstruction has been completed. [Portfolio framing](docs/PORTFOLIO.md), [a small formative-study protocol](docs/FORMATIVE-STUDY.md), and [a future image-reconstruction workflow](docs/RECONSTRUCTION.md) make the next personal contributions concrete without inventing results.
 
@@ -138,6 +144,7 @@ npm run qa:controls
 npm run qa:onboarding
 npm run qa:touch-guide
 npm run qa:encounters
+npm run qa:approaches
 npm run qa:devices
 npm run qa:resilience
 npm run qa:performance
@@ -148,6 +155,6 @@ npm run test:reconstruction
 
 These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, onboarding, encounter, and visual scripts accept `QA_BROWSER=msedge`. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. The encounter suite travels through five planets and the anomaly without teleporting, tests automatic-orbit interruption, and exercises all three release outcomes. Set `QA_BACKEND=webgl` for its fallback pass or `QA_PLACES=serein,nacre` for a shorter route. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions. Earlier pre-sanctuary scripts remain as historical records.
 
-See [the 2.1 verification record](docs/QA-2.1.md) for this update and [the 2.0 record](docs/QA-2.0.md) for the sanctuary renderer's earlier validation. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
+See [the 2.2 verification record](docs/QA-2.2.md), [the 2.1 record](docs/QA-2.1.md), and [the 2.0 record](docs/QA-2.0.md). Earlier performance numbers are browser frame intervals and renderer counters. The optional `?qa=1&profile=1` path adds GPU render/compute pass timestamps when supported; these exclude CPU and presentation time. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
 The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

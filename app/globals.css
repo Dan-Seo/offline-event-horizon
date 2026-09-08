@@ -969,3 +969,136 @@ button:disabled {
     transition: none !important;
   }
 }
+.relativity-note {
+  position: absolute;
+  z-index: 5;
+  left: 42px;
+  bottom: 116px;
+  width: min(388px, calc(100% - 44px));
+  max-height: calc(100dvh - 205px);
+  overflow-y: auto;
+  padding: 22px 25px;
+  background: rgba(5, 11, 15, 0.89);
+  border: 1px solid rgba(181, 205, 209, 0.16);
+  border-radius: 4px;
+  color: #d2dcdb;
+  pointer-events: auto;
+}
+.relativity-note h2 {
+  font-size: 19px;
+  line-height: 1.6;
+  font-weight: 400;
+  margin: 13px 0;
+}
+.relativity-note p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #bdcac9;
+}
+.relativity-note .eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #92acae;
+}
+.relativity-readings {
+  display: flex;
+  gap: 18px;
+  padding: 12px 0;
+  border-block: 1px solid #aabbcc24;
+}
+.relativity-readings span {
+  font-size: 10px;
+  color: #8ea5aa;
+}
+.relativity-readings b {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: #e8ddd0;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.relativity-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.relativity-note button,
+.relativity-note select,
+.relativity-note summary {
+  min-height: 44px;
+  cursor: pointer;
+}
+.relativity-note button {
+  background: transparent;
+  border: 0;
+  color: #e2dbcc;
+  padding: 9px 0;
+  font-size: 12px;
+  text-align: left;
+}
+.relativity-note label {
+  font-size: 11px;
+}
+.relativity-note select {
+  background: #101a1f;
+  border: 1px solid #aabbcc33;
+  color: #e2dbcc;
+  font-size: 11px;
+  margin-left: 5px;
+  border-radius: 3px;
+}
+.relativity-note summary {
+  font-size: 11px;
+  color: #a3babc;
+  display: list-item;
+  align-content: center;
+}
+.relativity-note a {
+  display: block;
+  font-size: 11px;
+  padding: 8px 0;
+}
+.relativity-note small {
+  display: block;
+  color: #879d9e;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.quiet > .relativity-note {
+  opacity: 0;
+  pointer-events: none;
+}
+.quiet > .relativity-note * {
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  .relativity-note {
+    left: 18px;
+    right: 18px;
+    bottom: 112px;
+    width: auto;
+    padding: 14px 18px;
+    max-height: calc(100dvh - 195px);
+  }
+  .relativity-note h2 {
+    font-size: 17px;
+    margin: 8px 0;
+  }
+  .relativity-note p {
+    font-size: 11px;
+  }
+  .relativity-readings {
+    gap: 21px;
+    padding: 9px 0;
+  }
+}
+@media (max-height: 570px) {
+  .relativity-note {
+    top: 70px;
+    bottom: auto;
+    max-height: calc(100dvh - 155px);
+    padding: 14px 18px;
+  }
+}

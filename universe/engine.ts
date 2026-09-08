@@ -10,6 +10,7 @@ import { pass, uniform, uv, float, smoothstep } from "three/tsl";
 import { bloom } from "three/addons/tsl/display/BloomNode.js";
 import { initialSnapshot, type UniverseSnapshot } from "./state";
 import type { ReleaseKind } from "./orbit-model";
+import type { RelativityObservation } from "./relativity";
 export class UniverseEngine {
   scene = new T.Scene();
   camera = new T.PerspectiveCamera(57, 1, 0.5, 20000000);
@@ -38,6 +39,13 @@ export class UniverseEngine {
   private glowStrength = uniform(0.16);
   benchmarkMode = "NONE";
   private beforeBenchmark: Quality = "HIGH";
+  private relativity?: RelativityObservation;
+  private observationRequest = 0;
+  private observationPreparation?: Promise<void>;
+  private profile = false;
+  private timestampsPending = false;
+  private gpuRenderMs: number | null = null;
+  private gpuComputeMs: number | null = null;
   constructor(
     private host: HTMLElement,
     private report: (s: UniverseSnapshot) => void,
@@ -64,6 +72,7 @@ export class UniverseEngine {
         antialias: true,
         forceWebGL: params.get("backend") === "webgl",
         logarithmicDepthBuffer: true,
+        trackTimestamp: params.has("profile"),
       });
       await this.renderer.init();
       mark("renderer");
@@ -76,6 +85,10 @@ export class UniverseEngine {
       ).isWebGLBackend
         ? "WebGL2"
         : "WebGPU";
+      this.profile =
+        params.has("profile") &&
+        this.state.backend === "WebGPU" &&
+        this.renderer.hasFeature("timestamp-query");
       this.renderer.toneMapping = T.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.08;
       this.scene.background = new T.Color(0x020407);
@@ -154,6 +167,9 @@ export class UniverseEngine {
       // while async pipelines are still pending can bind an unfinished pipeline.
       // Warm this one material with the real first draw after other shaders finish.
       this.world.sanctuaries.sea.mesh.visible = false;
+      this.world.approaches.reflectiveMeshes.forEach(
+        (mesh) => (mesh.visible = false),
+      );
       const pending = this.scenePass
         ? this.scenePass.compileAsync(this.renderer)
         : this.renderer.compileAsync(this.scene, this.camera);
@@ -198,12 +214,45 @@ export class UniverseEngine {
   }
   action = (a: InputAction) => {
     if (a === "manual") {
+      if (
+        this.relativity?.active &&
+        ([...this.input.keys].some((k) =>
+          [
+            "KeyW",
+            "KeyA",
+            "KeyS",
+            "KeyD",
+            "Space",
+            "KeyX",
+            "ShiftLeft",
+            "ShiftRight",
+          ].includes(k),
+        ) ||
+          this.input.touchMove.lengthSq() > 0.001)
+      )
+        this.endObservation();
+      if (this.state.relativityLoading) {
+        this.observationRequest++;
+        this.state.relativityLoading = false;
+      }
       if (this.flight.mode !== "FREE") {
         this.flight.cancel();
         this.flight.velocity.multiplyScalar(0.15);
       }
       return;
     }
+    if (
+      [
+        "cancel",
+        "reset",
+        "places",
+        "wander",
+        "focus",
+        "orbit",
+        "experiment",
+      ].includes(a)
+    )
+      this.endObservation();
     if (["help", "hud", "places", "experiment"].includes(a)) {
       this.input?.clear();
       this.flight.cancel();
@@ -242,6 +291,7 @@ export class UniverseEngine {
     this.report({ ...this.state });
   };
   select(id: string, travel = false) {
+    this.endObservation();
     const b = [...this.world.bodies, ...this.creation.stars].find(
       (b) => b.id === id,
     );
@@ -249,6 +299,81 @@ export class UniverseEngine {
     this.flight.selected = b;
     this.input.selected = true;
     if (travel) this.flight.focus(b);
+  }
+  async beginObservation() {
+    if (this.state.relativityLoading || this.relativity?.active) return;
+    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    if (this.flight.position.distanceTo(hole.position) > hole.radius * 12)
+      return;
+    const request = ++this.observationRequest;
+    this.input.clear();
+    this.flight.cancel();
+    this.flight.velocity.set(0, 0, 0);
+    this.state.relativityLoading = true;
+    this.state.relativityError = false;
+    this.report({ ...this.state });
+    try {
+      this.observationPreparation ??= (async () => {
+        const { RelativityObservation } = await import("./relativity");
+        if (this.disposed) return;
+        this.relativity = new RelativityObservation(
+          this.renderer,
+          new T.Vector3(0, 0, 1).applyQuaternion(
+            this.world.anomaly.diskRotation,
+          ),
+        );
+        await this.relativity.prepare();
+      })();
+      await this.observationPreparation;
+      if (this.disposed || request !== this.observationRequest) return;
+      if (!this.relativity) return;
+      this.relativity.setQuality(this.state.quality);
+      this.relativity.start(
+        this.flight.position,
+        this.flight.quaternion,
+        hole.position,
+        hole.radius,
+      );
+      this.flight.quaternion.multiply(
+        new T.Quaternion().setFromEuler(new T.Euler(0.12, 0.42, 0)),
+      );
+      this.input.selected = false;
+    } catch (e) {
+      console.warn("Relativistic observation unavailable", e);
+      this.state.relativityError = true;
+      this.relativity?.dispose();
+      this.relativity = undefined;
+      this.observationPreparation = undefined;
+    } finally {
+      if (!this.disposed && request === this.observationRequest) {
+        this.state.relativityLoading = false;
+        this.updateSnapshot();
+        this.report({ ...this.state });
+      }
+    }
+  }
+  endObservation() {
+    this.observationRequest++;
+    this.state.relativityLoading = false;
+    if (!this.relativity?.active) return;
+    this.flight.position.copy(this.relativity.returnPosition);
+    this.flight.quaternion.copy(this.relativity.returnQuaternion);
+    this.flight.cancel();
+    this.flight.velocity.set(0, 0, 0);
+    this.relativity.active = false;
+    this.input.selected = !!this.flight.selected;
+    this.state.relativity = this.relativity.snapshot();
+  }
+  setObservationRate(rate: number) {
+    if (this.relativity && [0.25, 1, 4].includes(rate))
+      this.relativity.rate = rate;
+  }
+  approach() {
+    const target = this.world.bodies.find((b) => b.id === this.state.encounter);
+    if (target?.approachArrival) {
+      this.select(target.id);
+      this.flight.approach(target);
+    }
   }
   releaseMatter(kind: ReleaseKind) {
     const hole = this.world.bodies.find((b) => b.id === "wound")!;
@@ -273,6 +398,7 @@ export class UniverseEngine {
     this.world.anomaly.experiment.clear();
   }
   private pick = (p: T.Vector2, travel: boolean) => {
+    if (this.relativity?.active) return;
     this.raycaster.setFromCamera(p, this.camera);
     let best = Infinity,
       selected;
@@ -343,16 +469,35 @@ export class UniverseEngine {
           : this.benchmarkMode === "GRAVITY"
             ? 2
             : 0;
-      this.flight.update(dt, this.input, [
-        ...this.world.bodies,
-        ...this.creation.stars,
-      ]);
+      this.flight.update(
+        dt,
+        this.input,
+        this.relativity?.active
+          ? []
+          : [...this.world.bodies, ...this.creation.stars],
+      );
+      if (this.relativity?.active) {
+        const hole = this.world.bodies.find((b) => b.id === "wound")!;
+        this.relativity.advance(this.state.paused ? 0 : dt);
+        this.flight.position
+          .copy(hole.position)
+          .addScaledVector(
+            this.relativity.outward,
+            this.relativity.radius * hole.radius,
+          );
+        this.flight.velocity.set(0, 0, 0);
+      }
       this.camera.quaternion.copy(this.flight.quaternion);
       this.camera.updateMatrixWorld();
       if (!this.state.paused) this.state.time += dt;
       this.world.sanctuaries.respond(this.flight.velocity.length());
       this.flight.holdBeauty = this.world.sanctuaries.event !== "none";
-      this.world.update(this.flight.position, this.state.time, this.camera);
+      this.world.update(
+        this.flight.position,
+        this.state.time,
+        this.camera,
+        this.flight.velocity.length(),
+      );
       this.world.anomaly.simulate(this.state.paused ? 0 : dt);
       this.world.sanctuaries.life.update(
         this.renderer,
@@ -397,7 +542,30 @@ export class UniverseEngine {
         Math.abs(this.projection.y) < 1.6
           ? 1
           : 0;
-      this.pipeline!.render();
+      if (this.relativity?.active)
+        this.relativity.render(
+          this.camera,
+          this.host.clientWidth,
+          this.host.clientHeight,
+        );
+      else this.pipeline!.render();
+      if (this.profile && !this.timestampsPending) {
+        this.timestampsPending = true;
+        void Promise.all([
+          this.renderer.resolveTimestampsAsync("render"),
+          this.renderer.resolveTimestampsAsync("compute"),
+        ])
+          .then(([render, compute]) => {
+            this.gpuRenderMs = render ?? null;
+            this.gpuComputeMs = compute ?? null;
+          })
+          .catch(() => {
+            this.profile = false;
+          })
+          .finally(() => {
+            this.timestampsPending = false;
+          });
+      }
       this.audio.update(this.state.quiet, this.world.sanctuaries.active);
       this.frames.push(elapsed * 1000);
       if (this.frames.length > 120) this.frames.shift();
@@ -434,13 +602,23 @@ export class UniverseEngine {
     this.state.field = this.matter.fieldActive;
     this.state.learning = { ...this.input.learning };
     this.state.experiment = this.world.anomaly.experiment.model.snapshot();
-    const encounter = this.world.bodies.find(
-      (b) =>
-        b.id === selected?.id &&
-        ![4, 5, 7].includes(b.archetype) &&
-        this.flight.position.distanceTo(b.position) <
-          b.radius * (b.archetype === 3 ? 12 : 7.5),
-    );
+    if (this.relativity) this.state.relativity = this.relativity.snapshot();
+    this.state.approach = this.world.approaches?.active ?? "";
+    const encounter =
+      this.world.bodies.find(
+        (b) =>
+          b.id === selected?.id &&
+          ![4, 5, 7].includes(b.archetype) &&
+          this.flight.position.distanceTo(b.position) <
+            b.radius * (b.archetype === 3 ? 12 : 7.5),
+      ) ??
+      this.world.bodies.find(
+        (b) =>
+          b.id !== "orpheus" &&
+          ![4, 5, 7].includes(b.archetype) &&
+          this.flight.position.distanceTo(b.position) <
+            b.radius * (b.archetype === 3 ? 4 : 1.5),
+      );
     this.state.encounter =
       this.flight.mode === "TRAVEL" ? "" : (encounter?.id ?? "");
     let nearest = Infinity;
@@ -479,6 +657,11 @@ export class UniverseEngine {
           this.projection.z < 1 && !("archetype" in b && b.archetype === 7);
       }
     } else this.state.selectionVisible = false;
+    if (
+      this.relativity?.active ||
+      this.state.approach === this.flight.selected?.id
+    )
+      this.state.selectionVisible = false;
     this.state.frameMs =
       this.frames.reduce((a, b) => a + b, 0) / this.frames.length;
     this.state.fps = Math.round(1000 / this.state.frameMs);
@@ -490,6 +673,7 @@ export class UniverseEngine {
     this.qualityAt = performance.now();
     this.world?.setQuality(q);
     this.matter?.setQuality(q);
+    this.relativity?.setQuality(q);
     this.glowStrength.value = q === "BATTERY" ? 0 : 0.15;
     this.resize();
   }
@@ -515,6 +699,8 @@ export class UniverseEngine {
         .length,
       benchmark: this.benchmarkMode,
       computeSubmitMs: this.matter.computeMs,
+      gpuRenderMs: this.gpuRenderMs,
+      gpuComputeMs: this.gpuComputeMs,
       orbitSample: Array.from(
         this.world.anomaly.experiment.model.positions.slice(0, 9),
       ),
@@ -558,6 +744,7 @@ export class UniverseEngine {
     this.world?.dispose();
     this.matter?.dispose();
     this.pipeline?.dispose();
+    this.relativity?.dispose();
     const geometries = new Set<T.BufferGeometry>(),
       materials = new Set<T.Material>();
     this.scene.traverse((o) => {

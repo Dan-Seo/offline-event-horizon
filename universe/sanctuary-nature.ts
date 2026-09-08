@@ -85,7 +85,7 @@ function islandGeometry(
   g.computeVertexNormals();
   return g;
 }
-function treeGeometry(seed: number) {
+export function treeGeometry(seed: number) {
   const random = seeded(seed),
     parts: T.BufferGeometry[] = [],
     tips: T.Vector3[] = [];

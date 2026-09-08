@@ -1,0 +1,105 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "name": "serein starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "serein is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "Planet orbit actually moves and turns the observer",
+      "passed": true
+    },
+    {
+      "name": "Orbit yields within the actual key event, before another render",
+      "passed": true
+    },
+    {
+      "name": "Manual input interrupts planet orbit within 80 ms",
+      "passed": true
+    },
+    {
+      "name": "wound starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "wound is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "Release creates 48 stateful tracers",
+      "passed": true
+    },
+    {
+      "name": "Tracer positions evolve under gravity",
+      "passed": true
+    },
+    {
+      "name": "Experiment fits mobile portrait without overflow",
+      "passed": true
+    },
+    {
+      "name": "P freezes interactive orbit simulation exactly",
+      "passed": true
+    },
+    {
+      "name": "Paused simulation cannot queue accidental releases",
+      "passed": true
+    },
+    {
+      "name": "Low angular momentum matter is actually absorbed",
+      "passed": true
+    },
+    {
+      "name": "High speed matter actually escapes",
+      "passed": true
+    },
+    {
+      "name": "Visible gravity slider changes the force model",
+      "passed": true
+    },
+    {
+      "name": "Clear removes live matter and histories",
+      "passed": true
+    },
+    {
+      "name": "T opens the experiment with a free cursor",
+      "passed": true
+    },
+    {
+      "name": "No runtime or shader errors",
+      "passed": true
+    }
+  ],
+  "samples": [
+    {
+      "id": "serein",
+      "travelMs": 12419,
+      "fps": 144,
+      "frameMs": 6.945000000000012,
+      "backend": "WebGPU",
+      "position": [
+        -159942.61905273865,
+        -34468.31866187769,
+        -246334.72176819431
+      ]
+    },
+    {
+      "id": "wound",
+      "travelMs": 10382,
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "backend": "WebGPU",
+      "position": [
+        68298.26787591595,
+        43325.78718711101,
+        63510.94446009615
+      ]
+    }
+  ],
+  "errors": []
+}

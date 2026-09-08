@@ -140,7 +140,11 @@ export class NebulaLibrary {
             .mul(smoothstep(0.25, 0.66, small))
             .mul(wisps.mul(0.75).add(0.25))
             .mul(envelope)
-            .mul(filament.mul(0.8).add(0.12))
+            .mul(
+              palette === 2
+                ? filament.mul(0.3).add(0.7)
+                : filament.mul(0.8).add(0.12),
+            )
             .mul(3);
           const alpha = float(1).sub(
             d.mul(this.density).mul(14).div(this.steps).negate().exp(),
@@ -149,8 +153,8 @@ export class NebulaLibrary {
             cool = vec3(0.08, 0.29, 0.32),
             red = vec3(0.45, 0.12, 0.065);
           const c = mix(
-            palette === 1 ? red : warm,
-            cool,
+            palette === 2 ? vec3(0.46, 0.43, 0.36) : palette === 1 ? red : warm,
+            palette === 2 ? vec3(0.31, 0.37, 0.41) : cool,
             smoothstep(-0.12, 0.3, p.x.add(n.mul(0.2))),
           ).mul(n.mul(1.4).add(0.15));
           const remaining = float(1).sub(result.a);

@@ -17,6 +17,10 @@ export type Destination = {
   surface?: boolean;
   arrival?: T.Vector3;
   gaze?: T.Vector3;
+  approachArrival?: T.Vector3;
+  approachGaze?: T.Vector3;
+  approachUp?: T.Vector3;
+  clearance?: (outward: T.Vector3) => number;
 };
 export class FlightController {
   position = HOME.clone();
@@ -31,6 +35,8 @@ export class FlightController {
   gentle = false;
   mode: "FREE" | "WANDER" | "TRAVEL" | "ORBIT" = "FREE";
   private orbitRadius = 0;
+  private approaching = false;
+  private approachWaypoint?: T.Vector3;
   selected?: Destination;
   holdBeauty = false;
   private wanderTime = 0;
@@ -59,6 +65,8 @@ export class FlightController {
     this.mode = "FREE";
     this.angular.set(0, 0, 0);
     this.pendingLook.set(0, 0);
+    this.approaching = false;
+    this.approachWaypoint = undefined;
   }
   focus(target = this.selected) {
     if (target) {
@@ -66,7 +74,19 @@ export class FlightController {
       this.mode = "TRAVEL";
       this.angular.set(0, 0, 0);
       this.pendingLook.set(0, 0);
+      this.approaching = false;
     }
+  }
+  approach(target = this.selected) {
+    if (!target?.approachArrival || !target.approachGaze) return;
+    this.focus(target);
+    this.approaching = true;
+    this.approachWaypoint = target.approachArrival
+      .clone()
+      .sub(target.position)
+      .normalize()
+      .multiplyScalar(target.radius * 1.65)
+      .add(target.position);
   }
   orbit(target = this.selected) {
     if (this.mode === "ORBIT") {
@@ -112,9 +132,10 @@ export class FlightController {
         .add(this.position);
     this.velocity.multiplyScalar(0.1);
   }
-  private lookAt(point: T.Vector3, dt: number, rate = 2) {
+  private lookAt(point: T.Vector3, dt: number, rate = 2, up?: T.Vector3) {
     this.dummy.position.copy(this.position);
-    this.dummy.up.set(0, 1, 0);
+    if (up) this.dummy.up.copy(up);
+    else this.dummy.up.set(0, 1, 0);
     this.dummy.lookAt(point);
     // Object3D looks along +Z, camera along -Z.
     this.targetRotation
@@ -277,13 +298,32 @@ export class FlightController {
     } else {
       const target = this.selected ?? bodies[0];
       if (target) {
-        if (target.arrival && target.gaze) {
-          this.desired.copy(target.arrival).sub(this.position);
+        if (
+          this.approachWaypoint &&
+          this.position.distanceTo(this.approachWaypoint) < target.radius * 0.1
+        )
+          this.approachWaypoint = undefined;
+        const arrival = this.approaching
+          ? (this.approachWaypoint ?? target.approachArrival)
+          : target.arrival;
+        const gaze = this.approaching ? target.approachGaze : target.gaze;
+        if (arrival && gaze) {
+          this.desired.copy(arrival).sub(this.position);
           const distance = this.desired.length();
           this.desired
             .normalize()
-            .multiplyScalar(Math.min(distance * 0.28, 520));
-          this.lookAt(target.gaze, dt, 0.6);
+            .multiplyScalar(
+              Math.min(
+                distance * 0.28,
+                this.approaching ? Math.max(520, target.radius * 0.6) : 520,
+              ),
+            );
+          this.lookAt(
+            gaze,
+            dt,
+            0.6,
+            this.approaching ? target.approachUp : undefined,
+          );
           if (distance < 3) {
             this.mode = "FREE";
             this.desired.set(0, 0, 0);
@@ -361,7 +401,11 @@ export class FlightController {
     for (const b of bodies) {
       if (b.solid === false) continue;
       this.offset.copy(this.position).sub(b.position);
-      const floor = b.surface ? b.radius + 2 : b.radius * 1.006 + 3;
+      const floor = b.clearance
+        ? b.clearance(this.offset.clone().normalize())
+        : b.surface
+          ? b.radius + 2
+          : b.radius * 1.006 + 3;
       if (this.offset.length() < floor) {
         this.offset.normalize();
         this.position.copy(b.position).addScaledVector(this.offset, floor);

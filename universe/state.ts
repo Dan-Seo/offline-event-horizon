@@ -29,6 +29,18 @@ export type UniverseSnapshot = {
   time: number;
   learning: { look: number; move: number; speed: number };
   encounter: string;
+  approach: string;
+  relativity: {
+    active: boolean;
+    ended: boolean;
+    radius: number;
+    properTime: number;
+    rate: number;
+    radialTide: number;
+    outwardLight: number;
+  };
+  relativityLoading: boolean;
+  relativityError: boolean;
   experiment: {
     active: number;
     absorbed: number;
@@ -67,5 +79,17 @@ export const initialSnapshot: UniverseSnapshot = {
   time: 0,
   learning: { look: 0, move: 0, speed: 0 },
   encounter: "",
+  approach: "",
+  relativity: {
+    active: false,
+    ended: false,
+    radius: 6,
+    properTime: 0,
+    rate: 1,
+    radialTide: 0,
+    outwardLight: 0,
+  },
+  relativityLoading: false,
+  relativityError: false,
   experiment: { active: 0, absorbed: 0, escaped: 0, launched: 0, gravity: 1 },
 };
