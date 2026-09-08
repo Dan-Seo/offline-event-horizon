@@ -124,6 +124,7 @@ export class Sanctuaries {
   }
   dispose() {
     this.sea.dispose();
+    this.air.dispose();
     this.life.dispose();
   }
 }

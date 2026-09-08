@@ -1,5 +1,7 @@
 # VASTNESS verification record
 
+Historical record for the pre-sanctuary edition. The current public URL runs the refactor documented in [QA-2.0.md](QA-2.0.md).
+
 2026-09-08. Windows workstation, NVIDIA Ampere adapter. Installed Chrome 152.0.7977.82 and Edge 152.0.4191.66 through Playwright in headless mode, with the real GPU renderer and no unsafe WebGPU flags. Tests send actual browser keyboard, mouse, wheel, and touch events. Viewport emulation is not physical mobile-device testing or a human usability study.
 
 ## Build and asset checks
@@ -51,9 +53,9 @@ The first public release (`aec3704`) had one 125.1 ms interval shortly after rea
 A fresh public startup run on the final release immediately pressed W, verified forward movement, and sampled the following seven seconds:
 
 | Backend | Readiness | p95 interval | Maximum interval | Intervals >50 ms |
-| --- | ---: | ---: | ---: | ---: |
-| WebGPU | 3,586 ms | 7.0 ms | 34.7 ms | 0 |
-| WebGL2 | 5,800 ms | 7.0 ms | 34.8 ms | 0 |
+| ------- | --------: | -----------: | ---------------: | ---------------: |
+| WebGPU  |  3,586 ms |       7.0 ms |          34.7 ms |                0 |
+| WebGL2  |  5,800 ms |       7.0 ms |          34.8 ms |                0 |
 
 These are individual workstation samples, not guaranteed startup times. [Final startup data](evidence/production-startup.json), [preserved earlier performance sample](evidence/production-before-prewarm.json). The startup script counts complete frame intervals after readiness and does not include the preparation interval itself.
 
@@ -61,14 +63,14 @@ These are individual workstation samples, not guaranteed startup times. [Final s
 
 Dedicated Chrome process, 2560×1440 viewport, DPR 1, High quality, 80,000 GPU matter particles, NVIDIA Ampere. Readiness was 2,988 ms in this separate run. No other browser QA workload ran concurrently with the measurement.
 
-| Scenario | Sample | p95 | p99 | Maximum | Intervals >50 ms |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Opening | 8 s | 7.0 ms | 7.1 ms | 7.1 ms | 0 |
-| Approach The Wound | 22 s | 7.0 ms | 7.1 ms | 7.2 ms | 0 |
-| Approach The Cathedral | 22 s | 7.0 ms | 7.1 ms | 7.2 ms | 0 |
-| Enter The Bloom | 22 s | 7.0 ms | 7.1 ms | 7.1 ms | 0 |
-| Fast procedural streaming | 18 s | 7.0 ms | 7.1 ms | 20.9 ms | 0 |
-| Star creation and gravity | 6 s | 7.0 ms | 7.1 ms | 7.1 ms | 0 |
+| Scenario                  | Sample |    p95 |    p99 | Maximum | Intervals >50 ms |
+| ------------------------- | -----: | -----: | -----: | ------: | ---------------: |
+| Opening                   |    8 s | 7.0 ms | 7.1 ms |  7.1 ms |                0 |
+| Approach The Wound        |   22 s | 7.0 ms | 7.1 ms |  7.2 ms |                0 |
+| Approach The Cathedral    |   22 s | 7.0 ms | 7.1 ms |  7.2 ms |                0 |
+| Enter The Bloom           |   22 s | 7.0 ms | 7.1 ms |  7.1 ms |                0 |
+| Fast procedural streaming |   18 s | 7.0 ms | 7.1 ms | 20.9 ms |                0 |
+| Star creation and gravity |    6 s | 7.0 ms | 7.1 ms |  7.1 ms |                0 |
 
 The normal cadence was approximately 144 FPS, matching this workstation's display cadence. Real W + Shift + wheel input traveled approximately 1.257 billion coordinate units; the world retained 27 resident sectors while generating and recycling distant content. No unexpected console errors occurred.
 

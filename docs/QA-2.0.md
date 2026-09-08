@@ -13,7 +13,7 @@ Visual fixes included:
 - Negative-base shader `pow` produced a checkerboard on the sea. Absolute/nonnegative bases removed the artifact.
 - Asynchronous shader warm-up and nested reflection initially attempted to bind unfinished pipelines. The reflection's first real draw now follows shader compilation before flight becomes available.
 - Island generation had a fractional-power edge case and reversed winding; both were corrected.
-- Back-face cloud depth testing removed mist in front of cliffs. Volume entry/exit selection plus local surface haze now provides a bounded approximation.
+- Back-face cloud depth testing removed mist in front of cliffs. The final refinement copies opaque depth independently for the main view and mirror, clips each ray to the visible surface, and integrates that interval. This also removed the horizontal bands caused by truncating a fixed sample grid on nearby trunks. Depth copies are skipped during asynchronous compilation and released on disposal.
 - Grass color used transformed height and overexposed to white triangles. A per-vertex blade-tip attribute now controls its color.
 - Waterfall curtains reached above the curved sea. Their lower extent and mist placement now meet the local water.
 - Reflections were visibly coarse. Resolution now scales from .30 to .85 with quality.
@@ -48,9 +48,21 @@ This local measurement preceded the final trunk smoothing. The deployed build is
 
 Production export and TypeScript checks passed. Three existing coordinate/streaming tests passed. Three analytic Python fixtures passed for the optional reconstruction-audit helper, covering a nontrivial world-to-camera rotation, sparse IDs and empty observations, known pixel residual, and radial distortion. These fixtures are not a captured reconstruction or study result.
 
-## Production validation
+## Initial production validation
 
-Pending deployment of this revision. This section will be updated only after opening and checking the public URL.
+Runtime commit `1fe5908` was built successfully on Vercel and published at [offline-vastness.vercel.app](https://offline-vastness.vercel.app). Deployment `dpl_Hu5MeFJqRTB8BHCY5rzbwiZLbs18`; [immutable deployment](https://offline-event-horizon-lfb2e9vul-sf-i455.vercel.app).
+
+The actual public page was opened, rendered, and visually inspected after deployment. Chrome 152.0.7977.82 and Edge 152.0.4191.66 each passed 40 control checks. The device/fallback suite passed another 33 checks on the public URL, including simultaneous touch controls, the automatic WebGL2 path, persistent creation, opt-in audio controls, and successful context-loss recovery. Unexpected browser/shader errors: **0** in those runs. These were browser-automation checks with real input events, not a human participant study.
+
+The deployed poster, both hero GLBs, and both fonts returned HTTP 200 and matched the committed files byte-for-byte. [Reports and rendered screenshots](evidence/vastness-2.0-initial) include deployment identity and separate local/production provenance. This initial evidence predates the final depth refinement.
+
+The public build was also observed during continuous travel to Moonfall and the Living Sky, followed by 70 seconds of stillness. Both environmental events appeared without camera takeover or notifications. A separate 110-second Wander run stayed within 100 local units of its starting position, paused repeatedly, and held its composition during the sea visitor. W interrupted it immediately afterward. Those event runs used concurrent browser instances to inspect behavior; their frame-rate readings are not the isolated performance benchmark.
+
+### Isolated production performance
+
+After the other QA browser instances closed, the public build was measured at 2560×1440, DPR 1, High, on the same NVIDIA Ampere/Chrome workstation. Initial readiness: **3,463ms**. All eight sampled scenarios had p95 **7.0ms** (approximately 144 Hz frame cadence). Largest interval: **41.6ms** during the surface-to-anomaly flight. Frames over 50ms: **0**. Unexpected browser/shader errors: **0**. The updated forest, cloud garden, and anomaly screenshots were inspected after this run.
+
+High renders 80,000 matter particles plus 8,192 living particles; geometry counters include the reflected scene. Procedural streaming continued beyond 600,000 local units and retained 27 resident sectors. See [the initial production measurement](evidence/vastness-2.0-initial/production-performance.json) for per-scenario intervals and counters. These are short workstation observations, not GPU timestamp queries or a guarantee for other devices.
 
 ## Practical limits
 

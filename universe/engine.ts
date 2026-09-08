@@ -161,6 +161,7 @@ export class UniverseEngine {
         object.frustumCulled = culled;
       });
       await pending;
+      this.world.sanctuaries.air.depthReady = true;
       mark("compiled");
       this.matter.prepare(this.renderer);
       this.world.sanctuaries.life.prepare(this.renderer);

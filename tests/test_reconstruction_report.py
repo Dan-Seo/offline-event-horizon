@@ -30,7 +30,9 @@ class ReconstructionAudit(unittest.TestCase):
             self.assertEqual(report['track_length']['mean'], 1)
 
     def test_radial_distortion_and_rejected_camera_model(self):
-        self.assertEqual(module.project('SIMPLE_RADIAL', [100, 0, 0, .1], [1, 0, 1]), (110.00000000000001, 0))
+        pixel = module.project('SIMPLE_RADIAL', [100, 0, 0, .1], [1, 0, 1])
+        self.assertAlmostEqual(pixel[0], 110)
+        self.assertAlmostEqual(pixel[1], 0)
         self.assertIsNone(module.project('PINHOLE', [1, 1, 0, 0], [0, 0, -1]))
         with self.assertRaises(ValueError):
             module.project('FISHEYE', [], [0, 0, 1])

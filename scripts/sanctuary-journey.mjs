@@ -19,6 +19,8 @@ page.on("console", (m) => {
 });
 const get = () => page.evaluate(() => window.__vastness.inspect());
 const place = process.env.QA_PLACE || "last-light";
+const fallback = process.env.QA_BACKEND === "webgl";
+const artifact = `sanctuary-${place}${fallback ? "-webgl" : ""}`;
 const titles = {
   moonfall: "Moonfall",
   forest: "The Breathing Forest",
@@ -26,7 +28,11 @@ const titles = {
   "living-sky": "The Living Sky",
 };
 try {
-  await page.goto((process.env.QA_URL || "http://localhost:3000") + "/?qa=1");
+  await page.goto(
+    (process.env.QA_URL || "http://localhost:3000") +
+      "/?qa=1" +
+      (fallback ? "&backend=webgl&quality=BATTERY" : ""),
+  );
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
   if (titles[place]) {
     await page
@@ -46,7 +52,7 @@ try {
   }
   await fs.mkdir("artifacts", { recursive: true });
   console.log("ARRIVED", place, JSON.stringify(await get()));
-  await page.screenshot({ path: `artifacts/sanctuary-${place}-arrival.png` });
+  await page.screenshot({ path: `artifacts/${artifact}-arrival.png` });
   for (let i = 0; i < Number(process.env.QA_OBSERVATIONS || 7); i++) {
     await page.waitForTimeout(10000);
     const s = await get();
@@ -63,12 +69,12 @@ try {
     console.log("OBSERVE", place, JSON.stringify(samples.at(-1)));
     if (i === 3 || i === 6)
       await page.screenshot({
-        path: `artifacts/sanctuary-${place}-${i === 3 ? "quiet" : "gift"}.png`,
+        path: `artifacts/${artifact}-${i === 3 ? "quiet" : "gift"}.png`,
       });
   }
   expect(errors).toEqual([]);
   await fs.writeFile(
-    `artifacts/sanctuary-${place}.json`,
+    `artifacts/${artifact}.json`,
     JSON.stringify({ url: page.url(), samples, errors }, null, 2),
   );
 } finally {

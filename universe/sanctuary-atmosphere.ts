@@ -4,8 +4,10 @@ import {
   float,
   length,
   max,
+  min,
   mix,
   positionLocal,
+  positionGeometry,
   positionWorld,
   pow,
   sin,
@@ -13,12 +15,20 @@ import {
   texture3D,
   uniform,
   vec3,
+  vec2,
   vec4,
   frontFacing,
   cameraPosition,
   modelWorldMatrixInverse,
+  modelViewMatrix,
+  cameraNear,
+  cameraFar,
+  screenUV,
+  viewportTexture,
+  logarithmicDepthToViewZ,
+  varying,
+  Loop,
 } from "three/tsl";
-import { RaymarchingBox } from "three/addons/tsl/utils/Raymarching.js";
 import { type Quality } from "./config";
 
 export class SanctuaryAtmosphere {
@@ -31,11 +41,31 @@ export class SanctuaryAtmosphere {
   creature = uniform(0);
   observer = uniform(new T.Vector3());
   steps = uniform(28);
+  depthReady = false;
+  // Runtime accepts Texture; r183's declaration narrows this argument to
+  // FramebufferTexture. Per-target copies keep the mirror and main view apart.
+  private opaqueDepth = viewportTexture(
+    screenUV,
+    null,
+    new T.DepthTexture(1, 1) as unknown as T.FramebufferTexture,
+  );
+  private depthCopies = new Set<T.Texture>([this.opaqueDepth.value]);
   sky: T.Mesh;
   constructor(
     public density: T.Data3DTexture,
     scene: T.Scene,
   ) {
+    const copyDepth = this.opaqueDepth.updateBefore.bind(this.opaqueDepth);
+    this.opaqueDepth.updateBefore = (frame) => {
+      // compileAsync also visits updateBefore, before a valid framebuffer exists.
+      if (!this.depthReady || !frame.renderer) return;
+      this.depthCopies.add(
+        this.opaqueDepth.getTextureForReference(
+          frame.renderer.getRenderTarget(),
+        ),
+      );
+      return copyDepth(frame);
+    };
     const material = new T.MeshBasicNodeMaterial({
       side: T.BackSide,
       transparent: true,
@@ -82,13 +112,13 @@ export class SanctuaryAtmosphere {
     return mix(c, vec3(0.034, 0.066, 0.075), air.mul(0.85));
   }
   volume(size: T.Vector3, tint: T.Vector3, opacity = 1, opening = false) {
-    // Outside, test the entry face, not the far face, against opaque geometry.
-    // Inside, integrate from the observer to the exit face. Surface haze supplies
-    // the near-terrain approximation without a costly extra depth prepass.
+    // Copy already-rendered opaque depth; no extra geometry pass. Stop the
+    // integral at each surface instead of clipping the entire volume box.
     const material = new T.MeshBasicNodeMaterial({
       transparent: true,
       side: T.DoubleSide,
       depthWrite: false,
+      depthTest: false,
     });
     material.colorNode = Fn(() => {
       const origin = modelWorldMatrixInverse.mul(vec4(cameraPosition, 1)).xyz;
@@ -97,9 +127,33 @@ export class SanctuaryAtmosphere {
         max(origin.y.abs(), origin.z.abs()),
       ).lessThan(0.5);
       inside.xor(frontFacing).not().discard();
+      const sceneZ = logarithmicDepthToViewZ(
+        this.opaqueDepth.r,
+        cameraNear,
+        cameraFar,
+      ).toVar();
+      const rayOrigin = varying(origin);
+      const rayDirection = varying(positionGeometry.sub(origin))
+        .normalize()
+        .toVar();
+      const entry = vec3(-0.5).sub(rayOrigin).div(rayDirection);
+      const exit = vec3(0.5).sub(rayOrigin).div(rayDirection);
+      const lo = min(entry, exit),
+        hi = max(entry, exit);
+      const viewStep = modelViewMatrix.mul(vec4(rayDirection, 0)).z;
+      const bounds = vec2(
+        max(0, max(lo.x, max(lo.y, lo.z))),
+        min(sceneZ.div(viewStep), min(hi.x, min(hi.y, hi.z))),
+      ).toVar();
+      bounds.y.lessThanEqual(bounds.x).discard();
+      // Integrate the visible interval, including the fractional final step.
+      // Breaking a fixed object-space grid at depth leaves bands on near surfaces.
+      const step = bounds.y.sub(bounds.x).div(this.steps).toVar();
+      const p = rayOrigin
+        .add(rayDirection.mul(bounds.x.add(step.mul(0.5))))
+        .toVar();
       const result = vec4(0).toVar();
-      RaymarchingBox(this.steps, ({ positionRay }) => {
-        const p = positionRay;
+      Loop({ type: "float", start: 0, end: this.steps, update: 1 }, () => {
         const n = texture3D(
           this.density,
           p
@@ -124,7 +178,7 @@ export class SanctuaryAtmosphere {
         const alpha = float(1).sub(
           d
             .mul(-8 * opacity)
-            .div(this.steps)
+            .mul(step)
             .exp(),
         );
         const light = n
@@ -135,6 +189,7 @@ export class SanctuaryAtmosphere {
         const remaining = float(1).sub(result.a);
         result.rgb.addAssign(c.mul(alpha).mul(remaining));
         result.a.addAssign(alpha.mul(remaining));
+        p.addAssign(rayDirection.mul(step));
       });
       return vec4(
         result.rgb.div(max(result.a, 0.001)),
@@ -148,5 +203,10 @@ export class SanctuaryAtmosphere {
   }
   setQuality(q: Quality) {
     this.steps.value = { ULTRA: 40, HIGH: 28, BALANCED: 20, BATTERY: 12 }[q];
+  }
+  dispose() {
+    this.depthReady = false;
+    this.depthCopies.forEach((texture) => texture.dispose());
+    this.depthCopies.clear();
   }
 }
