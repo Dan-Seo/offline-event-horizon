@@ -243,6 +243,14 @@ export default function Vastness() {
                     <span>{c.controls[i]}</span>
                   </div>
                 ))}
+                <div className="control-row">
+                  <kbd>J</kbd>
+                  <span>
+                    {language === "ko"
+                      ? "Nacre 해안에서 걷기 / 날기"
+                      : "Walk / fly on Nacre's coast"}
+                  </span>
+                </div>
               </div>
               <small className="desktop-help">{c.desktopHelp}</small>
               <small className="touch-help">{c.touchHelp}</small>
@@ -306,7 +314,7 @@ export default function Vastness() {
             </div>
           </footer>
           <div
-            className={`input-hint${(!guideActive && intro) || state.paused ? " visible" : ""}`}
+            className={`input-hint${((!guideActive && intro) || state.paused) && !state.relativity.active && !state.walking ? " visible" : ""}`}
             role="status"
           >
             {state.paused ? (
@@ -421,6 +429,27 @@ export default function Vastness() {
               {panel === "places" && (
                 <>
                   <p className="eyebrow">{further ? c.beyond : c.somewhere}</p>
+                  {!further && (
+                    <button
+                      className="destination"
+                      data-destination="nacre-coast"
+                      onClick={() => {
+                        engine.current?.approach("nacre");
+                        setIntro(false);
+                        setPanel(null);
+                      }}
+                    >
+                      <span>
+                        {language === "ko" ? "오로라 해안" : "The aurora coast"}
+                        <small>
+                          {language === "ko"
+                            ? "땅에 내려 산책하기"
+                            : "Come down for a walk"}
+                        </small>
+                      </span>
+                      <span>↘</span>
+                    </button>
+                  )}
                   {(further ? distantIds : refugeIds).map((id) => (
                     <button
                       className="destination"
@@ -504,6 +533,7 @@ export default function Vastness() {
             !panel &&
             !help &&
             !state.relativity.active &&
+            !state.walking &&
             state.encounter &&
             encounter.description && (
               <aside className="encounter-note" aria-label={encounter.name}>
@@ -518,6 +548,15 @@ export default function Vastness() {
                 </p>
                 {state.encounter === "wound" ? (
                   <>
+                    <button
+                      disabled={state.paused}
+                      onClick={() => engine.current?.releaseGas()}
+                    >
+                      {language === "ko"
+                        ? "가스 한 줄기 흘려보내기"
+                        : "Release a stream of gas"}{" "}
+                      ↝
+                    </button>
                     <button
                       disabled={state.relativityLoading}
                       onClick={() => void engine.current?.beginObservation()}
@@ -544,6 +583,14 @@ export default function Vastness() {
                   </>
                 ) : (
                   <>
+                    {state.walkAvailable && (
+                      <button onClick={() => action("walk")}>
+                        {language === "ko"
+                          ? "여기서 걸어보기 · J"
+                          : "Walk here · J"}{" "}
+                        ↘
+                      </button>
+                    )}
                     {approachText(state.encounter, language) &&
                       !state.approach && (
                         <button onClick={() => engine.current?.approach()}>
@@ -573,7 +620,39 @@ export default function Vastness() {
               onExit={() => engine.current?.endObservation()}
               onRate={(rate) => engine.current?.setObservationRate(rate)}
               onPause={() => action("pause")}
+              onGas={() => engine.current?.releaseGas()}
             />
+          )}
+          {state.walking && !panel && !help && (
+            <aside
+              className="walk-note"
+              aria-label={language === "ko" ? "해안 산책" : "Coastal walk"}
+            >
+              <p>
+                {language === "ko"
+                  ? "발걸음 닿는 곳마다, 작은 빛."
+                  : "A little light with every step."}
+              </p>
+              <small className="desktop-help">
+                {language === "ko"
+                  ? "WASD 걷기 · 드래그 둘러보기 · Space 작은 도약"
+                  : "WASD walk · drag to look · Space little hop"}
+              </small>
+              <small className="touch-help">
+                {language === "ko"
+                  ? "왼손으로 걷기 · 오른손으로 둘러보기"
+                  : "Left thumb walks · right thumb looks"}
+              </small>
+              <button onClick={() => action("seed")}>
+                {language === "ko" ? "빛 한 점 남기기" : "Leave a little light"}
+              </button>
+              <button onClick={() => action("walk")}>
+                {language === "ko"
+                  ? "다시 날아오르기 · J"
+                  : "Take flight again · J"}{" "}
+                ↗
+              </button>
+            </aside>
           )}
           <div
             className={`touch-zones${intro && !guideActive ? " visible" : ""}`}

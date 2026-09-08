@@ -132,6 +132,15 @@ try {
   await measure("opening");
   if (process.env.QA_GR !== "0") {
     await travel("wound");
+    const beforeGas = await read();
+    await page.getByRole("button", { name: "가스 한 줄기 흘려보내기" }).click();
+    await page.waitForTimeout(2000);
+    check(
+      "Gas release changes persistent state and moves",
+      (await read()).gas.released > beforeGas.gas.released &&
+        JSON.stringify((await read()).gasSample) !==
+          JSON.stringify(beforeGas.gasSample),
+    );
     await shot("wound-before");
     const start = await read();
     await page.getByRole("button", { name: /지평선 안으로/ }).click();
@@ -151,6 +160,17 @@ try {
       "Scientific observation initializes without shader errors",
       errors.length === 0,
     );
+    check(
+      "Numerical readings are optional, collapsed by default",
+      !(await page.locator(".relativity-readings").isVisible()),
+    );
+    const observedGas = (await read()).gas.released;
+    await page.getByRole("button", { name: "가스 한 줄기 흘려보내기" }).click();
+    await page.waitForTimeout(300);
+    check(
+      "Gas can be added while observing calculated light paths",
+      (await read()).gas.released > observedGas,
+    );
     await page
       .getByRole("combobox", { name: "관측 재생 속도" })
       .selectOption("4");
@@ -159,10 +179,15 @@ try {
     await page.keyboard.press("p");
     await page.waitForTimeout(250);
     const paused = (await read()).relativity;
+    const pausedGas = (await read()).gas.time;
     await page.waitForTimeout(600);
     check(
       "P freezes the actual proper-time clock",
       paused.properTime === (await read()).relativity.properTime,
+    );
+    check(
+      "P also freezes accretion state",
+      pausedGas === (await read()).gas.time,
     );
     const beforeLook = (await read()).quaternion;
     await page.mouse.move(1040, 300);

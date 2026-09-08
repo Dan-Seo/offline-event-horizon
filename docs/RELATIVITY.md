@@ -1,6 +1,6 @@
 # Following light through a Schwarzschild horizon
 
-VASTNESS 2.2 adds an optional, idealized general-relativistic observation at **The Wound**. It is separate from the existing softened Newtonian test-particle experiment and from the artistic black-hole mesh used during ordinary flight. The application does not claim to reproduce an observed black-hole interior.
+VASTNESS 2.2 introduced an optional, idealized general-relativistic observation at **The Wound**. Version 2.3 preserves its photon/observer equations and adds illustrative, irregular gas emissivity. It remains separate from the existing softened Newtonian test-particle experiment and from the artistic black-hole mesh used during ordinary flight. The application does not claim to reproduce an observed black-hole interior.
 
 ## Observer and coordinates
 
@@ -52,7 +52,7 @@ Primes denote an affine parameter, not Newtonian time. This equation follows by 
 
 ## Light sources and frequency transfer
 
-The source model is stationary: an opaque, geometrically thin disk from `3` to `9 r_s`, and a distant procedural sky treated as an infinity source. The disk follows circular Keplerian motion. The first disk-plane intersection along a ray supplies its emission. For the past-directed ray convention above:
+The source geometry is an opaque, geometrically thin disk from `3` to `9 r_s`, and a stationary distant procedural sky treated as an infinity source. Frequency transfer assumes circular Keplerian disk emitters. The first disk-plane intersection along a ray supplies its emission. For the past-directed ray convention above:
 
 ```text
 Ω = sqrt(1 / (2 r_em³))
@@ -61,7 +61,15 @@ g = observed frequency / emitted frequency
 I_observed = g⁴ I_emitted              [bolometric intensity]
 ```
 
-The sky uses `g=1/(-E_ray)` for rays arriving from the chosen exterior infinity. Ray integration ends at radius `90`; its outgoing tangent approximates the asymptotic direction. Emission-time delays are not integrated because neither source varies with time. The radial emissivity profile, banding, source colors, RGB temperature mapping, and photographic exposure are designed illustrations. Radiance and frequency gains are clipped for a finite display. This is not a calibrated spectrum or a full relativistic disk-radiation calculation.
+The sky uses `g=1/(-E_ray)` for rays arriving from the chosen exterior infinity. Ray integration ends at radius `90`; its outgoing tangent approximates the asymptotic direction. The radial emissivity profile, banding, source colors, RGB temperature mapping, and photographic exposure are designed illustrations. Radiance and frequency gains are clipped for a finite display. This is not a calibrated spectrum or a full relativistic disk-radiation calculation.
+
+### Irregular gas in 2.3
+
+`accretion-model.ts` advances at most 384 test parcels, in eight bounded streams, using fixed 1/120-second steps. Softened central gravity, linear drag, and a small smooth azimuthal disturbance change position and velocity. A dimensionless heat proxy responds to inward motion; eight measured positions per parcel form visible trails. Streams can be released by the user or arrive at deterministic irregular intervals. Old or captured parcels are removed, and pause freezes the state. This is dissipative particle motion, **not fluid pressure, magnetic reconnection, or GRMHD**. The ordinary exterior maps these model radii into its existing artistic disk scale.
+
+Circular angle/radius moments of each live stream modulate the ray-traced disk's emission. This brightness pattern uses one shared scene clock: **retarded emission times are not integrated**. Consequently the pattern's motion, repeated lensed images and flare timing are illustrative; the calculated light paths and the assumed circular-emitter frequency factor do not turn it into a physically consistent time-dependent plasma simulation. Gas parcel velocities are not used as relativistic emitter four-velocities. No Kerr frame dragging has been added. The boundary source still omits white-hole illumination and stellar collapse history.
+
+The visual motivation is observed variability, not a reproduction of a particular dataset: [ESO's ALMA hot-spot report](https://www.hq.eso.org/public/news/eso2212/) discusses orbiting bright gas near Sagittarius A\*, while [NASA's Webb report](https://science.nasa.gov/missions/webb/webb-reveals-rapid-fire-light-show-from-milky-ways-central-black-hole/) describes continuously varying brightness and flares. The application does not simulate the proposed magnetic mechanism.
 
 ## Numerical and rendering limits
 
@@ -70,7 +78,7 @@ The sky uses `g=1/(-E_ray)` for rays arriving from the chosen exterior infinity.
 - Observation stops at `r=0.2`. This is a chosen application limit, not a quantum-gravity threshold or another physical surface. No image of the `r=0` singularity is invented.
 - The observer lens is 106° vertically. Render-width caps are 1440 / 1200 / 900 / 600 pixels for Ultra / High / Balanced / Battery. The half-float color target is upscaled to the canvas. Very thin rings can alias.
 - The GPU uses float32 arithmetic; the CPU reference uses JavaScript float64. CPU convergence tests do not certify every GPU pixel. A linear segment approximates the disk-plane crossing within each integration step.
-- No Kerr spin, charged interior, collapse history, disk self-gravity, GRMHD, spectral radiative transfer, Hawking radiation, or quantum singularity model. The stationary source boundary omits white-hole illumination and does not model the surface of a collapsing star.
+- No Kerr spin, charged interior, collapse history, disk self-gravity, GRMHD, spectral radiative transfer, Hawking radiation, or quantum singularity model.
 
 ## Verification
 

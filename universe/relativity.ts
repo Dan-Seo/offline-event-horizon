@@ -23,6 +23,7 @@ import {
   radialLightSlopes,
 } from "./relativity-model";
 import type { Quality } from "./config";
+import type { AccretionWeather } from "./accretion";
 
 /** An optional observation, not a second universe or a traversable wormhole. */
 export class RelativityObservation {
@@ -40,6 +41,8 @@ export class RelativityObservation {
   private view = uniform(new T.Matrix3());
   private projection = uniform(new T.Vector2(1, 1));
   private normal = uniform(new T.Vector3(0, 1, 0));
+  private axisX = uniform(new T.Vector3(1, 0, 0));
+  private axisY = uniform(new T.Vector3(0, 1, 0));
   private material = new T.MeshBasicNodeMaterial({
     depthTest: false,
     depthWrite: false,
@@ -54,9 +57,12 @@ export class RelativityObservation {
   private quality: Quality = "HIGH";
   constructor(
     private renderer: T.WebGPURenderer,
-    diskNormal: T.Vector3,
+    diskRotation: T.Quaternion,
+    weather: AccretionWeather,
   ) {
-    this.normal.value.copy(diskNormal);
+    this.normal.value.set(0, 0, 1).applyQuaternion(diskRotation);
+    this.axisX.value.applyQuaternion(diskRotation);
+    this.axisY.value.applyQuaternion(diskRotation);
     const acceleration = Fn(([p, l2]: [T.Node<"vec3">, T.Node<"float">]) =>
       p.mul(l2.mul(-1.5).div(p.length().pow(5).max(1e-12))),
     );
@@ -167,11 +173,17 @@ export class RelativityObservation {
               .mul(float(1).sub(float(3).div(rd).sqrt()))
               .mul(3);
             const bands = rd
-              .mul(112)
+              .mul(34)
               .sin()
-              .mul(0.1)
-              .add(rd.mul(43).sin().mul(0.09))
-              .add(0.83);
+              .mul(0.045)
+              .add(rd.mul(15).sin().mul(0.04))
+              .add(0.92);
+            // Variable source brightness is illustrative, evaluated on a shared scene
+            // clock, not retarded emission time. Photon paths remain Schwarzschild.
+            const gas = weather.emission(
+              rd,
+              intersection.dot(this.axisY).atan(intersection.dot(this.axisX)),
+            );
             const temp = float(3)
               .div(rd)
               .pow(0.75)
@@ -184,7 +196,11 @@ export class RelativityObservation {
               temp,
             );
             radiance.assign(
-              tint.mul(emission).mul(bands).mul(g.pow(4)).min(35),
+              tint
+                .mul(emission)
+                .mul(bands.add(gas.mul(2.1)))
+                .mul(g.pow(4))
+                .min(35),
             );
             Break();
           });

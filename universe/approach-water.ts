@@ -94,10 +94,10 @@ export class RegionalLagoon {
   }
   setQuality(quality: Quality) {
     this.mirror.reflector.resolutionScale = {
-      ULTRA: 0.65,
-      HIGH: 0.4,
-      BALANCED: 0.3,
-      BATTERY: 0.2,
+      ULTRA: 1,
+      HIGH: 0.65,
+      BALANCED: 0.45,
+      BATTERY: 0.3,
     }[quality];
   }
   dispose() {

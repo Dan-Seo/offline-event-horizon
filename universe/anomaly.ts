@@ -16,6 +16,7 @@ import {
   vec3,
 } from "three/tsl";
 import { OrbitExperiment } from "./orbit-experiment";
+import { AccretionWeather } from "./accretion";
 export class GravitationalAnomaly {
   group = new T.Group();
   time = uniform(0);
@@ -23,7 +24,12 @@ export class GravitationalAnomaly {
   private response = uniform(0);
   diskRotation = new T.Quaternion().setFromEuler(new T.Euler(-1.1, 0.12, 0.21));
   private lens: T.Mesh;
+  weather: AccretionWeather;
   constructor() {
+    const gas = new T.Group();
+    gas.quaternion.copy(this.diskRotation);
+    this.weather = new AccretionWeather(gas);
+    this.group.add(gas);
     const shadow = new T.Mesh(
       new T.SphereGeometry(1, 96, 64),
       new T.MeshBasicMaterial({ color: 0x000001 }),
@@ -40,7 +46,7 @@ export class GravitationalAnomaly {
       angle = p.y.atan(p.x);
     const ripple = sin(
       r
-        .mul(125)
+        .mul(55)
         .sub(this.time.mul(1.8))
         .add(sin(angle.mul(9).add(this.time.mul(0.3))).mul(2)),
     )
@@ -57,7 +63,12 @@ export class GravitationalAnomaly {
     material.colorNode = mix(color(0x97431d), color(0xffe5b4), heat)
       .mul(heat.mul(2.8).add(0.25))
       .mul(p.x.div(5).mul(0.5).add(0.75))
-      .mul(this.response.mul(0.13).add(1));
+      .mul(this.response.mul(0.13).add(1))
+      .add(
+        color(0xffd29b)
+          .mul(this.weather.emission(r.sub(1.2).div(0.6).add(3), angle))
+          .mul(1.8),
+      );
     material.opacityNode = inner
       .mul(outer)
       .mul(ripple)
@@ -117,6 +128,7 @@ export class GravitationalAnomaly {
   }
   simulate(dt: number) {
     this.experiment.update(dt);
+    this.weather.update(dt);
     this.response.value = Math.min(
       1,
       this.response.value * Math.exp(-dt * 1.7) +

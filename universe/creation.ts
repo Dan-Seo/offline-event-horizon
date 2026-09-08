@@ -77,7 +77,7 @@ export class CreationSystem {
       radius,
       object,
       born: time,
-      solid: true,
+      solid: radius >= 1,
     };
     this.stars.push(star);
     if (this.stars.length > 24) {

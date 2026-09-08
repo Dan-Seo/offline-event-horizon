@@ -1,6 +1,6 @@
 # OFFLINE // VASTNESS
 
-A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.2 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
+A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.3 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. A small light you leave behind is saved on this device.
 
@@ -29,6 +29,10 @@ At **The Wound**, choose **Release a little matter** or press **T**. Three initi
 Choose **Beyond the horizon · freefall observation** for a separate scientific observation. A radial infaller crosses an ideal Schwarzschild horizon while GPU-integrated null geodesics determine the visible disk and sky. Drag to look, P to pause, and WASD or Esc to restore the exterior flight position. The panel explains the proper-time clock, frequency transfer, and the chosen numerical stop. It makes no claim to show an observed interior or a physical escape. [Equations, references, and limits](docs/RELATIVITY.md).
 
 The five distant hero planets now offer **Closer · into the landscape**. Existing smooth flight continues into Selene's ice canyon, Serein's dune ridges, Ember's cooling caldera, Nacre's reflective lagoon and luminous canopy, or the Silent Giant's cloud tops beneath its rings. These regions stay attached to their planets and remain freely navigable. They are regional environments, not complete planet-wide landing systems. Manual movement interrupts the approach immediately.
+
+**The aurora coast**, in Explore, flies directly to Nacre's shoreline. Choose **Walk here** or press **J** to settle onto the actual terrain at eye height. WASD walks, drag looks, Space makes a small hop, and J takes flight again. Touch uses both thumbs. Curved aurora curtains reflect in the lagoon; small grass tiles stream underfoot, steps leave fading light in the moss, and delicate creatures gather when you rest. **Leave a little light** plants a miniature stellar keepsake. There are no scores or tasks. Grounded walking is currently specific to Nacre, with deep water and steep slopes limiting the route; vegetation is permeable.
+
+The Wound now receives irregular streams of gas. **Release a stream of gas** adds persistent parcels that orbit, shear, heat and accrete. Their emission also changes the optional ray-traced observation. This uses simplified dissipative particle dynamics, not magnetic plasma simulation. The photon equations remain Schwarzschild; variable emission uses a shared scene clock rather than retarded source time. Plain-language descriptions appear first; numerical readings and model details are collapsed.
 
 ## Run
 
@@ -68,6 +72,7 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 | B / K              | Wander / quiet                                                |
 | G / V              | Hold to attract / repel matter                                |
 | N                  | Plant a star                                                  |
+| J                  | Walk / take flight on Nacre's coast                           |
 | Backquote          | Technical observatory                                         |
 
 Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. The application never requests pointer lock. Hovering the free cursor leaves Wander undisturbed; an intentional drag or movement key takes control immediately.
@@ -89,6 +94,8 @@ Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio.
 - `orbit-model.ts` integrates up to 144 interactive test particles on CPU with fixed 1/120-second velocity-Verlet steps and softened inverse-square gravity. `orbit-experiment.ts` renders their measured position histories. Dense ambient matter remains on GPU; the small experiment uses the same force model on both render backends.
 - `relativity-model.ts` contains the Schwarzschild observer and null-ray reference model. The lazy-loaded `relativity.ts` traces the same equations per fragment through TSL, with a capped render target on both WebGPU and WebGL2. `RelativityPanel.tsx` keeps explanatory controls in English and Korean.
 - `approaches.ts`, `approach-terrain.ts`, and `approach-water.ts` attach deterministic regional geometry, collision clearance, reflective water, instanced organic forms, and three-dimensional cloud volumes to the existing planetary bodies. They reuse the current flight controller, materials, and floating origin.
+- `walk.ts` and `walk-ground.ts` add damped, grounded movement with height sampled from the rendered terrain triangles, slope/water limits, one-hop input, and a smooth departure into flight. `nacre-garden.ts` attaches reflected 3D aurora, nine recycled grass tiles, world-space footprint history, and 72 stateful ambient creatures. A tile rebuild is limited to one per frame.
+- `accretion-model.ts` and `accretion.ts` keep a bounded, fixed-step gas experiment separate from the exact null-ray equations; small source moments reach the GPU as uniforms. This modest simulation runs on CPU on both backends; the existing dense matter/creature fields remain on GPU.
 - `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels clears held input. Drag capture lasts only for the gesture and is also released on blur or cancellation; the cursor remains visible and unrestricted.
 - `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
 - `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
@@ -145,6 +152,7 @@ npm run qa:onboarding
 npm run qa:touch-guide
 npm run qa:encounters
 npm run qa:approaches
+npm run qa:walk
 npm run qa:devices
 npm run qa:resilience
 npm run qa:performance
@@ -155,6 +163,6 @@ npm run test:reconstruction
 
 These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, onboarding, encounter, and visual scripts accept `QA_BROWSER=msedge`. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. The encounter suite travels through five planets and the anomaly without teleporting, tests automatic-orbit interruption, and exercises all three release outcomes. Set `QA_BACKEND=webgl` for its fallback pass or `QA_PLACES=serein,nacre` for a shorter route. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions. Earlier pre-sanctuary scripts remain as historical records.
 
-See [the 2.2 verification record](docs/QA-2.2.md), [the 2.1 record](docs/QA-2.1.md), and [the 2.0 record](docs/QA-2.0.md). Earlier performance numbers are browser frame intervals and renderer counters. The optional `?qa=1&profile=1` path adds GPU render/compute pass timestamps when supported; these exclude CPU and presentation time. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
+See [the 2.3 verification record](docs/QA-2.3.md), [the 2.2 record](docs/QA-2.2.md), [the 2.1 record](docs/QA-2.1.md), and [the 2.0 record](docs/QA-2.0.md). Earlier performance numbers are browser frame intervals and renderer counters. The optional `?qa=1&profile=1` path adds GPU render/compute pass timestamps when supported; these exclude CPU and presentation time. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
 The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

@@ -32,11 +32,11 @@ const descriptions = {
   nacre: {
     ko: [
       "빛이 밀려오는 해안",
-      "물 위를 움직이면 작은 빛이 번져요. 거대한 생명체 같은 식물이 해안을 감싸고 있어요.",
+      "오로라가 물에 비치는 해안이에요. 땅에 내려 걸어보세요. 가만히 쉬고 있으면 작은 빛들이 다가와요.",
     ],
     en: [
       "A luminous tide",
-      "Motion above the water spreads a little light. Tall living forms shelter the shore.",
+      "Aurora rests on the water. Come down for a walk. Stay still and little lights will find you.",
     ],
   },
   giant: {

@@ -1,6 +1,7 @@
 import * as T from "three/webgpu";
 import { InputManager, type InputAction } from "./input";
 import { FlightController } from "./flight";
+import { SurfaceWalker } from "./walk";
 import { UniverseWorld } from "./world";
 import { QUALITY, type Quality } from "./config";
 import { Ambience } from "./audio";
@@ -15,6 +16,7 @@ export class UniverseEngine {
   scene = new T.Scene();
   camera = new T.PerspectiveCamera(57, 1, 0.5, 20000000);
   flight = new FlightController();
+  walker = new SurfaceWalker();
   renderer!: T.WebGPURenderer;
   input!: InputManager;
   world!: UniverseWorld;
@@ -212,7 +214,32 @@ export class UniverseEngine {
       this.fail(e instanceof Error ? e.message : "Graphics could not start.");
     }
   }
+  private leaveGround() {
+    if (!this.walker.active) return;
+    const surface = this.walker.surface!;
+    this.flight.departSurface(surface.id, (position) => {
+      const p = this.walker.localPosition(surface, position);
+      p.y = surface.height(p.x, p.z) + 1.8 / surface.radius;
+      return (
+        p.applyQuaternion(surface.frame).add(surface.up).length() *
+        surface.radius
+      );
+    });
+    this.walker.stop();
+  }
   action = (a: InputAction) => {
+    if (["reset", "focus", "wander", "orbit"].includes(a)) this.leaveGround();
+    if (a === "walk") {
+      if (this.walker.active) this.leaveGround();
+      else {
+        const surface = this.world.approaches.walkSurface(this.state.approach);
+        if (surface) this.walker.start(surface, this.flight);
+      }
+      this.input.clear();
+      this.updateSnapshot();
+      this.report({ ...this.state });
+      return;
+    }
     if (a === "manual") {
       if (
         this.relativity?.active &&
@@ -273,14 +300,37 @@ export class UniverseEngine {
       this.state.quiet = false;
       this.flight.quiet = false;
     } else if (a === "seed" && this.creation) {
-      const local = this.world.sanctuaries.presence > 0.5;
-      const distance = local ? 55 : Math.max(100, this.matter.domain * 0.35),
+      const walking = this.walker.active;
+      const local = walking || this.world.sanctuaries.presence > 0.5;
+      const distance = walking
+          ? 4
+          : local
+            ? 55
+            : Math.max(100, this.matter.domain * 0.35),
         position = new T.Vector3(0, 0, -distance)
           .applyQuaternion(this.flight.quaternion)
           .add(this.flight.position);
+      if (walking && this.walker.surface) {
+        const up = this.flight.position
+          .clone()
+          .sub(this.walker.surface.center)
+          .normalize();
+        const direction = position
+          .clone()
+          .sub(this.flight.position)
+          .addScaledVector(
+            up,
+            -position.clone().sub(this.flight.position).dot(up),
+          )
+          .normalize();
+        position
+          .copy(this.flight.position)
+          .addScaledVector(direction, 4)
+          .addScaledVector(up, 0.5);
+      }
       const star = this.creation.add(
         position,
-        local ? 1.5 : Math.max(8, this.matter.domain * 0.012),
+        walking ? 0.12 : local ? 1.5 : Math.max(8, this.matter.domain * 0.012),
         this.state.time,
       );
       this.state.seeds = this.creation.stars.length;
@@ -292,6 +342,7 @@ export class UniverseEngine {
   };
   select(id: string, travel = false) {
     this.endObservation();
+    if (travel) this.leaveGround();
     const b = [...this.world.bodies, ...this.creation.stars].find(
       (b) => b.id === id,
     );
@@ -306,6 +357,7 @@ export class UniverseEngine {
     if (this.flight.position.distanceTo(hole.position) > hole.radius * 12)
       return;
     const request = ++this.observationRequest;
+    this.walker.stop();
     this.input.clear();
     this.flight.cancel();
     this.flight.velocity.set(0, 0, 0);
@@ -318,9 +370,8 @@ export class UniverseEngine {
         if (this.disposed) return;
         this.relativity = new RelativityObservation(
           this.renderer,
-          new T.Vector3(0, 0, 1).applyQuaternion(
-            this.world.anomaly.diskRotation,
-          ),
+          this.world.anomaly.diskRotation,
+          this.world.anomaly.weather,
         );
         await this.relativity.prepare();
       })();
@@ -368,9 +419,10 @@ export class UniverseEngine {
     if (this.relativity && [0.25, 1, 4].includes(rate))
       this.relativity.rate = rate;
   }
-  approach() {
-    const target = this.world.bodies.find((b) => b.id === this.state.encounter);
+  approach(id = this.state.encounter) {
+    const target = this.world.bodies.find((b) => b.id === id);
     if (target?.approachArrival) {
+      this.leaveGround();
       this.select(target.id);
       this.flight.approach(target);
     }
@@ -389,6 +441,22 @@ export class UniverseEngine {
     this.world.anomaly.experiment.release(
       kind,
       Math.atan2(local.y, local.x) + 0.75,
+    );
+  }
+  releaseGas() {
+    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    if (
+      this.state.paused ||
+      (!this.relativity?.active &&
+        this.flight.position.distanceTo(hole.position) > hole.radius * 12)
+    )
+      return;
+    const local = this.flight.position
+      .clone()
+      .sub(hole.position)
+      .applyQuaternion(this.world.anomaly.diskRotation.clone().invert());
+    this.world.anomaly.weather.model.release(
+      Math.atan2(local.y, local.x) + 0.45,
     );
   }
   setGravity(value: number) {
@@ -469,13 +537,15 @@ export class UniverseEngine {
           : this.benchmarkMode === "GRAVITY"
             ? 2
             : 0;
-      this.flight.update(
-        dt,
-        this.input,
-        this.relativity?.active
-          ? []
-          : [...this.world.bodies, ...this.creation.stars],
-      );
+      if (this.walker.active) this.walker.update(dt, this.input, this.flight);
+      else
+        this.flight.update(
+          dt,
+          this.input,
+          this.relativity?.active
+            ? []
+            : [...this.world.bodies, ...this.creation.stars],
+        );
       if (this.relativity?.active) {
         const hole = this.world.bodies.find((b) => b.id === "wound")!;
         this.relativity.advance(this.state.paused ? 0 : dt);
@@ -602,8 +672,13 @@ export class UniverseEngine {
     this.state.field = this.matter.fieldActive;
     this.state.learning = { ...this.input.learning };
     this.state.experiment = this.world.anomaly.experiment.model.snapshot();
+    this.state.gas = this.world.anomaly.weather.model.snapshot();
     if (this.relativity) this.state.relativity = this.relativity.snapshot();
     this.state.approach = this.world.approaches?.active ?? "";
+    this.state.walking = this.walker.active;
+    const walkSurface = this.world.approaches.walkSurface(this.state.approach);
+    this.state.walkAvailable =
+      !!walkSurface && this.walker.canStart(walkSurface, this.flight.position);
     const encounter =
       this.world.bodies.find(
         (b) =>
@@ -701,6 +776,12 @@ export class UniverseEngine {
       computeSubmitMs: this.matter.computeMs,
       gpuRenderMs: this.gpuRenderMs,
       gpuComputeMs: this.gpuComputeMs,
+      walkedDistance: this.walker.distance,
+      walkEyeHeight: this.walker.eyeHeight,
+      garden: this.world.approaches.inspectGarden(),
+      gasSample: this.world.anomaly.weather.model.streams
+        .slice(0, 3)
+        .map((s) => [s.angle, s.radius, s.spread, s.heat]),
       orbitSample: Array.from(
         this.world.anomaly.experiment.model.positions.slice(0, 9),
       ),

@@ -22,6 +22,9 @@ import { treeGeometry } from "./sanctuary-nature";
 import type { NebulaLibrary } from "./nebula";
 import { reliefNormal } from "./planets";
 import { RegionalLagoon } from "./approach-water";
+import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
+import type { WalkSurface } from "./walk";
+import { NacreGarden } from "./nacre-garden";
 
 type Region = {
   body: Body;
@@ -32,6 +35,7 @@ type Region = {
   particles: T.InstancedMesh;
   color: T.Color;
   lagoon?: RegionalLagoon;
+  garden?: NacreGarden;
 };
 export class PlanetApproaches {
   active = "";
@@ -109,6 +113,26 @@ export class PlanetApproaches {
           kind === 2 ? 0.0001 : 0.000012,
         ),
       );
+      if (kind === 10) {
+        const stone = mx_noise_float(positionLocal.mul(14500))
+          .mul(0.5)
+          .add(0.5);
+        const moss = mx_noise_float(positionLocal.mul(5800)).mul(0.5).add(0.5);
+        const detail = mx_noise_float(positionLocal.mul(110000))
+          .mul(0.12)
+          .add(0.88);
+        material.colorNode = mix(
+          color(0x18332f),
+          color(0x455555),
+          smoothstep(0.28, 0.75, moss),
+        )
+          .mul(stone.mul(0.3).add(0.7))
+          .mul(detail);
+        material.normalNode = reliefNormal(
+          stone.mul(0.000006).add(detail.mul(0.000001)),
+        );
+        material.roughnessNode = mix(float(0.48), float(0.9), moss);
+      }
       if (kind === 2)
         material.emissiveNode = color(0x266779).mul(
           sin(
@@ -124,8 +148,10 @@ export class PlanetApproaches {
         material.dispose();
       }
       let lagoon: RegionalLagoon | undefined;
+      let garden: NacreGarden | undefined;
       if (kind === 10) {
         lagoon = new RegionalLagoon(root, this.time, this.viewer, this.motion);
+        garden = new NacreGarden(root, body.radius, material);
         this.reflectiveMeshes.push(lagoon.mesh);
       }
       if (kind === 6) {
@@ -174,7 +200,7 @@ export class PlanetApproaches {
           mx_noise_float(positionLocal.mul(5)).mul(0.25).add(0.8),
         );
         leafMaterial.emissiveNode = color(0x63bba2).mul(
-          float(1).sub(normalView.z.abs()).pow(3).mul(0.35).add(0.025),
+          float(1).sub(normalView.z.abs()).pow(3).mul(0.12).add(0.04),
         );
         const leafSource = new T.IcosahedronGeometry(1, 2);
         leafSource.deleteAttribute("normal");
@@ -217,6 +243,8 @@ export class PlanetApproaches {
           const z = kind === 2 ? (random() - 0.65) * 0.34 : Math.sin(angle) * r;
           const h = (kind === 2 ? 0.024 : 0.045) * (0.3 + random());
           dummy.position.copy(localPoint(x, z, kind === 2 ? h * 0.48 : 0));
+          if (kind === 10 && Math.hypot(x, z - NACRE_ENTRY_Z) < 0.018)
+            dummy.position.copy(localPoint(x + 0.035, z));
           dummy.rotation.set(
             (random() - 0.5) * 0.45,
             random() * Math.PI,
@@ -315,9 +343,14 @@ export class PlanetApproaches {
         particles,
         color: new T.Color(colorValue),
         lagoon,
+        garden,
       });
       // Approach is a continuous flight into a region, not a scene swap.
-      body.approachArrival = localPoint(0, 0.12, kind === 1 ? 0.018 : 0.0045)
+      body.approachArrival = localPoint(
+        0,
+        kind === 10 ? NACRE_ENTRY_Z : 0.12,
+        kind === 1 ? 0.018 : 0.0045,
+      )
         .applyQuaternion(frame)
         .add(up)
         .multiplyScalar(body.radius)
@@ -347,6 +380,22 @@ export class PlanetApproaches {
       };
     }
   }
+  walkSurface(id: string): WalkSurface | undefined {
+    const region = this.regions.find((r) => r.body.id === id && id === "nacre");
+    if (!region) return;
+    return {
+      id,
+      radius: region.body.radius,
+      center: region.body.position,
+      frame: region.frame,
+      up: region.up,
+      height: (x, z) => groundHeight(10, x, z),
+      water: lagoonHeight,
+    };
+  }
+  inspectGarden() {
+    return this.regions.find((r) => r.garden)?.garden?.inspect();
+  }
   update(observer: T.Vector3, time: number, speed: number) {
     this.time.value = time;
     this.active = "";
@@ -362,6 +411,7 @@ export class PlanetApproaches {
         .sub(r.up)
         .applyQuaternion(r.inverse);
       if (r.root.visible) r.lagoon?.update(local);
+      r.garden?.update(local, time, speed, r.root.visible);
       const weight =
         clamp((1.42 - distance) / 0.32) *
         clamp((0.4 - Math.max(Math.abs(local.x), Math.abs(local.z))) / 0.1);
@@ -385,6 +435,7 @@ export class PlanetApproaches {
     this.regions.forEach((r) => {
       r.particles.count = count;
       r.lagoon?.setQuality(quality);
+      r.garden?.setQuality(quality);
     });
   }
   dispose() {

@@ -1,0 +1,482 @@
+{
+  "url": "http://localhost:4173",
+  "testedAt": "2026-09-08T15:58:28.101Z",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "name": "Land arrival offers grounded walking",
+      "passed": true
+    },
+    {
+      "name": "Walking settles to eye height above actual terrain",
+      "passed": true
+    },
+    {
+      "name": "Ground-level view contains a rendered landscape, not a silent black frame",
+      "passed": true
+    },
+    {
+      "name": "W+D walks diagonally without leaving ground mode",
+      "passed": true
+    },
+    {
+      "name": "Walking leaves world-space light traces and streams local grass",
+      "passed": true
+    },
+    {
+      "name": "Walking drag look changes orientation with a free cursor",
+      "passed": true
+    },
+    {
+      "name": "Walking input release settles",
+      "passed": true
+    },
+    {
+      "name": "Walking can leave a visible persistent little light",
+      "passed": true
+    },
+    {
+      "name": "Stillness gathers living light",
+      "passed": true
+    },
+    {
+      "name": "Stillness and created light contains a rendered landscape, not a silent black frame",
+      "passed": true
+    },
+    {
+      "name": "Quiet walking does not leave an invisible control panel",
+      "passed": true
+    },
+    {
+      "name": "Walking controls fit portrait",
+      "passed": true
+    },
+    {
+      "name": "Two thumbs walk and look at the same time",
+      "passed": true
+    },
+    {
+      "name": "Mobile walking explains thumb controls",
+      "passed": true
+    },
+    {
+      "name": "Touch release leaves no stuck motion",
+      "passed": true
+    },
+    {
+      "name": "Visible take-flight control returns free flight",
+      "passed": true
+    },
+    {
+      "name": "Takeoff eases upward instead of snapping to the flight envelope",
+      "passed": true
+    },
+    {
+      "name": "Flight still responds after walking",
+      "passed": true
+    },
+    {
+      "name": "Landing again remains available after takeoff",
+      "passed": true
+    },
+    {
+      "name": "Wander leaves walking gently",
+      "passed": true
+    },
+    {
+      "name": "Manual input immediately takes over from coastal Wander",
+      "passed": true
+    },
+    {
+      "name": "R recovers the original sea without walking state",
+      "passed": true
+    },
+    {
+      "name": "No rendering or runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "performance": [],
+  "renderedFrames": [
+    {
+      "name": "Ground-level view",
+      "mean": 39.45546874999998,
+      "litFraction": 0.933203125
+    },
+    {
+      "name": "Stillness and created light",
+      "mean": 38.22382812500003,
+      "litFraction": 0.90546875
+    }
+  ],
+  "state": {
+    "ready": true,
+    "sanctuary": "last-light",
+    "backend": "WebGL2",
+    "paused": false,
+    "mode": "FREE",
+    "quiet": false,
+    "selected": null,
+    "selectedId": "",
+    "selectedKind": "",
+    "selectionX": 60.02757571134399,
+    "selectionY": 71.62895569754308,
+    "selectionVisible": false,
+    "nearest": "THE LAST LIGHT",
+    "quality": "BATTERY",
+    "fps": 144,
+    "frameMs": 6.944999999999951,
+    "drawCalls": 105,
+    "triangles": 1231707,
+    "particles": 5000,
+    "dpr": 0.85,
+    "sectors": 27,
+    "distance": 24.203106350447342,
+    "velocity": 0,
+    "speedDial": 1,
+    "seeds": 1,
+    "field": false,
+    "time": 101.52286666665842,
+    "learning": {
+      "look": 0.6112000000000009,
+      "move": 39.37228744102759,
+      "speed": 0.00261327301645766
+    },
+    "encounter": "",
+    "approach": "",
+    "walking": false,
+    "walkAvailable": false,
+    "gas": {
+      "active": 48,
+      "released": 6,
+      "absorbed": 240,
+      "time": 101.48333333336016
+    },
+    "relativity": {
+      "active": false,
+      "ended": false,
+      "radius": 6,
+      "properTime": 0,
+      "rate": 1,
+      "radialTide": 0,
+      "outwardLight": 0
+    },
+    "relativityLoading": false,
+    "relativityError": false,
+    "experiment": {
+      "active": 0,
+      "absorbed": 0,
+      "escaped": 0,
+      "launched": 0,
+      "gravity": 1
+    },
+    "assetFallback": false,
+    "generatedSectors": 45,
+    "createdVisible": 1,
+    "benchmark": "NONE",
+    "computeSubmitMs": 0.3999999910593033,
+    "gpuRenderMs": null,
+    "gpuComputeMs": null,
+    "walkedDistance": 21.461507585385494,
+    "walkEyeHeight": 1.8045765982817124,
+    "garden": {
+      "stillness": 0.1834177084983276,
+      "blades": 0,
+      "footprints": 10,
+      "lifeVisible": false,
+      "lifeCount": 72
+    },
+    "gasSample": [
+      [
+        0,
+        7,
+        0.12,
+        0
+      ],
+      [
+        0,
+        7,
+        0.12,
+        0
+      ],
+      [
+        0,
+        7,
+        0.12,
+        0
+      ]
+    ],
+    "orbitSample": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "stillness": 0.1170178723930854,
+    "beautyEvent": "none",
+    "beautyEventTime": 0,
+    "eventsSeen": 0,
+    "livingParticles": 1200,
+    "waterWakes": 1,
+    "position": [
+      0,
+      22,
+      460
+    ],
+    "quaternion": [
+      0.047482140035779614,
+      0,
+      0,
+      0.9988720870950507
+    ],
+    "velocityVector": [
+      0,
+      0,
+      0
+    ],
+    "speed": 28,
+    "keys": [],
+    "bodies": [
+      {
+        "id": "orpheus",
+        "x": 195,
+        "y": -6616.192083186756,
+        "z": 1.000244112863387
+      },
+      {
+        "id": "giant",
+        "x": 285.79527084984824,
+        "y": 317.35669078703324,
+        "z": 0.9999944702620099
+      },
+      {
+        "id": "moon",
+        "x": 65.9344267885743,
+        "y": 419.5097276486511,
+        "z": 0.9999921183965658
+      },
+      {
+        "id": "wound",
+        "x": -324.44620688656454,
+        "y": 712.8033185472701,
+        "z": 1.0000046788262604
+      },
+      {
+        "id": "cathedral",
+        "x": 1173.6111086311005,
+        "y": 118.0604325648094,
+        "z": 0.9999895740652456
+      },
+      {
+        "id": "bloom",
+        "x": 28.768574891714383,
+        "y": 345.9214544924643,
+        "z": 0.9999939206424522
+      },
+      {
+        "id": "ember",
+        "x": 963.8433291537576,
+        "y": 618.6158790679208,
+        "z": 0.999987292893171
+      },
+      {
+        "id": "serein",
+        "x": -202.6636134908944,
+        "y": 565.8455989985408,
+        "z": 0.9999963336269391
+      },
+      {
+        "id": "nacre",
+        "x": 470.3674015867598,
+        "y": 408.33260164633367,
+        "z": 0.9999971591974598
+      },
+      {
+        "id": "last-light",
+        "x": 195,
+        "y": 508.64593302536764,
+        "z": 0.9978062927124502
+      },
+      {
+        "id": "moonfall",
+        "x": -162.3332955330483,
+        "y": 483.18776606985665,
+        "z": 0.9997177125215078
+      },
+      {
+        "id": "forest",
+        "x": 715.9809621727588,
+        "y": 485.48705327591387,
+        "z": 0.9995450801744874
+      },
+      {
+        "id": "veil",
+        "x": 531.5325506559915,
+        "y": 409.7176569416166,
+        "z": 0.9998075000451774
+      },
+      {
+        "id": "living-sky",
+        "x": 119.81966393640886,
+        "y": 402.3960330287326,
+        "z": 0.99986144589428
+      },
+      {
+        "id": "sector--1,-1,-1",
+        "x": -314.38535210594904,
+        "y": 987.3807144308906,
+        "z": 0.9999964565491821
+      },
+      {
+        "id": "sector-0,-1,-1",
+        "x": 902.117168146926,
+        "y": 796.3423685190509,
+        "z": 0.9999963888910015
+      },
+      {
+        "id": "sector--1,0,-1",
+        "x": -380.3482696999927,
+        "y": -65.73547606197822,
+        "z": 0.9999961604088426
+      },
+      {
+        "id": "sector-0,0,-1",
+        "x": 543.9644918176142,
+        "y": 156.20632711323387,
+        "z": 0.9999972874785482
+      },
+      {
+        "id": "sector-1,0,-1",
+        "x": 1477.408828072487,
+        "y": 23.408510223124058,
+        "z": 0.9999958419832513
+      },
+      {
+        "id": "sector-0,1,-1",
+        "x": 826.3548854560772,
+        "y": -1152.8868093522765,
+        "z": 0.9999952204488378
+      },
+      {
+        "id": "sector-1,1,-1",
+        "x": 1395.6572817758936,
+        "y": -729.4759020001842,
+        "z": 0.9999956678747633
+      },
+      {
+        "id": "sector--1,-1,0",
+        "x": 720.1639458909971,
+        "y": 90.18198741610827,
+        "z": 1.0000031666240847
+      },
+      {
+        "id": "sector-0,-1,0",
+        "x": -583.7855197292993,
+        "y": -591.2484605152691,
+        "z": 1.000005286591001
+      },
+      {
+        "id": "sector-1,-1,0",
+        "x": -2206.994840367406,
+        "y": -563.5227661218129,
+        "z": 1.000007521679585
+      },
+      {
+        "id": "cloud-1,-1,0",
+        "x": -1465.532593929318,
+        "y": -76.63146599252451,
+        "z": 1.0000051662872484
+      },
+      {
+        "id": "sector--1,0,0",
+        "x": 1496.2570765263142,
+        "y": 1605.9004134203894,
+        "z": 1.0000069580123268
+      },
+      {
+        "id": "cloud--1,0,0",
+        "x": 865.3024131908414,
+        "y": 1152.7165089881726,
+        "z": 1.0000044989035273
+      },
+      {
+        "id": "sector-0,0,0",
+        "x": -659.7714070332328,
+        "y": 944.0405654599174,
+        "z": 1.0000045660181809
+      },
+      {
+        "id": "sector-1,0,0",
+        "x": -2951.7582597266596,
+        "y": 1328.0225587653108,
+        "z": 1.0000096627115678
+      },
+      {
+        "id": "sector--1,1,0",
+        "x": 1953.9019768027595,
+        "y": 5058.725193437673,
+        "z": 1.0000146142475421
+      },
+      {
+        "id": "cloud--1,1,0",
+        "x": 1044.560929923695,
+        "y": 3039.5918632738144,
+        "z": 1.0000079026561624
+      },
+      {
+        "id": "sector-0,1,0",
+        "x": -792.2745027423688,
+        "y": 5937.51390595821,
+        "z": 1.0000156215716824
+      },
+      {
+        "id": "sector-1,1,0",
+        "x": -1562.1408889869213,
+        "y": 2436.9798056770146,
+        "z": 1.00000687446881
+      },
+      {
+        "id": "sector-0,-1,1",
+        "x": -49.789109407295484,
+        "y": 341.78643470726007,
+        "z": 1.0000018539960782
+      },
+      {
+        "id": "sector-1,-1,1",
+        "x": -449.08412906917624,
+        "y": 274.8354768274505,
+        "z": 1.0000023151563733
+      },
+      {
+        "id": "sector--1,0,1",
+        "x": 479.93776897892,
+        "y": 695.2921366745546,
+        "z": 1.0000020804516279
+      },
+      {
+        "id": "sector-1,0,1",
+        "x": -420.4070427611399,
+        "y": 660.7623114249878,
+        "z": 1.000002270990064
+      },
+      {
+        "id": "sector--1,1,1",
+        "x": 431.8239448371416,
+        "y": 1227.9927869684425,
+        "z": 1.0000026672178597
+      },
+      {
+        "id": "sector-0,1,1",
+        "x": -129.72971206289787,
+        "y": 1314.7887334552368,
+        "z": 1.000002805100787
+      }
+    ]
+  }
+}

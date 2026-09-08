@@ -360,7 +360,7 @@ const places: Record<Language, Record<string, PlaceText>> = {
       name: "The Wound",
       kind: "Gravitational anomaly",
       description:
-        "Let a little matter go and watch gravity draw. Different starting speeds lead to orbit, escape, or capture.",
+        "Gas arrives unevenly, stretches into bright streams and slips inward. Let a little more go and watch its path.",
     },
     cathedral: {
       name: "The Cathedral",
@@ -435,7 +435,7 @@ const places: Record<Language, Record<string, PlaceText>> = {
       name: "빛의 틈",
       kind: "블랙홀",
       description:
-        "작은 물질을 놓고 중력이 그리는 길을 바라보세요. 출발 속도에 따라 공전하거나, 탈출하거나, 안으로 떨어져요.",
+        "가스가 한꺼번에 밀려들고, 밝은 띠로 늘어지다가 안으로 스며들어요. 한 줄기 더 흘려보내고 그 길을 바라보세요.",
     },
     cathedral: {
       name: "대성당",

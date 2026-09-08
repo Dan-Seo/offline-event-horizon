@@ -1,0 +1,449 @@
+{
+  "url": "http://localhost:4173",
+  "testedAt": "2026-09-08T15:42:13.692Z",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "name": "Land arrival offers grounded walking",
+      "passed": true
+    },
+    {
+      "name": "Walking settles to eye height above actual terrain",
+      "passed": true
+    },
+    {
+      "name": "W+D walks diagonally without leaving ground mode",
+      "passed": true
+    },
+    {
+      "name": "Walking leaves world-space light traces and streams local grass",
+      "passed": true
+    },
+    {
+      "name": "Walking drag look changes orientation with a free cursor",
+      "passed": true
+    },
+    {
+      "name": "Walking input release settles",
+      "passed": true
+    },
+    {
+      "name": "Walking can leave a visible persistent little light",
+      "passed": true
+    },
+    {
+      "name": "Stillness gathers living light",
+      "passed": true
+    },
+    {
+      "name": "Quiet walking does not leave an invisible control panel",
+      "passed": true
+    },
+    {
+      "name": "Walking controls fit portrait",
+      "passed": true
+    },
+    {
+      "name": "Two thumbs walk and look at the same time",
+      "passed": true
+    },
+    {
+      "name": "Mobile walking explains thumb controls",
+      "passed": true
+    },
+    {
+      "name": "Touch release leaves no stuck motion",
+      "passed": true
+    },
+    {
+      "name": "Visible take-flight control returns free flight",
+      "passed": true
+    },
+    {
+      "name": "Takeoff eases upward instead of snapping to the flight envelope",
+      "passed": true
+    },
+    {
+      "name": "Flight still responds after walking",
+      "passed": true
+    },
+    {
+      "name": "R recovers the original sea without walking state",
+      "passed": true
+    },
+    {
+      "name": "No rendering or runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "state": {
+    "ready": true,
+    "sanctuary": "last-light",
+    "backend": "WebGPU",
+    "paused": false,
+    "mode": "FREE",
+    "quiet": false,
+    "selected": null,
+    "selectedId": "",
+    "selectedKind": "",
+    "selectionX": 55.84880304998201,
+    "selectionY": 61.298797695140514,
+    "selectionVisible": false,
+    "nearest": "THE LAST LIGHT",
+    "quality": "HIGH",
+    "fps": 144,
+    "frameMs": 6.944999999999951,
+    "drawCalls": 105,
+    "triangles": 1693675,
+    "particles": 80000,
+    "dpr": 1,
+    "sectors": 27,
+    "distance": 24.203106350447342,
+    "velocity": 0,
+    "speedDial": 1,
+    "seeds": 1,
+    "field": false,
+    "time": 95.39196666665966,
+    "learning": {
+      "look": 0.6112000000000001,
+      "move": 35.90750611075221,
+      "speed": 0.00261327301645766
+    },
+    "encounter": "",
+    "approach": "",
+    "walking": false,
+    "walkAvailable": false,
+    "gas": {
+      "active": 48,
+      "released": 6,
+      "absorbed": 240,
+      "time": 95.35000000002195
+    },
+    "relativity": {
+      "active": false,
+      "ended": false,
+      "radius": 6,
+      "properTime": 0,
+      "rate": 1,
+      "radialTide": 0,
+      "outwardLight": 0
+    },
+    "relativityLoading": false,
+    "relativityError": false,
+    "experiment": {
+      "active": 0,
+      "absorbed": 0,
+      "escaped": 0,
+      "launched": 0,
+      "gravity": 1
+    },
+    "assetFallback": false,
+    "generatedSectors": 45,
+    "createdVisible": 1,
+    "benchmark": "NONE",
+    "computeSubmitMs": 0,
+    "gpuRenderMs": null,
+    "gpuComputeMs": null,
+    "walkedDistance": 21.473586609452155,
+    "walkEyeHeight": 1.8000000000000056,
+    "garden": {
+      "stillness": 0.23425836438336228,
+      "blades": 0,
+      "footprints": 10,
+      "lifeVisible": false,
+      "lifeCount": 72
+    },
+    "gasSample": [
+      [
+        0,
+        7,
+        0.12,
+        0
+      ],
+      [
+        0,
+        7,
+        0.12,
+        0
+      ],
+      [
+        0,
+        7,
+        0.12,
+        0
+      ]
+    ],
+    "orbitSample": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "stillness": 0.1660088697653213,
+    "beautyEvent": "none",
+    "beautyEventTime": 0,
+    "eventsSeen": 0,
+    "livingParticles": 8192,
+    "waterWakes": 1,
+    "position": [
+      0,
+      22,
+      460
+    ],
+    "quaternion": [
+      0.04748214003577963,
+      0,
+      0,
+      0.9988720870950509
+    ],
+    "velocityVector": [
+      0,
+      0,
+      0
+    ],
+    "speed": 28,
+    "keys": [],
+    "bodies": [
+      {
+        "id": "orpheus",
+        "x": 195,
+        "y": -6616.192083186753,
+        "z": 1.0001220564316933
+      },
+      {
+        "id": "giant",
+        "x": 285.7952708498482,
+        "y": 317.35669078703324,
+        "z": 0.9999972351310049
+      },
+      {
+        "id": "moon",
+        "x": 65.9344267885743,
+        "y": 419.5097276486511,
+        "z": 0.9999960591982827
+      },
+      {
+        "id": "wound",
+        "x": -324.44620688656454,
+        "y": 712.8033185472701,
+        "z": 1.0000023394131299
+      },
+      {
+        "id": "cathedral",
+        "x": 1173.6111086311005,
+        "y": 118.0604325648094,
+        "z": 0.9999947870326227
+      },
+      {
+        "id": "bloom",
+        "x": 28.768574891714383,
+        "y": 345.9214544924643,
+        "z": 0.9999969603212261
+      },
+      {
+        "id": "ember",
+        "x": 963.8433291537576,
+        "y": 618.6158790679208,
+        "z": 0.9999936464465854
+      },
+      {
+        "id": "serein",
+        "x": -202.6636134908944,
+        "y": 565.8455989985408,
+        "z": 0.9999981668134693
+      },
+      {
+        "id": "nacre",
+        "x": 470.3674015867598,
+        "y": 408.33260164633367,
+        "z": 0.9999985795987297
+      },
+      {
+        "id": "last-light",
+        "x": 195,
+        "y": 508.64593302536764,
+        "z": 0.9989031463562251
+      },
+      {
+        "id": "moonfall",
+        "x": -162.3332955330483,
+        "y": 483.18776606985665,
+        "z": 0.9998588562607538
+      },
+      {
+        "id": "forest",
+        "x": 715.9809621727588,
+        "y": 485.487053275914,
+        "z": 0.9997725400872435
+      },
+      {
+        "id": "veil",
+        "x": 531.5325506559915,
+        "y": 409.7176569416166,
+        "z": 0.9999037500225885
+      },
+      {
+        "id": "living-sky",
+        "x": 119.81966393640886,
+        "y": 402.39603302873263,
+        "z": 0.9999307229471398
+      },
+      {
+        "id": "sector--1,-1,-1",
+        "x": -314.3853521059492,
+        "y": 987.3807144308909,
+        "z": 0.9999982282745908
+      },
+      {
+        "id": "sector-0,-1,-1",
+        "x": 902.117168146926,
+        "y": 796.3423685190509,
+        "z": 0.9999981944455005
+      },
+      {
+        "id": "sector--1,0,-1",
+        "x": -380.3482696999927,
+        "y": -65.73547606197822,
+        "z": 0.9999980802044213
+      },
+      {
+        "id": "sector-0,0,-1",
+        "x": 543.9644918176141,
+        "y": 156.20632711323393,
+        "z": 0.9999986437392739
+      },
+      {
+        "id": "sector-1,0,-1",
+        "x": 1477.408828072487,
+        "y": 23.408510223124104,
+        "z": 0.9999979209916254
+      },
+      {
+        "id": "sector-0,1,-1",
+        "x": 826.3548854560772,
+        "y": -1152.8868093522765,
+        "z": 0.999997610224419
+      },
+      {
+        "id": "sector-1,1,-1",
+        "x": 1395.6572817758936,
+        "y": -729.4759020001842,
+        "z": 0.9999978339373816
+      },
+      {
+        "id": "sector--1,-1,0",
+        "x": 720.1639458909971,
+        "y": 90.18198741610831,
+        "z": 1.0000015833120421
+      },
+      {
+        "id": "sector-0,-1,0",
+        "x": -583.7855197292993,
+        "y": -591.2484605152691,
+        "z": 1.0000026432955005
+      },
+      {
+        "id": "sector-1,-1,0",
+        "x": -2206.994840367406,
+        "y": -563.5227661218129,
+        "z": 1.0000037608397923
+      },
+      {
+        "id": "cloud-1,-1,0",
+        "x": -1465.532593929318,
+        "y": -76.63146599252451,
+        "z": 1.000002583143624
+      },
+      {
+        "id": "sector--1,0,0",
+        "x": 1496.2570765263147,
+        "y": 1605.90041342039,
+        "z": 1.0000034790061632
+      },
+      {
+        "id": "cloud--1,0,0",
+        "x": 865.3024131908414,
+        "y": 1152.7165089881728,
+        "z": 1.0000022494517635
+      },
+      {
+        "id": "sector-0,0,0",
+        "x": -659.7714070332328,
+        "y": 944.0405654599174,
+        "z": 1.0000022830090902
+      },
+      {
+        "id": "sector-1,0,0",
+        "x": -2951.7582597266596,
+        "y": 1328.0225587653108,
+        "z": 1.0000048313557837
+      },
+      {
+        "id": "sector--1,1,0",
+        "x": 1953.9019768027601,
+        "y": 5058.7251934376745,
+        "z": 1.000007307123771
+      },
+      {
+        "id": "cloud--1,1,0",
+        "x": 1044.560929923695,
+        "y": 3039.5918632738144,
+        "z": 1.000003951328081
+      },
+      {
+        "id": "sector-0,1,0",
+        "x": -792.2745027423689,
+        "y": 5937.513905958211,
+        "z": 1.000007810785841
+      },
+      {
+        "id": "sector-1,1,0",
+        "x": -1562.1408889869213,
+        "y": 2436.9798056770146,
+        "z": 1.0000034372344049
+      },
+      {
+        "id": "sector-0,-1,1",
+        "x": -49.789109407295484,
+        "y": 341.78643470726007,
+        "z": 1.000000926998039
+      },
+      {
+        "id": "sector-1,-1,1",
+        "x": -449.08412906917624,
+        "y": 274.8354768274505,
+        "z": 1.0000011575781864
+      },
+      {
+        "id": "sector--1,0,1",
+        "x": 479.93776897892,
+        "y": 695.2921366745546,
+        "z": 1.0000010402258137
+      },
+      {
+        "id": "sector-1,0,1",
+        "x": -420.4070427611399,
+        "y": 660.7623114249878,
+        "z": 1.000001135495032
+      },
+      {
+        "id": "sector--1,1,1",
+        "x": 431.8239448371416,
+        "y": 1227.9927869684425,
+        "z": 1.00000133360893
+      },
+      {
+        "id": "sector-0,1,1",
+        "x": -129.72971206289787,
+        "y": 1314.7887334552368,
+        "z": 1.0000014025503934
+      }
+    ]
+  }
+}

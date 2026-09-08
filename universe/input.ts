@@ -11,6 +11,7 @@ export type InputAction =
   | "places"
   | "experiment"
   | "orbit"
+  | "walk"
   | "manual"
   | "cancel";
 type Touch = {
@@ -47,6 +48,7 @@ const actions: Record<string, InputAction> = {
   KeyM: "places",
   KeyT: "experiment",
   KeyO: "orbit",
+  KeyJ: "walk",
   Backquote: "hud",
   Escape: "cancel",
 };
@@ -249,7 +251,8 @@ export class InputManager {
     this.wheel = 0;
     this.manual = false;
     for (const id of this.captures) {
-      if (this.canvas.hasPointerCapture(id)) this.canvas.releasePointerCapture(id);
+      if (this.canvas.hasPointerCapture(id))
+        this.canvas.releasePointerCapture(id);
     }
     this.captures.clear();
   };

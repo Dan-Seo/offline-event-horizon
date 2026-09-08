@@ -30,6 +30,9 @@ export type UniverseSnapshot = {
   learning: { look: number; move: number; speed: number };
   encounter: string;
   approach: string;
+  walking: boolean;
+  walkAvailable: boolean;
+  gas: { active: number; released: number; absorbed: number; time: number };
   relativity: {
     active: boolean;
     ended: boolean;
@@ -80,6 +83,9 @@ export const initialSnapshot: UniverseSnapshot = {
   learning: { look: 0, move: 0, speed: 0 },
   encounter: "",
   approach: "",
+  walking: false,
+  walkAvailable: false,
+  gas: { active: 0, released: 0, absorbed: 0, time: 0 },
   relativity: {
     active: false,
     ended: false,

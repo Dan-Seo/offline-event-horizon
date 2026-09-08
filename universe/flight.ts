@@ -37,6 +37,11 @@ export class FlightController {
   private orbitRadius = 0;
   private approaching = false;
   private approachWaypoint?: T.Vector3;
+  private departure?: {
+    id: string;
+    ground: (position: T.Vector3) => number;
+    time: number;
+  };
   selected?: Destination;
   holdBeauty = false;
   private wanderTime = 0;
@@ -52,6 +57,7 @@ export class FlightController {
   private dummy = new T.Object3D();
   private direction = new T.Vector3();
   reset() {
+    this.departure = undefined;
     this.position.copy(HOME);
     this.quaternion.setFromEuler(new T.Euler(HOME_PITCH, 0, 0));
     this.velocity.set(0, 0, 0);
@@ -67,6 +73,9 @@ export class FlightController {
     this.pendingLook.set(0, 0);
     this.approaching = false;
     this.approachWaypoint = undefined;
+  }
+  departSurface(id: string, ground: (position: T.Vector3) => number) {
+    this.departure = { id, ground, time: 0 };
   }
   focus(target = this.selected) {
     if (target) {
@@ -398,14 +407,24 @@ export class FlightController {
     if (this.mode === "FREE" && movement)
       input.learning.move += this.velocity.length() * dt;
     this.position.addScaledVector(this.velocity, dt);
+    if (this.departure) {
+      this.departure.time += dt;
+      if (this.departure.time >= 3) this.departure = undefined;
+    }
     for (const b of bodies) {
       if (b.solid === false) continue;
       this.offset.copy(this.position).sub(b.position);
-      const floor = b.clearance
+      let floor = b.clearance
         ? b.clearance(this.offset.clone().normalize())
         : b.surface
           ? b.radius + 2
           : b.radius * 1.006 + 3;
+      if (this.departure?.id === b.id) {
+        const t = this.departure.time / 3,
+          blend = t * t * (3 - 2 * t);
+        const ground = this.departure.ground(this.position);
+        floor = ground + (floor - ground) * blend;
+      }
       if (this.offset.length() < floor) {
         this.offset.normalize();
         this.position.copy(b.position).addScaledVector(this.offset, floor);
