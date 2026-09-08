@@ -3,7 +3,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "OFFLINE // VASTNESS",
   description:
-    "Go anywhere. A quiet, freely explorable universe for a little distance from everything.",
+    "Nothing needs you right now. Mirror seas, breathing forests, and a freely explorable universe. Take your time.",
   icons: { icon: "/icon.svg" },
 };
 export const viewport: Viewport = {

@@ -15,6 +15,8 @@ import {
   vec3,
   vec4,
   attribute,
+  mix,
+  smoothstep,
 } from "three/tsl";
 import { clamp, QUALITY, seeded, type Quality } from "./config";
 // The simulation has a moving local domain. Rebasing changes representation, not trajectories.
@@ -35,6 +37,9 @@ export class MatterField {
   private force = uniform(0);
   private seed = uniform(new T.Vector3(4, 4, 4));
   private seedStrength = uniform(0);
+  private shelter = uniform(0);
+  private stirring = uniform(new T.Vector3());
+  private gentleness = uniform(0);
   private compute?: T.ComputeNode;
   private positions: Float32Array;
   private velocities: Float32Array;
@@ -91,7 +96,11 @@ export class MatterField {
         const orbit = vec3(toSeed.z.negate(), 0, toSeed.x)
           .mul(this.seedStrength)
           .mul(0.08);
-        v.addAssign(fieldForce.add(seedForce).add(orbit).mul(this.dt));
+        const nearby = float(1).sub(smoothstep(0.05, 0.36, length(p)));
+        const wake = this.stirring.mul(nearby).mul(this.shelter).mul(0.18);
+        v.addAssign(
+          fieldForce.add(seedForce).add(orbit).add(wake).mul(this.dt),
+        );
         v.mulAssign(pow(0.998, this.dt.mul(60)));
         p.addAssign(v.mul(this.dt));
         If(p.x.abs().greaterThan(1), () => {
@@ -125,13 +134,18 @@ export class MatterField {
           ),
         ).xyz,
       );
-    material.colorNode = attribute<"vec3">("aHue", "vec3").mul(0.8);
+    material.colorNode = mix(
+      attribute<"vec3">("aHue", "vec3"),
+      vec3(0.23, 0.52, 0.45),
+      this.shelter.mul(0.7),
+    ).mul(0.8);
     material.opacityNode = pow(
       max(0, float(1).sub(length(uv().sub(0.5).mul(2)))),
       2,
     )
       .mul(float(1).sub(smoothEdge(position)))
-      .mul(0.48);
+      .mul(mix(0.48, 0.11, this.shelter))
+      .mul(this.gentleness.mul(0.35).add(0.65));
     this.mesh = new T.Mesh(g, material);
     this.mesh.frustumCulled = false;
     scene.add(this.mesh);
@@ -155,6 +169,9 @@ export class MatterField {
     dt: number,
     force: number,
     seed?: T.Vector3,
+    sanctuary = 0,
+    stillness = 0,
+    velocity = new T.Vector3(),
   ) {
     const size = clamp(Math.max(200, clearance) * 0.7, 300, 60000),
       next = this.domain + (size - this.domain) * Math.min(1, dt * 1.8 + 0.01);
@@ -168,6 +185,9 @@ export class MatterField {
     this.anchor.copy(position);
     this.scale.value = next;
     this.dt.value = dt;
+    this.shelter.value = sanctuary;
+    this.gentleness.value = stillness;
+    this.stirring.value.copy(velocity).divideScalar(next).clampLength(0, 0.3);
     this.field.value.set(0, 0, -0.35).applyQuaternion(rotation);
     this.force.value = force;
     this.fieldActive = force !== 0;
@@ -201,15 +221,29 @@ export class MatterField {
           b =
             (this.seedStrength.value * 0.016) /
             Math.pow(sx * sx + sy * sy + sz * sz + 0.012, 1.5);
+        const near = clamp(
+          (0.36 - Math.hypot(p[j], p[j + 1], p[j + 2])) / 0.31,
+        );
+        const wake = near * near * (3 - 2 * near) * sanctuary * 0.18;
         v[j] =
           (v[j] * r +
-            (dx * a + sx * b - sz * 0.08 * this.seedStrength.value) * dt) *
+            (dx * a +
+              sx * b -
+              sz * 0.08 * this.seedStrength.value +
+              this.stirring.value.x * wake) *
+              dt) *
           Math.pow(0.998, dt * 60);
         v[j + 1] =
-          (v[j + 1] * r + (dy * a + sy * b) * dt) * Math.pow(0.998, dt * 60);
+          (v[j + 1] * r +
+            (dy * a + sy * b + this.stirring.value.y * wake) * dt) *
+          Math.pow(0.998, dt * 60);
         v[j + 2] =
           (v[j + 2] * r +
-            (dz * a + sz * b + sx * 0.08 * this.seedStrength.value) * dt) *
+            (dz * a +
+              sz * b +
+              sx * 0.08 * this.seedStrength.value +
+              this.stirring.value.z * wake) *
+              dt) *
           Math.pow(0.998, dt * 60);
         for (let k = 0; k < 3; k++) {
           p[j + k] += v[j + k] * dt;

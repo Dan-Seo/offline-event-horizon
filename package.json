@@ -12,11 +12,13 @@
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "qa": "node scripts/vastness-look.mjs",
-    "qa:controls": "node scripts/vastness-controls.mjs",
-    "qa:devices": "node scripts/vastness-devices.mjs",
-    "qa:performance": "node scripts/vastness-performance.mjs",
-    "qa:resilience": "node scripts/vastness-resilience.mjs"
+    "qa": "node scripts/sanctuary-look.mjs",
+    "qa:controls": "node scripts/sanctuary-controls.mjs",
+    "qa:devices": "node scripts/sanctuary-devices.mjs",
+    "qa:performance": "node scripts/sanctuary-performance.mjs",
+    "qa:resilience": "node scripts/sanctuary-resilience.mjs",
+    "qa:place": "node scripts/sanctuary-journey.mjs",
+    "test:reconstruction": "python -m unittest discover -s tests -p test_reconstruction_report.py"
   },
   "dependencies": {
     "next": "16.3.4",

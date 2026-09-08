@@ -8,6 +8,7 @@ import { StarField } from "./stars";
 import { GravitationalAnomaly } from "./anomaly";
 import { QUALITY, seeded, sectorSeed, type Quality } from "./config";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { Sanctuaries } from "./sanctuaries";
 export type Body = Destination & {
   object: T.Group;
   color: number;
@@ -21,6 +22,7 @@ export class UniverseWorld {
   nebulae = new NebulaLibrary();
   anomaly = new GravitationalAnomaly();
   stars: StarField;
+  sanctuaries: Sanctuaries;
   private sectorMap = new Map<
     string,
     { group: T.Group; center: T.Vector3; bodies: Body[] }
@@ -33,7 +35,11 @@ export class UniverseWorld {
   private cathedralLow?: T.Group;
   private disposed = false;
   assetFallback = false;
-  constructor(public scene: T.Scene) {
+  nebulaBoost = 1;
+  constructor(
+    public scene: T.Scene,
+    gpu = true,
+  ) {
     this.stars = new StarField(scene);
     const specs: [string, string, string, number[], number, number, number][] =
       [
@@ -41,7 +47,7 @@ export class UniverseWorld {
           "orpheus",
           "ORPHEUS IV",
           "Ocean world",
-          [5000, -48000, -16000],
+          [0, -48000, 0],
           48000,
           0x1b6972,
           0,
@@ -50,8 +56,8 @@ export class UniverseWorld {
           "giant",
           "THE SILENT GIANT",
           "Ringed giant",
-          [-105000, 41000, -380000],
-          20000,
+          [27000, 48000, -175000],
+          28000,
           0xb5a68e,
           1,
         ],
@@ -59,8 +65,8 @@ export class UniverseWorld {
           "moon",
           "SELENE",
           "Frozen moon",
-          [28000, 3000, -95000],
-          1900,
+          [-27000, 12500, -125000],
+          4400,
           0xa7b4b3,
           2,
         ],
@@ -68,7 +74,7 @@ export class UniverseWorld {
           "wound",
           "THE WOUND",
           "Gravitational anomaly",
-          [160000, 70000, -380000],
+          [190000, 85000, 230000],
           35000,
           0x020204,
           3,
@@ -77,7 +83,7 @@ export class UniverseWorld {
           "cathedral",
           "THE CATHEDRAL",
           "Ancient structure",
-          [19000, 27000, -78000],
+          [155000, 57000, -90000],
           1800,
           0xb3b29c,
           4,
@@ -119,7 +125,11 @@ export class UniverseWorld {
         const volume = this.nebulae.create();
         volume.scale.set(3.6, 2.1, 1.8);
         object.add(volume);
-      } else object.add(this.planets.create(archetype));
+      } else {
+        const planet = this.planets.create(id === "orpheus" ? 8 : archetype);
+        if (id === "orpheus") planet.scale.setScalar(0.9996);
+        object.add(planet);
+      }
       scene.add(object);
       this.bodies.push({
         id,
@@ -131,16 +141,19 @@ export class UniverseWorld {
         color,
         archetype,
         solid: ![4, 5].includes(archetype),
+        surface: id === "orpheus",
       });
     }
+    this.sanctuaries = new Sanctuaries(scene, this.nebulae.texture, gpu);
+    this.bodies.push(...this.sanctuaries.places);
     const sun = new T.DirectionalLight(0xffe4c4, 3.2);
     sun.position.set(-0.82, 0.38, 0.43);
     scene.add(sun);
-    scene.add(new T.AmbientLight(0x587b90, 0.18));
-    const fill = new T.DirectionalLight(0x718895, 0.38);
+    scene.add(new T.AmbientLight(0x718f9a, 0.55));
+    const fill = new T.DirectionalLight(0x718895, 0.65);
     fill.position.set(0.2, 0.5, -1);
     scene.add(fill);
-    this.asteroidCenter.set(-105000, 41000, -380000);
+    this.asteroidCenter.set(27000, 48000, -175000);
     const rock = new T.IcosahedronGeometry(1, 0);
     const positions = rock.attributes.position;
     for (let i = 0; i < positions.count; i++) {
@@ -344,13 +357,19 @@ export class UniverseWorld {
     this.nebulae.time.value = time;
     for (const sector of this.sectorMap.values())
       placeRelative(sector.group, sector.center, observer);
+    this.sanctuaries.update(observer, time);
+    this.nebulae.density.value =
+      (1 - this.sanctuaries.presence * 0.72) * this.nebulaBoost;
     for (const b of this.bodies) {
+      if (b.archetype === 7) continue;
       placeRelative(b.object, b.position, observer, b.radius);
+      if (b.id.startsWith("sector-") || b.id.startsWith("cloud-"))
+        b.object.visible = this.sanctuaries.presence < 0.7;
       if (![3, 4, 5].includes(b.archetype)) {
         b.object.rotation.set(
           b.archetype === 0 ? 0.5 : 0,
-          time * 0.003 + (b.id === "orpheus" ? 1.3 : 0),
-          b.archetype === 0 ? 0.8 : 0,
+          b.id === "orpheus" ? 0 : time * 0.003,
+          b.archetype === 0 && b.id !== "orpheus" ? 0.8 : 0,
         );
         this.planets.update(
           b.object.children[0] as T.Group,
@@ -369,6 +388,7 @@ export class UniverseWorld {
   }
   setQuality(quality: Quality) {
     this.nebulae.setQuality(quality);
+    this.sanctuaries.setQuality(quality);
     this.asteroids.count = QUALITY[quality].asteroids;
   }
   stressAsteroids() {
@@ -377,5 +397,6 @@ export class UniverseWorld {
   dispose() {
     this.disposed = true;
     this.nebulae.dispose();
+    this.sanctuaries.dispose();
   }
 }

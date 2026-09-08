@@ -1,6 +1,9 @@
 import type { Quality } from "./config";
 export type UniverseSnapshot = {
   ready: boolean;
+  locked: boolean;
+  lockFailed: boolean;
+  sanctuary: string;
   backend: string;
   paused: boolean;
   mode: string;
@@ -28,6 +31,9 @@ export type UniverseSnapshot = {
 };
 export const initialSnapshot: UniverseSnapshot = {
   ready: false,
+  locked: false,
+  lockFailed: false,
+  sanctuary: "last-light",
   backend: "Initializing",
   paused: false,
   mode: "FREE",
@@ -37,7 +43,7 @@ export const initialSnapshot: UniverseSnapshot = {
   selectionX: 0,
   selectionY: 0,
   selectionVisible: false,
-  nearest: "ORPHEUS IV",
+  nearest: "THE LAST LIGHT",
   quality: "HIGH",
   fps: 0,
   frameMs: 0,

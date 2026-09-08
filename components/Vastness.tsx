@@ -4,25 +4,64 @@ import { initialSnapshot } from "@/universe/state";
 import type { UniverseEngine } from "@/universe/engine";
 import type { Quality } from "@/universe/config";
 import type { InputAction } from "@/universe/input";
-const destinations = [
-  ["orpheus", "Orpheus IV", "Ocean world"],
-  ["giant", "The Silent Giant", "Ringed giant"],
-  ["wound", "The Wound", "Gravitational anomaly"],
-  ["cathedral", "The Cathedral", "Ancient structure"],
-  ["bloom", "The Bloom", "Luminous nebula"],
-  ["ember", "Ember", "Volcanic world"],
+const refuges = [
+  ["last-light", "The Last Light", "Water holding the sky"],
+  ["moonfall", "Moonfall", "Silver water, falling softly"],
+  ["forest", "The Breathing Forest", "A little light, a little life"],
+  ["veil", "The Veil", "A garden held by clouds"],
+  ["living-sky", "The Living Sky", "Room for a thousand quiet lives"],
 ];
+const distant = [
+  ["giant", "The Silent Giant", "Beyond the atmosphere"],
+  ["wound", "The Wound", "An absence of light"],
+  ["cathedral", "The Cathedral", "Something left behind"],
+  ["bloom", "The Bloom", "Interstellar dust"],
+];
+function Mark({ kind }: { kind: "wander" | "quiet" | "settings" | "sound" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      aria-hidden="true"
+    >
+      {kind === "wander" ? (
+        <>
+          <path d="M2 13c4-10 6 10 10 0s6 10 10-2" />
+          <path d="m18 8 4 3-3 4" />
+        </>
+      ) : kind === "quiet" ? (
+        <circle cx="12" cy="12" r="7" />
+      ) : kind === "sound" ? (
+        <>
+          <path d="m4 10 4 0 5-4v12l-5-4H4z" />
+          <path d="M17 8q5 4 0 8" />
+        </>
+      ) : (
+        <>
+          <path d="M4 7h16M4 17h16" />
+          <circle cx="9" cy="7" r="2" fill="#101e24" />
+          <circle cx="15" cy="17" r="2" fill="#101e24" />
+        </>
+      )}
+    </svg>
+  );
+}
 export default function Vastness() {
   const host = useRef<HTMLDivElement>(null),
     engine = useRef<UniverseEngine | null>(null);
   const [state, setState] = useState(initialSnapshot),
     [panel, setPanel] = useState<string | null>(null),
-    [help, setHelp] = useState(true),
+    [help, setHelp] = useState(false),
     [sound, setSound] = useState(false),
     [error, setError] = useState("");
   const [gentle, setGentle] = useState(false),
-    [creation, setCreation] = useState(false);
-  const [benchmark, setBenchmark] = useState("NONE");
+    [intro, setIntro] = useState(true),
+    [benchmark, setBenchmark] = useState("NONE"),
+    [further, setFurther] = useState(false);
   useEffect(() => {
     let cancelled = false;
     const onAction = (a: InputAction) => {
@@ -48,8 +87,7 @@ export default function Vastness() {
         setGentle(matchMedia("(prefers-reduced-motion: reduce)").matches);
       })
       .catch(() => {
-        if (!cancelled)
-          setError("The universe could not finish loading. Please try again.");
+        if (!cancelled) setError("This quiet corner could not finish loading.");
       });
     return () => {
       cancelled = true;
@@ -59,21 +97,20 @@ export default function Vastness() {
   }, []);
   useEffect(() => {
     if (!state.ready) return;
-    const id = setTimeout(() => setHelp(false), 12000);
-    return () => clearTimeout(id);
+    const timer = setTimeout(() => setIntro(false), 16000);
+    return () => clearTimeout(timer);
   }, [state.ready]);
-  const action = (a: InputAction) => {
-    engine.current?.action(a);
-  };
+  const action = (a: InputAction) => engine.current?.action(a);
   const toggle = (name: string) => setPanel((v) => (v === name ? null : name));
   return (
     <main
-      className={`vastness${state.quiet ? " quiet" : ""}`}
+      className={`vastness${state.quiet ? " quiet" : ""}${state.locked ? " pointer-locked" : ""}`}
       data-ready={state.ready}
       data-backend={state.backend}
       data-mode={state.mode}
       data-paused={state.paused}
       data-seeds={state.seeds}
+      data-sanctuary={state.sanctuary}
     >
       <div ref={host} className="universe-canvas" />
       <div className="vignette" aria-hidden="true" />
@@ -81,7 +118,6 @@ export default function Vastness() {
         <a href="/" aria-label="Offline Vastness home">
           OFFLINE <span>//</span> VASTNESS
         </a>
-        <span className="header-note">NOWHERE TO BE. NOTHING TO FINISH.</span>
         <button
           onClick={() => setHelp((v) => !v)}
           aria-label="Controls help"
@@ -92,24 +128,17 @@ export default function Vastness() {
       </header>
       {!state.ready && !error && (
         <div className="arrival" role="status">
-          <div className="arrival-orbit" />
-          <p>Making room.</p>
+          <p>Take your time.</p>
         </div>
       )}
       {state.ready && (
         <>
-          <div className="place">
-            <span className="eyebrow">
-              {state.mode === "DRIFT"
-                ? "DRIFTING NEAR"
-                : state.mode === "TRAVEL"
-                  ? "ON YOUR WAY"
-                  : "SOMEWHERE NEAR"}
-            </span>
-            <p>{state.mode === "TRAVEL" ? state.selected : state.nearest}</p>
-            <span className="place-line">
-              You can stay as long as you like.
-            </span>
+          <div
+            className={`arrival-thought${intro ? " visible" : ""}`}
+            aria-hidden={!intro}
+          >
+            <p>Nothing needs you right now.</p>
+            <span>You can stay a while.</span>
           </div>
           {state.selectionVisible && (
             <div
@@ -126,129 +155,122 @@ export default function Vastness() {
               </span>
             </div>
           )}
+          {state.locked && <div className="look-dot" aria-hidden="true" />}
           {help && (
             <aside className="controls-help" aria-label="Flight controls">
-              <p>GO ANYWHERE.</p>
+              <p>Make yourself comfortable.</p>
               <div>
-                <kbd>W A S D</kbd>
-                <span>Move</span>
+                <kbd>CLICK</kbd>
+                <span>Take the view</span>
                 <kbd>MOUSE</kbd>
                 <span>Look around</span>
+                <kbd>W A S D</kbd>
+                <span>Move</span>
                 <kbd>SCROLL</kbd>
                 <span>Travel speed</span>
                 <kbd>SHIFT / CTRL</kbd>
-                <span>Boost / precision</span>
-                <kbd>Q E · SPACE X</kbd>
-                <span>Roll · rise / descend</span>
-                <kbd>CLICK · F</kbd>
-                <span>Select · approach</span>
-                <kbd>LEFT DRAG</kbd>
+                <span>Faster / slower</span>
+                <kbd>Q E</kbd>
+                <span>Roll</span>
+                <kbd>SPACE / X</kbd>
+                <span>Rise / descend</span>
+                <kbd>CLICK / F</kbd>
+                <span>Select / approach</span>
+                <kbd>RIGHT DRAG</kbd>
                 <span>Orbit selection</span>
-                <kbd>G / V</kbd>
-                <span>Attract / repel matter</span>
-                <kbd>P · R · ESC</kbd>
-                <span>Pause · recover · cancel</span>
-                <kbd>B · K · H</kbd>
-                <span>Drift · quiet · help</span>
+                <kbd>B / K</kbd>
+                <span>Wander / quiet</span>
+                <kbd>P / R</kbd>
+                <span>Pause / return</span>
+                <kbd>G / V / N</kbd>
+                <span>Gather / release / light</span>
+                <kbd>ESC / H</kbd>
+                <span>Free cursor / help</span>
               </div>
+              <small className="desktop-help">
+                Click once to look freely. Esc gives you the cursor.
+                <br />
+                If pointer lock is unavailable, drag to look.
+                <br />
+                Your movement always takes over.
+              </small>
               <small className="touch-help">
                 Left thumb to move. Right thumb to look.
                 <br />
-                Pinch to change speed. Double tap to approach.
-              </small>
-              <small className="desktop-help">
-                L locks the pointer. Esc releases it.
+                Pinch to change speed. Tap to select.
                 <br />
-                Your movement always takes over.
+                Double tap to approach.
               </small>
             </aside>
           )}
           <footer className="flight-bar">
             <div className="flight-actions">
               <button
-                onClick={() => action("drift")}
-                aria-pressed={state.mode === "DRIFT"}
+                onClick={() => action("wander")}
+                aria-pressed={state.mode === "WANDER"}
+                aria-label="WANDER"
               >
-                ↝ <span>DRIFT</span>
+                <Mark kind="wander" />
+                <span>{state.mode === "WANDER" ? "WANDERING" : "WANDER"}</span>
               </button>
-              <button
-                onClick={() => toggle("places")}
-                aria-expanded={panel === "places"}
-              >
-                ⌖ <span>PLACES</span>
-              </button>
-              <button
-                onClick={() => {
-                  setCreation((v) => !v);
-                  setPanel(null);
-                }}
-                aria-pressed={creation}
-              >
-                ＋ <span>CREATE</span>
-              </button>
-              <button onClick={() => action("quiet")}>
-                ○ <span>QUIET</span>
+              <button onClick={() => action("quiet")} aria-label="QUIET">
+                <Mark kind="quiet" />
+                <span>QUIET</span>
               </button>
             </div>
             <div className="flight-tools">
               <button
                 onClick={async () => {
-                  const enabled = await engine.current?.audio.toggle();
-                  setSound(Boolean(enabled));
+                  try {
+                    setSound(Boolean(await engine.current?.audio.toggle()));
+                  } catch {
+                    setSound(false);
+                  }
                 }}
                 aria-label={sound ? "Mute sound" : "Enable sound"}
                 aria-pressed={sound}
               >
-                {sound ? "SOUND ON" : "SOUND OFF"}
+                <Mark kind="sound" />
+                <span>{sound ? "SOUND ON" : "SOUND OFF"}</span>
               </button>
               <button
                 onClick={() => toggle("settings")}
-                aria-label="Flight settings"
+                aria-label="Comfort settings"
+                aria-expanded={panel === "settings"}
               >
-                ⚙
+                <Mark kind="settings" />
               </button>
             </div>
           </footer>
-          <div className="speed-hint" aria-hidden="true">
-            <span>{state.mode === "FREE" ? "FREE FLIGHT" : state.mode}</span>
-            <i
-              style={{
-                width: `${Math.min(70, 10 + Math.log2(1 + state.speedDial) * 12)}px`,
-              }}
-            />
-            {state.paused && <span>SIMULATION PAUSED</span>}
+          <div
+            className={`input-hint${intro || state.paused || state.lockFailed ? " visible" : ""}`}
+            role="status"
+          >
+            {state.paused ? (
+              "The world is resting. P to resume."
+            ) : state.lockFailed ? (
+              "Drag to look · WASD to move"
+            ) : state.locked ? (
+              "Mouse to look · Esc for the cursor"
+            ) : (
+              <>
+                <span className="desktop-help">
+                  Click to look around <b>·</b> WASD to move
+                </span>
+                <span className="touch-help">
+                  Left thumb moves <b>·</b> Right thumb looks
+                </span>
+              </>
+            )}
           </div>
-          {creation && (
-            <div className="creation-bar">
-              <p>A small beginning.</p>
-              <button onClick={() => action("seed")}>
-                Plant a star <span>N</span>
-              </button>
-              <button
-                onPointerDown={() => engine.current?.input.keys.add("KeyG")}
-                onPointerUp={() => engine.current?.input.keys.delete("KeyG")}
-                onPointerLeave={() => engine.current?.input.keys.delete("KeyG")}
-                onPointerCancel={() =>
-                  engine.current?.input.keys.delete("KeyG")
-                }
-              >
-                Hold to gather
-              </button>
-              <small>
-                {state.seeds
-                  ? `${state.seeds} ${state.seeds === 1 ? "star" : "stars"} left in the quiet.`
-                  : "Matter remembers your touch."}
-              </small>
-            </div>
-          )}
           {panel && (
             <section
               className={`small-panel ${panel}`}
               aria-label={
                 panel === "places"
-                  ? "Places to discover"
+                  ? "Quiet places"
                   : panel === "settings"
-                    ? "Flight settings"
+                    ? "Comfort settings"
                     : "Technical benchmark"
               }
             >
@@ -259,31 +281,9 @@ export default function Vastness() {
               >
                 ×
               </button>
-              {panel === "places" && (
-                <>
-                  <p className="eyebrow">A FEW PLACES IN THE INFINITE</p>
-                  {destinations.map(([id, title, kind]) => (
-                    <button
-                      className="destination"
-                      key={id}
-                      onClick={() => {
-                        engine.current?.select(id, true);
-                        setPanel(null);
-                      }}
-                    >
-                      <span>
-                        {title}
-                        <small>{kind}</small>
-                      </span>
-                      <span>↗</span>
-                    </button>
-                  ))}
-                  <small>Move at any moment to take over.</small>
-                </>
-              )}
               {panel === "settings" && (
                 <>
-                  <p className="eyebrow">MAKE YOURSELF COMFORTABLE</p>
+                  <p className="eyebrow">AT YOUR OWN PACE</p>
                   <label>
                     Detail
                     <select
@@ -293,8 +293,8 @@ export default function Vastness() {
                         engine.current?.setQuality(e.target.value as Quality)
                       }
                     >
-                      {["ULTRA", "HIGH", "BALANCED", "BATTERY"].map((v) => (
-                        <option key={v}>{v}</option>
+                      {["ULTRA", "HIGH", "BALANCED", "BATTERY"].map((q) => (
+                        <option key={q}>{q}</option>
                       ))}
                     </select>
                   </label>
@@ -325,26 +325,68 @@ export default function Vastness() {
                       }}
                     />
                   </label>
+                  <button onClick={() => setPanel("places")}>
+                    Find somewhere quiet <span>↗</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      action("seed");
+                      setPanel(null);
+                    }}
+                  >
+                    Leave a little light
+                  </button>
                   <button onClick={() => action("pause")}>
-                    {state.paused ? "Resume simulation" : "Pause simulation"}
+                    {state.paused ? "Resume the world" : "Pause the world"}
                   </button>
-                  <button onClick={() => action("reset")}>
-                    Return to a safe orbit
+                  <button
+                    onClick={() => {
+                      action("reset");
+                      setPanel(null);
+                    }}
+                  >
+                    Return to the water
                   </button>
-                  <button onClick={() => setPanel("benchmark")}>
-                    Technical observatory ↗
+                  <button
+                    className="muted-link"
+                    onClick={() => setPanel("benchmark")}
+                  >
+                    Technical observatory
                   </button>
-                  <small>
-                    Physics-inspired interactive art.
-                    <br />
-                    No astrophysical accuracy is implied.
-                  </small>
+                </>
+              )}
+              {panel === "places" && (
+                <>
+                  <p className="eyebrow">SOMEWHERE TO STAY</p>
+                  {(further ? distant : refuges).map(([id, title, kind]) => (
+                    <button
+                      className="destination"
+                      key={id}
+                      onClick={() => {
+                        engine.current?.select(id, true);
+                        setPanel(null);
+                      }}
+                    >
+                      <span>
+                        {title}
+                        <small>{kind}</small>
+                      </span>
+                      <span>↗</span>
+                    </button>
+                  ))}
+                  <button
+                    className="muted-link"
+                    onClick={() => setFurther((v) => !v)}
+                  >
+                    {further ? "Back to the water" : "Beyond this world"}
+                  </button>
+                  <small>Move at any moment to take over.</small>
                 </>
               )}
               {panel === "benchmark" && (
                 <>
                   <p className="eyebrow">TECHNICAL OBSERVATORY</p>
-                  <pre>{`${state.fps} FPS · ${state.frameMs.toFixed(2)} ms\n${state.backend} · ${state.quality}\n${state.drawCalls} draws · ${state.triangles.toLocaleString()} triangles\n${state.particles.toLocaleString()} simulated particles\nDPR ${state.dpr.toFixed(2)} · ${state.sectors} resident sectors\n${engine.current?.world.generatedSectors ?? 0} sectors generated\nCamera-relative / logarithmic far field\n${Math.round(state.velocity).toLocaleString()} local units / s\n${engine.current?.matter.computeMs.toFixed(3) ?? 0} ms compute submission`}</pre>
+                  <pre>{`${state.fps} FPS · ${state.frameMs.toFixed(2)} ms\n${state.backend} · ${state.quality}\n${state.drawCalls} draws · ${state.triangles.toLocaleString()} triangles\n${state.particles.toLocaleString()} matter particles\n${engine.current?.world.sanctuaries.life.count.toLocaleString() ?? 0} living particles\nDPR ${state.dpr.toFixed(2)} · ${state.sectors} resident sectors\n${engine.current?.world.generatedSectors ?? 0} sectors generated\nCamera-relative / logarithmic far field\n${state.nearest}\n${Math.round(state.velocity).toLocaleString()} local units / s`}</pre>
                   <label>
                     Stress field
                     <select
@@ -361,21 +403,24 @@ export default function Vastness() {
                         "NEBULA",
                         "ASTEROIDS",
                         "GRAVITY",
-                      ].map((s) => (
-                        <option key={s}>{s}</option>
+                      ].map((v) => (
+                        <option key={v}>{v}</option>
                       ))}
                     </select>
                   </label>
                   <small>
-                    Frame cadence and CPU submission time,
+                    Physics-inspired art. Frame cadence, not GPU timestamps.
                     <br />
-                    not GPU timestamps. Press ` to hide.
+                    Press ` to hide.
                   </small>
                 </>
               )}
             </section>
           )}
-          <div className="touch-zones" aria-hidden="true">
+          <div
+            className={`touch-zones${intro ? " visible" : ""}`}
+            aria-hidden="true"
+          >
             <span>MOVE</span>
             <span>LOOK</span>
           </div>
@@ -387,7 +432,7 @@ export default function Vastness() {
           onClick={() => action("quiet")}
           aria-label="Leave quiet mode"
         >
-          ○
+          <Mark kind="quiet" />
         </button>
       )}
       {error && (

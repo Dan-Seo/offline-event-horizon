@@ -6,6 +6,7 @@ export class Ambience {
   private tone?: GainNode;
   private filter?: BiquadFilterNode;
   private lastQuiet?: boolean;
+  private lastPlace = "";
   enabled = false;
   async toggle() {
     await this.setEnabled(!this.enabled);
@@ -63,20 +64,31 @@ export class Ambience {
       o.start();
     });
   }
-  update(quiet: boolean) {
+  update(quiet: boolean, place = "space") {
     if (
       !this.context ||
       !this.air ||
       !this.tone ||
       !this.filter ||
-      quiet === this.lastQuiet
+      (quiet === this.lastQuiet && place === this.lastPlace)
     )
       return;
     this.lastQuiet = quiet;
+    this.lastPlace = place;
     const now = this.context.currentTime;
-    this.air.gain.setTargetAtTime(quiet ? 0.045 : 0.12, now, 2);
-    this.filter.frequency.setTargetAtTime(quiet ? 550 : 950, now, 2);
-    this.tone.gain.setTargetAtTime(quiet ? 0.012 : 0.042, now, 2);
+    const profile: Record<string, number[]> = {
+      "last-light": [0.09, 650, 0.016],
+      moonfall: [0.17, 1150, 0.008],
+      forest: [0.055, 1700, 0.019],
+      veil: [0.095, 850, 0.012],
+      "living-sky": [0.038, 1250, 0.027],
+      space: [0.012, 350, 0.013],
+    };
+    const [air, hz, tone] = profile[place] ?? profile.space,
+      soft = quiet ? 0.4 : 1;
+    this.air.gain.setTargetAtTime(air * soft, now, 5);
+    this.filter.frequency.setTargetAtTime(hz * (quiet ? 0.7 : 1), now, 5);
+    this.tone.gain.setTargetAtTime(tone * soft, now, 5);
   }
   suspend() {
     void this.context?.suspend();

@@ -46,6 +46,9 @@ export class UniverseEngine {
   async init() {
     try {
       const params = new URLSearchParams(location.search);
+      const mark = (stage: string) => {
+        if (params.has("qa")) console.info("VASTNESS ready:", stage);
+      };
       const quality = params.get("quality");
       this.state.quality =
         quality && quality in QUALITY
@@ -62,6 +65,7 @@ export class UniverseEngine {
         logarithmicDepthBuffer: true,
       });
       await this.renderer.init();
+      mark("renderer");
       if (this.disposed) {
         this.renderer.dispose();
         return;
@@ -79,7 +83,11 @@ export class UniverseEngine {
         "aria-label",
         "Freely explorable universe. WASD to fly, mouse to look. H for all controls.",
       );
-      this.world = new UniverseWorld(this.scene);
+      this.world = new UniverseWorld(
+        this.scene,
+        this.state.backend === "WebGPU",
+      );
+      mark("world");
       this.world.setQuality(this.state.quality);
       this.matter = new MatterField(
         this.scene,
@@ -122,7 +130,10 @@ export class UniverseEngine {
             this.fail("The graphics device was interrupted.");
         });
       this.world.update(this.flight.position, 0);
+      this.camera.quaternion.copy(this.flight.quaternion);
+      this.camera.updateMatrixWorld();
       this.setupPost();
+      mark("pipeline");
       // Precompile every material against the actual scene render target. Light topology stays fixed.
       const restore: {
         object: T.Object3D;
@@ -138,6 +149,10 @@ export class UniverseEngine {
         object.visible = true;
         object.frustumCulled = false;
       });
+      // r183's reflector performs a nested render from updateBefore; invoking it
+      // while async pipelines are still pending can bind an unfinished pipeline.
+      // Warm this one material with the real first draw after other shaders finish.
+      this.world.sanctuaries.sea.mesh.visible = false;
       const pending = this.scenePass
         ? this.scenePass.compileAsync(this.renderer)
         : this.renderer.compileAsync(this.scene, this.camera);
@@ -146,11 +161,14 @@ export class UniverseEngine {
         object.frustumCulled = culled;
       });
       await pending;
+      mark("compiled");
       this.matter.prepare(this.renderer);
+      this.world.sanctuaries.life.prepare(this.renderer);
       if (this.disposed) return;
       // Scene compilation does not warm the post-processing graph. Complete its
       // first draw while the arrival poster is visible, before accepting flight.
       this.pipeline!.render();
+      mark("first draw");
       if (device) await device.queue.onSubmittedWorkDone();
       if (this.disposed) return;
       this.state.ready = true;
@@ -181,23 +199,25 @@ export class UniverseEngine {
     else if (a === "reset") {
       this.input.clear();
       this.flight.reset();
+      this.input.selected = false;
     } else if (a === "pause") this.state.paused = !this.state.paused;
     else if (a === "quiet") {
       this.state.quiet = !this.state.quiet;
       this.flight.quiet = this.state.quiet;
-    } else if (a === "drift") this.flight.drift();
+    } else if (a === "wander") this.flight.wander();
     else if (a === "cancel") {
       this.flight.cancel();
       this.state.quiet = false;
       this.flight.quiet = false;
     } else if (a === "seed" && this.creation) {
-      const distance = Math.max(100, this.matter.domain * 0.35),
+      const local = this.world.sanctuaries.presence > 0.5;
+      const distance = local ? 55 : Math.max(100, this.matter.domain * 0.35),
         position = new T.Vector3(0, 0, -distance)
           .applyQuaternion(this.flight.quaternion)
           .add(this.flight.position);
       const star = this.creation.add(
         position,
-        Math.max(8, this.matter.domain * 0.012),
+        local ? 1.5 : Math.max(8, this.matter.domain * 0.012),
         this.state.time,
       );
       this.state.seeds = this.creation.stars.length;
@@ -221,6 +241,8 @@ export class UniverseEngine {
     let best = Infinity,
       selected;
     for (const b of [...this.world.bodies, ...this.creation.stars]) {
+      if (!b.object.visible || ("archetype" in b && b.archetype === 7))
+        continue;
       const sphere = new T.Sphere(b.object.position, b.object.scale.x);
       const hit = this.raycaster.ray.intersectSphere(sphere, new T.Vector3());
       if (hit && hit.length() < best) {
@@ -292,7 +314,16 @@ export class UniverseEngine {
       this.camera.quaternion.copy(this.flight.quaternion);
       this.camera.updateMatrixWorld();
       if (!this.state.paused) this.state.time += dt;
+      this.world.sanctuaries.respond(this.flight.velocity.length());
+      this.flight.holdBeauty = this.world.sanctuaries.event !== "none";
       this.world.update(this.flight.position, this.state.time, this.camera);
+      this.world.sanctuaries.life.update(
+        this.renderer,
+        this.state.paused ? 0 : dt,
+        this.flight.velocity.length(),
+        this.world.sanctuaries.event,
+        this.world.sanctuaries.eventTime,
+      );
       this.creation.update(this.flight.position, this.state.time);
       const hole = this.world.bodies.find((b) => b.id === "wound")!;
       const pull =
@@ -308,6 +339,9 @@ export class UniverseEngine {
         this.state.paused ? 0 : dt,
         force,
         pull,
+        this.world.sanctuaries.presence,
+        this.world.sanctuaries.stillness,
+        this.flight.velocity,
       );
       this.projection.copy(hole.object.position).project(this.camera);
       this.lensCenter.value.set(
@@ -327,7 +361,7 @@ export class UniverseEngine {
           ? 1
           : 0;
       this.pipeline!.render();
-      this.audio.update(this.state.quiet);
+      this.audio.update(this.state.quiet, this.world.sanctuaries.active);
       this.frames.push(elapsed * 1000);
       if (this.frames.length > 120) this.frames.shift();
       if (now - this.reportAt > 120) {
@@ -351,6 +385,9 @@ export class UniverseEngine {
     }
   };
   private updateSnapshot() {
+    this.state.locked = this.input.locked;
+    this.state.lockFailed = this.input.lockFailed;
+    this.state.sanctuary = this.world.sanctuaries.active;
     const selected = this.flight.selected;
     this.state.selected = selected?.name ?? null;
     this.state.selectedKind = selected?.kind ?? "";
@@ -362,12 +399,17 @@ export class UniverseEngine {
     let nearest = Infinity;
     for (const b of this.world.bodies) {
       const d = this.flight.position.distanceTo(b.position) - b.radius;
+      if (b.archetype === 7) continue;
       if (d < nearest) {
         nearest = d;
         this.state.nearest = b.name;
       }
     }
     this.state.distance = nearest;
+    if (this.world.sanctuaries.active !== "space")
+      this.state.nearest = this.world.sanctuaries.places.find(
+        (p) => p.id === this.world.sanctuaries.active,
+      )!.name;
     this.state.sectors = this.world.sectors;
     if (selected) {
       const b = [...this.world.bodies, ...this.creation.stars].find(
@@ -386,7 +428,8 @@ export class UniverseEngine {
           14,
           Math.min(73, (-this.projection.y * 0.5 + 0.5) * 100),
         );
-        this.state.selectionVisible = this.projection.z < 1;
+        this.state.selectionVisible =
+          this.projection.z < 1 && !("archetype" in b && b.archetype === 7);
       }
     } else this.state.selectionVisible = false;
     this.state.frameMs =
@@ -408,11 +451,11 @@ export class UniverseEngine {
       this.beforeBenchmark = this.state.quality;
     this.benchmarkMode = mode;
     this.setQuality(this.beforeBenchmark);
-    this.world.nebulae.density.value = 1;
+    this.world.nebulaBoost = 1;
     if (mode === "PARTICLES") this.matter.setQuality("ULTRA");
     if (mode === "NEBULA") {
       this.world.nebulae.setQuality("ULTRA");
-      this.world.nebulae.density.value = 1.8;
+      this.world.nebulaBoost = 1.8;
     }
     if (mode === "ASTEROIDS") this.world.stressAsteroids();
   }
@@ -425,6 +468,13 @@ export class UniverseEngine {
         .length,
       benchmark: this.benchmarkMode,
       computeSubmitMs: this.matter.computeMs,
+      sanctuary: this.world.sanctuaries.active,
+      stillness: this.world.sanctuaries.stillness,
+      beautyEvent: this.world.sanctuaries.event,
+      beautyEventTime: this.world.sanctuaries.eventTime,
+      eventsSeen: this.world.sanctuaries.eventsSeen,
+      livingParticles: this.world.sanctuaries.life.count,
+      waterWakes: this.world.sanctuaries.sea.wakeCount,
       position: this.flight.position.toArray(),
       quaternion: this.flight.quaternion.toArray(),
       velocityVector: this.flight.velocity.toArray(),

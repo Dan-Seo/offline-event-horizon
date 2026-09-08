@@ -1,5 +1,11 @@
 import * as T from "three/webgpu";
-import { clamp, damp } from "./config";
+import { clamp, damp, seeded } from "./config";
+import {
+  HOME,
+  HOME_PITCH,
+  SANCTUARIES,
+  localPresence,
+} from "./sanctuary-layout";
 import type { InputManager } from "./input";
 export type Destination = {
   id: string;
@@ -8,10 +14,13 @@ export type Destination = {
   position: T.Vector3;
   radius: number;
   solid?: boolean;
+  surface?: boolean;
+  arrival?: T.Vector3;
+  gaze?: T.Vector3;
 };
 export class FlightController {
-  position = new T.Vector3(0, 0, 9000);
-  quaternion = new T.Quaternion();
+  position = HOME.clone();
+  quaternion = new T.Quaternion().setFromEuler(new T.Euler(HOME_PITCH, 0, 0));
   velocity = new T.Vector3();
   angular = new T.Vector3();
   private pendingLook = new T.Vector2();
@@ -20,10 +29,15 @@ export class FlightController {
   sensitivity = 1;
   quiet = false;
   gentle = false;
-  mode: "FREE" | "DRIFT" | "TRAVEL" = "FREE";
+  mode: "FREE" | "WANDER" | "TRAVEL" = "FREE";
   selected?: Destination;
-  private driftTime = 0;
-  private driftLeg = false;
+  holdBeauty = false;
+  private wanderTime = 0;
+  private wanderRest = 0;
+  private wanderGlide = 0;
+  private wanderPoint = new T.Vector3();
+  private wanderGaze = new T.Vector3();
+  private random = seeded(4917);
   private desired = new T.Vector3();
   private offset = new T.Vector3();
   private rotation = new T.Quaternion();
@@ -31,17 +45,19 @@ export class FlightController {
   private dummy = new T.Object3D();
   private direction = new T.Vector3();
   reset() {
-    this.position.set(0, 0, 9000);
-    this.quaternion.identity();
+    this.position.copy(HOME);
+    this.quaternion.setFromEuler(new T.Euler(HOME_PITCH, 0, 0));
     this.velocity.set(0, 0, 0);
     this.angular.set(0, 0, 0);
     this.pendingLook.set(0, 0);
     this.mode = "FREE";
     this.speedDial = 1;
+    this.selected = undefined;
   }
   cancel() {
     this.mode = "FREE";
     this.angular.set(0, 0, 0);
+    this.pendingLook.set(0, 0);
   }
   focus(target = this.selected) {
     if (target) {
@@ -51,10 +67,29 @@ export class FlightController {
       this.pendingLook.set(0, 0);
     }
   }
-  drift() {
-    this.mode = this.mode === "DRIFT" ? "FREE" : "DRIFT";
-    this.driftTime = 0;
-    this.driftLeg = false;
+  wander() {
+    if (this.mode === "WANDER") {
+      this.cancel();
+      return;
+    }
+    this.mode = "WANDER";
+    this.wanderTime = 0;
+    this.wanderRest = 10 + this.random() * 12;
+    this.wanderGlide = 0;
+    this.wanderPoint.copy(this.position);
+    const near = SANCTUARIES.reduce((a, b) =>
+      this.position.distanceTo(a.position) <
+      this.position.distanceTo(b.position)
+        ? a
+        : b,
+    );
+    if (localPresence(this.position) > 0.1) this.wanderGaze.copy(near.gaze);
+    else
+      this.wanderGaze
+        .set(0, 0, -10000)
+        .applyQuaternion(this.quaternion)
+        .add(this.position);
+    this.velocity.multiplyScalar(0.1);
   }
   private lookAt(point: T.Vector3, dt: number, rate = 2) {
     this.dummy.position.copy(this.position);
@@ -85,7 +120,10 @@ export class FlightController {
         ].includes(k),
       ) ||
       input.touchMove.lengthSq() > 0.001;
-    if (movement && this.mode !== "FREE") this.cancel();
+    if (movement && this.mode !== "FREE") {
+      this.cancel();
+      this.velocity.multiplyScalar(0.15);
+    }
     this.speedDial = clamp(this.speedDial * Math.exp(input.wheel), 0.03, 200);
     let clearance = 1e8;
     for (const b of bodies)
@@ -94,7 +132,12 @@ export class FlightController {
           clearance,
           this.position.distanceTo(b.position) - b.radius,
         );
-    const contextual = clamp(Math.max(1, clearance) * 0.18, 2, 260000);
+    const presence = localPresence(this.position);
+    const contextual = clamp(
+      Math.max(1, clearance) * 0.18,
+      presence > 0.1 ? 28 : 2,
+      260000,
+    );
     const boost = keys.has("ShiftLeft") || keys.has("ShiftRight") ? 5 : 1;
     const precision =
       keys.has("ControlLeft") || keys.has("ControlRight") ? 0.12 : 1;
@@ -142,62 +185,112 @@ export class FlightController {
         this.velocity.set(0, 0, 0);
         this.lookAt(this.selected.position, dt, 30);
       }
-    } else {
-      if (this.mode === "DRIFT" && this.driftTime > 50) {
-        const destinations = bodies.filter((b) =>
-          ["orpheus", "giant", "cathedral", "bloom", "wound"].includes(b.id),
+    } else if (this.mode === "WANDER") {
+      // Wander stays with a place. It does not count down to the next attraction.
+      this.wanderTime += dt;
+      if (this.holdBeauty) {
+        this.wanderRest = Math.max(this.wanderRest, this.wanderTime + 8);
+      } else if (this.wanderTime > this.wanderRest) {
+        const near = SANCTUARIES.reduce((a, b) =>
+          this.position.distanceTo(a.position) <
+          this.position.distanceTo(b.position)
+            ? a
+            : b,
         );
-        const index = destinations.findIndex((b) => b.id === this.selected?.id);
-        this.selected = destinations[(index + 1) % destinations.length];
-        this.driftTime = 0;
-        this.driftLeg = true;
+        const a = this.random() * Math.PI * 2;
+        if (presence > 0.1) {
+          const r = 70 + this.random() * 150;
+          this.wanderPoint
+            .copy(this.position)
+            .add(
+              new T.Vector3(
+                Math.cos(a) * r,
+                (this.random() - 0.5) * 15,
+                Math.sin(a) * r,
+              ),
+            );
+          this.wanderPoint.y = Math.max(16, this.wanderPoint.y);
+          if (this.wanderPoint.distanceTo(near.arrival) > near.radius * 1.1)
+            this.wanderPoint.lerp(near.arrival, 0.25);
+          this.wanderGaze
+            .copy(near.gaze)
+            .add(
+              new T.Vector3((this.random() - 0.5) * 220, this.random() * 80, 0),
+            );
+        } else {
+          this.wanderPoint
+            .set(Math.cos(a), Math.sin(a) * 0.1, Math.sin(a))
+            .multiplyScalar(contextual * 0.15)
+            .add(this.position);
+        }
+        this.wanderTime = 0;
+        this.wanderRest = 45 + this.random() * 55;
+        this.wanderGlide = 19 + this.random() * 9;
       }
+      if (!this.holdBeauty && this.wanderTime < this.wanderGlide) {
+        this.desired
+          .copy(this.wanderPoint)
+          .sub(this.position)
+          .multiplyScalar(0.045);
+        this.desired.clampLength(0, presence > 0.1 ? 7 : contextual * 0.025);
+        if (this.desired.length() < 0.45) this.desired.set(0, 0, 0);
+      }
+      if (!this.holdBeauty) this.lookAt(this.wanderGaze, dt, 0.11);
+    } else {
       const target = this.selected ?? bodies[0];
       if (target) {
-        this.offset.copy(this.position).sub(target.position);
-        const distance = this.offset.length();
-        const factor =
-          target.kind === "Nebula"
-            ? 0.25
-            : target.kind === "Gravitational anomaly"
-              ? 6
-              : target.kind === "Ringed giant"
-                ? 6.5
-                : target.kind === "Ancient structure"
-                  ? 3.6
-                  : 2.8;
-        const stop = target.radius * factor + 35;
-        this.direction.copy(this.offset).normalize();
-        if (this.mode === "TRAVEL" || this.driftLeg) {
-          const speed = clamp(
-            (distance - stop) * 0.7,
-            -contextual * 0.4,
-            Math.max(800, distance * 0.3),
-          );
-          this.desired.copy(this.direction).multiplyScalar(-speed);
-          if (Math.abs(distance - stop) < Math.max(5, target.radius * 0.012)) {
-            if (this.mode === "TRAVEL") this.mode = "FREE";
-            this.driftLeg = false;
+        if (target.arrival && target.gaze) {
+          this.desired.copy(target.arrival).sub(this.position);
+          const distance = this.desired.length();
+          this.desired
+            .normalize()
+            .multiplyScalar(Math.min(distance * 0.28, 520));
+          this.lookAt(target.gaze, dt, 0.6);
+          if (distance < 3) {
+            this.mode = "FREE";
+            this.desired.set(0, 0, 0);
           }
         } else {
-          this.driftTime += dt;
-          const tangent = new T.Vector3()
-            .crossVectors(new T.Vector3(0, 1, 0), this.direction)
-            .normalize();
-          const rest = Math.sin(this.driftTime * 0.055) > 0.88 ? 0 : 1;
-          this.desired
-            .copy(tangent)
-            .multiplyScalar(Math.max(5, target.radius * 0.009) * rest);
-          if (distance < target.radius * 1.25)
-            this.desired.addScaledVector(this.direction, contextual * 0.4);
+          this.offset.copy(this.position).sub(target.position);
+          const distance = this.offset.length();
+          const factor =
+            target.kind === "Nebula"
+              ? 0.25
+              : target.kind === "Gravitational anomaly"
+                ? 6
+                : target.kind === "Ringed giant"
+                  ? 6.5
+                  : target.kind === "Ancient structure"
+                    ? 3.6
+                    : 2.8;
+          const stop = target.radius * factor + 35;
+          this.direction.copy(this.offset).normalize();
+          if (this.mode === "TRAVEL") {
+            const speed = clamp(
+              (distance - stop) * 0.7,
+              -contextual * 0.4,
+              Math.max(800, distance * 0.3),
+            );
+            this.desired.copy(this.direction).multiplyScalar(-speed);
+            if (
+              Math.abs(distance - stop) < Math.max(5, target.radius * 0.012)
+            ) {
+              if (this.mode === "TRAVEL") this.mode = "FREE";
+            }
+          }
+          this.lookAt(target.position, dt, 1.2);
         }
-        this.lookAt(target.position, dt, this.mode === "TRAVEL" ? 1.2 : 0.2);
       }
     }
     if (this.mode !== "FREE" && this.desired.lengthSq() > 1) {
       this.direction.copy(this.desired).normalize();
       for (const body of bodies) {
-        if (body.solid === false || body.id === this.selected?.id) continue;
+        if (
+          body.solid === false ||
+          body.surface ||
+          body.id === this.selected?.id
+        )
+          continue;
         this.offset.copy(body.position).sub(this.position);
         const ahead = this.offset.dot(this.direction);
         if (
@@ -224,7 +317,7 @@ export class FlightController {
     for (const b of bodies) {
       if (b.solid === false) continue;
       this.offset.copy(this.position).sub(b.position);
-      const floor = b.radius * 1.006 + 3;
+      const floor = b.surface ? b.radius + 2 : b.radius * 1.006 + 3;
       if (this.offset.length() < floor) {
         this.offset.normalize();
         this.position.copy(b.position).addScaledVector(this.offset, floor);
@@ -232,6 +325,26 @@ export class FlightController {
         if (toward < 0) this.velocity.addScaledVector(this.offset, -toward);
       }
     }
+    // Broad, forgiving top surfaces. Trees remain permeable to free flight.
+    if (presence > 0.1)
+      for (const island of [
+        { x: 1900, z: -1750, y: 30, rx: 760, rz: 1060, depth: 180 },
+        { x: 2900, z: -4700, y: 730, rx: 490, rz: 590, depth: 460 },
+      ]) {
+        const r = Math.hypot(
+          (this.position.x - island.x) / island.rx,
+          (this.position.z - island.z) / island.rz,
+        );
+        const top = island.y - Math.pow(r, 3) * 19 + 7;
+        if (
+          r < 0.88 &&
+          this.position.y > island.y - island.depth * 0.4 &&
+          this.position.y < top
+        ) {
+          this.position.y = top;
+          this.velocity.y = Math.max(0, this.velocity.y);
+        }
+      }
     input.consume();
   }
 }

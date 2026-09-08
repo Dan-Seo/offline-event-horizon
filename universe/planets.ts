@@ -97,9 +97,9 @@ export class PlanetLibrary {
         .mul(0.5)
         .add(0.5);
       albedo = mix(
-        color(0x736958),
-        color(0xd8c8a4),
-        bands.mul(0.65).add(storm.mul(0.35)),
+        color(0x727d7e),
+        color(0xc1c9bd),
+        bands.mul(0.38).add(storm.mul(0.27)).add(0.16),
       );
       relief = float(0);
     } else if (kind === 2) {
@@ -120,6 +120,11 @@ export class PlanetLibrary {
         .mul(smoothstep(-0.08, 0.3, base))
         .mul(2.4);
       relief = max(base, 0).mul(0.009);
+    } else if (kind === 8) {
+      // The sanctuary ocean is the north cap of this same sphere. Its local
+      // reflection mesh recedes gradually into this continuous far surface.
+      albedo = mix(color(0x061e28), color(0x123d49), variation.mul(0.45));
+      relief = float(0);
     }
     const surfaceDetail = mx_noise_float(p.mul(160))
       .mul(0.1)
@@ -129,7 +134,7 @@ export class PlanetLibrary {
     );
     material.positionNode = positionLocal.mul(float(1).add(relief));
     material.normalNode =
-      kind === 1
+      kind === 1 || kind === 8
         ? normalView
         : reliefNormal(
             base
@@ -169,7 +174,7 @@ export class PlanetLibrary {
     lod.autoUpdate = false;
     group.add(lod);
     group.userData.lod = lod;
-    if (kind === 0 || kind === 1 || kind === 6) {
+    if (kind === 0 || kind === 1 || kind === 6 || kind === 8) {
       let atmo = this.atmospheres.get(kind);
       if (!atmo) {
         const m = new T.MeshBasicNodeMaterial({
@@ -188,7 +193,7 @@ export class PlanetLibrary {
         );
         const day = smoothstep(-0.3, 0.6, normalWorld.dot(sunDirection));
         m.colorNode =
-          kind === 0
+          kind === 0 || kind === 8
             ? mix(color(0x165d91), color(0x6eb7bd), day)
             : kind === 1
               ? color(0xa9a393)
