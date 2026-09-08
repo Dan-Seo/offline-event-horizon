@@ -1,0 +1,17 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "chrome",
+  "checks": [
+    "Raycast notification drag releases actual object",
+    "Accessible release button and R release separate objects",
+    "Space pauses and resumes; timeline stays still while paused",
+    "Quality changes, reduced motion, benchmark scenarios, return to saved chapter/quality",
+    "Button and canvas seed the cosmic field",
+    "Sound opt-in and mute state",
+    "Context loss produces recovery UI; quiet fallback remains reachable",
+    "Touch portrait/landscape, reduced-motion preference and quality selector",
+    "Missing GLB keeps procedural workspace and journey usable",
+    "WebGPU unavailable automatically initializes WebGL2"
+  ],
+  "errors": []
+}
