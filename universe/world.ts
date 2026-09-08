@@ -106,6 +106,24 @@ export class UniverseWorld {
           0x783e24,
           6,
         ],
+        [
+          "serein",
+          "SEREIN",
+          "Dune world",
+          [-185000, -40000, -285000],
+          16500,
+          0xc3a078,
+          9,
+        ],
+        [
+          "nacre",
+          "NACRE",
+          "Living world",
+          [175000, 45000, -380000],
+          21000,
+          0x77ad94,
+          10,
+        ],
       ];
     for (const [id, name, kind, xyz, radius, color, archetype] of specs) {
       const object = new T.Group();
@@ -276,7 +294,7 @@ export class UniverseWorld {
           );
           this.scene.add(group);
           if (random() > 0.3) {
-            const kind = [0, 1, 2, 6][Math.floor(random() * 4)],
+            const kind = [0, 1, 2, 6, 9, 10][Math.floor(random() * 6)],
               radius = 3500 + random() * 15000,
               position = center
                 .clone()
@@ -300,7 +318,11 @@ export class UniverseWorld {
                     ? "Frozen moon"
                     : kind === 6
                       ? "Volcanic world"
-                      : "Ocean world",
+                      : kind === 9
+                        ? "Dune world"
+                        : kind === 10
+                          ? "Living world"
+                          : "Ocean world",
               position,
               radius,
               object,

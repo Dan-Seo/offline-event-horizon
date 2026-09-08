@@ -15,9 +15,13 @@ import {
   vec2,
   vec3,
 } from "three/tsl";
+import { OrbitExperiment } from "./orbit-experiment";
 export class GravitationalAnomaly {
   group = new T.Group();
   time = uniform(0);
+  experiment = new OrbitExperiment();
+  private response = uniform(0);
+  diskRotation = new T.Quaternion().setFromEuler(new T.Euler(-1.1, 0.12, 0.21));
   private lens: T.Mesh;
   constructor() {
     const shadow = new T.Mesh(
@@ -52,7 +56,8 @@ export class GravitationalAnomaly {
     const heat = pow(max(0, float(1).sub(r.sub(1.3).div(3.4))), 2);
     material.colorNode = mix(color(0x97431d), color(0xffe5b4), heat)
       .mul(heat.mul(2.8).add(0.25))
-      .mul(p.x.div(5).mul(0.5).add(0.75));
+      .mul(p.x.div(5).mul(0.5).add(0.75))
+      .mul(this.response.mul(0.13).add(1));
     material.opacityNode = inner
       .mul(outer)
       .mul(ripple)
@@ -63,6 +68,8 @@ export class GravitationalAnomaly {
     disk.rotation.y = 0.12;
     disk.rotation.z = 0.21;
     this.group.add(disk);
+    this.experiment.group.quaternion.copy(this.diskRotation);
+    this.group.add(this.experiment.group);
     const lensMaterial = new T.MeshBasicNodeMaterial({
       transparent: true,
       depthWrite: false,
@@ -107,5 +114,13 @@ export class GravitationalAnomaly {
   update(time: number, camera: T.Camera) {
     this.time.value = time;
     this.lens.quaternion.copy(camera.quaternion);
+  }
+  simulate(dt: number) {
+    this.experiment.update(dt);
+    this.response.value = Math.min(
+      1,
+      this.response.value * Math.exp(-dt * 1.7) +
+        this.experiment.model.capturesThisStep * 0.06,
+    );
   }
 }

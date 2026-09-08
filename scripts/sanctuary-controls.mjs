@@ -1,5 +1,6 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
+import { enterEnglishExperience } from "./qa-entry.mjs";
 const browser = await chromium.launch({
   channel: process.env.QA_BROWSER || "chrome",
   headless: true,
@@ -31,6 +32,7 @@ const delta = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
 try {
   await page.goto((process.env.QA_URL || "http://localhost:3000") + "/?qa=1");
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
+  await enterEnglishExperience(page);
   await wait(400);
   const home = await inspect();
   await page.keyboard.down("w");
@@ -180,11 +182,15 @@ try {
   }
   await reset();
   const normal = (await inspect()).speed;
-  await hold(["Control", "w"], 250);
+  await page.keyboard.down("Control");
+  await page.keyboard.down("w");
+  await wait(250);
   check(
     "Ctrl precision slows movement",
     (await inspect()).speed < normal * 0.3,
   );
+  await page.keyboard.up("w");
+  await page.keyboard.up("Control");
   await page.keyboard.press("b");
   await wait(200);
   check("B enables WANDER", (await inspect()).mode === "WANDER");
@@ -194,9 +200,9 @@ try {
   await page.keyboard.up("w");
   await page.keyboard.press("Escape");
   await page.keyboard.press("h");
-  await expect(page.getByLabel("Flight controls")).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Flight controls", exact: true })).toBeVisible();
   await page.keyboard.press("h");
-  await expect(page.getByLabel("Flight controls")).toHaveCount(0);
+  await expect(page.getByRole("complementary", { name: "Flight controls", exact: true })).toHaveCount(0);
   checks.push("H toggles help both ways");
   await page.keyboard.press("p");
   await wait(140);

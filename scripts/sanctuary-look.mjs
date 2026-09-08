@@ -1,5 +1,6 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs/promises";
+import { enterEnglishExperience } from "./qa-entry.mjs";
 const browser = await chromium.launch({
   channel: process.env.QA_BROWSER || "chrome",
   headless: true,
@@ -23,6 +24,7 @@ try {
         : ""),
   );
   await page.locator("main[data-ready=true]").waitFor({ timeout: 60000 });
+  await enterEnglishExperience(page);
   await page.waitForTimeout(3000);
   await page.keyboard.press("Escape");
   await fs.mkdir("artifacts", { recursive: true });

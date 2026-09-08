@@ -9,6 +9,7 @@ export type UniverseSnapshot = {
   mode: string;
   quiet: boolean;
   selected: string | null;
+  selectedId: string;
   selectedKind: string;
   selectionX: number;
   selectionY: number;
@@ -28,6 +29,15 @@ export type UniverseSnapshot = {
   seeds: number;
   field: boolean;
   time: number;
+  learning: { look: number; move: number; speed: number };
+  encounter: string;
+  experiment: {
+    active: number;
+    absorbed: number;
+    escaped: number;
+    launched: number;
+    gravity: number;
+  };
 };
 export const initialSnapshot: UniverseSnapshot = {
   ready: false,
@@ -39,6 +49,7 @@ export const initialSnapshot: UniverseSnapshot = {
   mode: "FREE",
   quiet: false,
   selected: null,
+  selectedId: "",
   selectedKind: "",
   selectionX: 0,
   selectionY: 0,
@@ -58,4 +69,7 @@ export const initialSnapshot: UniverseSnapshot = {
   seeds: 0,
   field: false,
   time: 0,
+  learning: { look: 0, move: 0, speed: 0 },
+  encounter: "",
+  experiment: { active: 0, absorbed: 0, escaped: 0, launched: 0, gravity: 1 },
 };

@@ -1,5 +1,6 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
+import { enterEnglishExperience } from "./qa-entry.mjs";
 const url = process.env.QA_URL || "http://localhost:4173";
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const page = await browser.newPage({
@@ -51,7 +52,7 @@ const visit = async (name, further = false) => {
     .getByRole("button", { name: "Comfort settings", exact: true })
     .click();
   await page.getByRole("button", { name: /Find somewhere quiet/ }).click();
-  if (further)
+  if (further && await page.getByRole("button", { name: "Beyond this world", exact: true }).count())
     await page
       .getByRole("button", { name: "Beyond this world", exact: true })
       .click();
@@ -63,6 +64,7 @@ try {
   await page.goto(url + "/?qa=1");
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
   readyMs = Date.now() - start;
+  await enterEnglishExperience(page);
   await measure("opening-cold", 8000);
   await visit("The Breathing Forest");
   await measure("water-to-forest-flight", 26000);
@@ -75,6 +77,19 @@ try {
   await visit("The Wound", true);
   await measure("surface-to-space-and-anomaly", 26000);
   await page.screenshot({ path: "artifacts/sanctuary-performance-wound.png" });
+  await page.waitForFunction(() => window.__vastness.inspect().encounter === "wound", {}, { timeout: 60000 });
+  await page.keyboard.press("t");
+  for (let i = 0; i < 3; i++) await page.locator('[data-release="orbit"]').click();
+  await expect.poll(async () => (await get()).experiment.active).toBe(144);
+  await measure("interactive-orbit-144-tracers", 8000);
+  await page.screenshot({ path: "artifacts/performance-orbit.png" });
+  await page.getByRole("button", { name: "Close panel" }).click();
+  for (const name of ["Serein", "Nacre"]) {
+    await visit(name, true);
+    await measure(name.toLowerCase() + "-approach", 22000);
+    await page.waitForFunction(() => window.__vastness.inspect().mode === "FREE", {}, { timeout: 60000 });
+    await measure(name.toLowerCase() + "-surface-detail", 6000);
+  }
   await page.keyboard.press("r");
   await page.mouse.move(1200, 650);
   await page.mouse.wheel(0, -4000);

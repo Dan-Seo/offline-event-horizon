@@ -1,0 +1,26 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "chrome",
+  "checks": [
+    "Technical PARTICLES remains live",
+    "Particle stress enables 160,000 simulated particles",
+    "Technical NEBULA remains live",
+    "Technical ASTEROIDS remains live",
+    "Technical GRAVITY remains live",
+    "Gravity stress activates the force field",
+    "Technical NONE remains live",
+    "Leaving stress restores the original particle budget",
+    "ULTRA changes the live simulation budget",
+    "HIGH changes the live simulation budget",
+    "BALANCED changes the live simulation budget",
+    "BATTERY changes the live simulation budget",
+    "Failed hero GLBs retain a navigable procedural universe",
+    "Sustained slow frames automatically lower detail",
+    "Navigation continues after adaptive downgrade"
+  ],
+  "errors": [],
+  "expectedErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ]
+}

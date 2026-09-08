@@ -1,6 +1,6 @@
 # OFFLINE // VASTNESS
 
-A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.0 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
+A quiet, freely explorable sanctuary inside a persistent universe. VASTNESS 2.1 opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. A small light you leave behind is saved on this device.
 
@@ -16,7 +16,15 @@ No chapters, timer, score, account, analytics, or mandatory route. Movement alwa
 - **The Veil:** an enterable three-dimensional cloud field around a suspended garden. Density and openings change slowly.
 - **The Living Sky:** thousands of stateful flow-following creatures, local avoidance, and a rare translucent form passing through them.
 
-These places are spatial neighbors on one ocean world. Optional directions are tucked inside Comfort settings. There is no required order. **Wander** glides briefly, rests often, and holds its composition during a nearby beauty event. **Quiet** removes the interface.
+These places are spatial neighbors on one ocean world. **Explore** opens optional directions to nearby sanctuaries and distant planets. There is no required order. **Wander** glides briefly, rests often, and holds its composition during a nearby beauty event. **Quiet** removes the interface.
+
+## Start comfortably
+
+Choose **한국어 / English** on arrival; the initial choice follows the browser language and a saved choice takes precedence. The optional movement guide responds to actual look, flight, and speed input, with separate touch instructions. It returns the cursor when the lesson ends. Skip it, choose Wander immediately, or replay it from Help at any time. Language remains available in Comfort settings.
+
+Beyond the water, **Serein** has wind-shaped dunes and salt basins; **Nacre** has green oceans, pearl clouds, and luminous night coasts. Selene's ice basins and fractures, Ember's warm crustal seams, and the Silent Giant's slow storm bands distinguish the other worlds. Select a planet and use its orbit button or **O** to drift around it; manual input takes over immediately.
+
+At **The Wound**, choose **Release a little matter** or press **T**. Three initial speeds produce falling, bound, and escaping trajectories. Changing gravity affects particles already in flight. This optional experiment preserves the quiet default scene.
 
 ## Run
 
@@ -53,6 +61,7 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 | R / Esc              | Return to the water / cancel automation and release pointer lock |
 | L                    | Optional pointer lock                                            |
 | P / H                | Pause simulation / controls help                                 |
+| M / O / T            | Explore / slow planetary orbit / nearby black-hole experiment    |
 | B / K                | Wander / quiet                                                   |
 | G / V                | Hold to attract / repel matter                                   |
 | N                    | Plant a star                                                     |
@@ -74,6 +83,8 @@ Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio.
 - `nebula.ts` raymarches spatial volumes through a seamless procedural 96³ density texture, with extinction and locally varying color. The camera can enter the volume.
 - `stars.ts` combines a distant clustered stellar population with sector stars and local matter for parallax.
 - `anomaly.ts` builds the accretion disk and lensed arcs; `engine.ts` adds bounded screen-space distortion and restrained bloom.
+- `orbit-model.ts` integrates up to 144 interactive test particles on CPU with fixed 1/120-second velocity-Verlet steps and softened inverse-square gravity. `orbit-experiment.ts` renders their measured position histories. Dense ambient matter remains on GPU; the small experiment uses the same force model on both render backends.
+- `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels safely releases pointer lock without an unintended cancellation.
 - `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
 - `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
 - `sanctuaries.ts` coordinates local presence, stillness, and unannounced environmental events. It never changes scenes or takes camera control.
@@ -115,7 +126,7 @@ When WebGPU is unavailable, Three.js automatically uses WebGL2. Procedural shade
 
 ## Scientific and practical limits
 
-This is physics-inspired interactive art. Dust trajectories respond to actual force integration. Gravitational lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. This is not general relativity, an N-body simulation, or a planet-formation model.
+This is physics-inspired interactive art. Dust and released test particles respond to actual force integration. The black-hole experiment uses a prescribed absorbing sphere and a finite escape boundary; its gravity slider and starting speeds use artistic units. Gravitational lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. This is not general relativity, an N-body simulation, or a planet-formation model.
 
 The five local environments contain near-surface geometry and broad collision floors; trees remain permeable. Other planets support close orbital inspection, not full planetary terrain landing. The mirror is a tangent-plane reflection on a gently curved cap, not a physically exact curved-water reflection. Volumes clip against opaque scene depth, while transparent foliage and water use approximate compositing; there is no multiple-scattering solution. Waterfalls are animated geometric curtains rather than fluid simulation. The large visitor and rare-event timing are authored approximations; small creatures have integrated dynamic state. The distant galactic star field is an angular background population. Persistence is local to the browser and retains up to 24 created lights. Reduced motion softens navigation rather than eliminating all motion; P pauses the simulation. No UE5 edition was built.
 
@@ -125,6 +136,9 @@ This is designed for a restful experience. No therapeutic benefit has been estab
 
 ```sh
 npm run qa:controls
+npm run qa:onboarding
+npm run qa:touch-guide
+npm run qa:encounters
 npm run qa:devices
 npm run qa:resilience
 npm run qa:performance
@@ -133,8 +147,8 @@ npm run qa:place
 npm run test:reconstruction
 ```
 
-These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, and visual scripts accept `QA_BROWSER=msedge`. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions. Older `vastness-*.mjs` scripts and the old QA record describe the pre-sanctuary edition and are retained as history, not current acceptance tests.
+These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, onboarding, encounter, and visual scripts accept `QA_BROWSER=msedge`. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. The encounter suite travels through five planets and the anomaly without teleporting, tests automatic-orbit interruption, and exercises all three release outcomes. Set `QA_BACKEND=webgl` for its fallback pass or `QA_PLACES=serein,nacre` for a shorter route. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions. Earlier pre-sanctuary scripts remain as historical records.
 
-See [the 2.0 verification record](docs/QA-2.0.md) for measured results, corrected visual issues, and coverage limits. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
+See [the 2.1 verification record](docs/QA-2.1.md) for this update and [the 2.0 record](docs/QA-2.0.md) for the sanctuary renderer's earlier validation. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
 The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

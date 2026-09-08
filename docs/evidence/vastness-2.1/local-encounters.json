@@ -1,0 +1,177 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "name": "serein starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "serein is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "Planet orbit actually moves and turns the observer",
+      "passed": true
+    },
+    {
+      "name": "Manual input interrupts planet orbit within 80 ms",
+      "passed": true
+    },
+    {
+      "name": "nacre starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "nacre is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "moon starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "moon is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "ember starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "ember is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "giant starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "giant is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "wound starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "wound is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "Release creates 48 stateful tracers",
+      "passed": true
+    },
+    {
+      "name": "Tracer positions evolve under gravity",
+      "passed": true
+    },
+    {
+      "name": "P freezes interactive orbit simulation exactly",
+      "passed": true
+    },
+    {
+      "name": "Paused simulation cannot queue accidental releases",
+      "passed": true
+    },
+    {
+      "name": "Low angular momentum matter is actually absorbed",
+      "passed": true
+    },
+    {
+      "name": "High speed matter actually escapes",
+      "passed": true
+    },
+    {
+      "name": "Visible gravity slider changes the force model",
+      "passed": true
+    },
+    {
+      "name": "Clear removes live matter and histories",
+      "passed": true
+    },
+    {
+      "name": "T opens the experiment and releases pointer lock",
+      "passed": true
+    },
+    {
+      "name": "No runtime or shader errors",
+      "passed": true
+    }
+  ],
+  "samples": [
+    {
+      "id": "serein",
+      "travelMs": 12528,
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "backend": "WebGPU",
+      "position": [
+        -159942.54536916577,
+        -34468.39173654914,
+        -246334.60892511992
+      ]
+    },
+    {
+      "id": "nacre",
+      "travelMs": 11896,
+      "fps": 144,
+      "frameMs": 6.945000000000012,
+      "backend": "WebGPU",
+      "position": [
+        121402.17057234279,
+        32240.69396319216,
+        -358748.4554532538
+      ]
+    },
+    {
+      "id": "moon",
+      "travelMs": 16001,
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "backend": "WebGPU",
+      "position": [
+        -20622.303389684846,
+        12877.93681556674,
+        -135627.89848718717
+      ]
+    },
+    {
+      "id": "ember",
+      "travelMs": 11750,
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "backend": "WebGPU",
+      "position": [
+        79337.60906575999,
+        -12710.663509992033,
+        -89528.95948413745
+      ]
+    },
+    {
+      "id": "giant",
+      "travelMs": 8124,
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "backend": "WebGPU",
+      "position": [
+        108177.75878801657,
+        -46164.67126751213,
+        -42430.98812568845
+      ]
+    },
+    {
+      "id": "wound",
+      "travelMs": 8287,
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "backend": "WebGPU",
+      "position": [
+        135041.56626302478,
+        -3100.8802233040665,
+        47013.26893581285
+      ]
+    }
+  ],
+  "errors": []
+}

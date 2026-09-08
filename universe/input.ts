@@ -8,6 +8,9 @@ export type InputAction =
   | "wander"
   | "seed"
   | "hud"
+  | "places"
+  | "experiment"
+  | "orbit"
   | "cancel";
 type Touch = {
   x: number;
@@ -40,6 +43,9 @@ const actions: Record<string, InputAction> = {
   KeyK: "quiet",
   KeyB: "wander",
   KeyN: "seed",
+  KeyM: "places",
+  KeyT: "experiment",
+  KeyO: "orbit",
   Backquote: "hud",
   Escape: "cancel",
 };
@@ -56,6 +62,8 @@ export class InputManager {
   lockFailed = false;
   selected = false;
   active = false;
+  learning = { look: 0, move: 0, speed: 0 };
+  private releaseForUI = false;
   private touches = new Map<number, Touch>();
   private lastPinch = 0;
   private down = { x: 0, y: 0, moved: 0 };
@@ -83,6 +91,7 @@ export class InputManager {
         this.buttons.clear();
         this.inside = this.locked;
         if (this.locked) this.lockFailed = false;
+        else if (this.releaseForUI) this.releaseForUI = false;
         else this.action("cancel");
       },
       o,
@@ -286,6 +295,13 @@ export class InputManager {
     this.manual = false;
     this.inside = false;
   };
+  releasePointer() {
+    this.clear();
+    if (document.pointerLockElement === this.canvas) {
+      this.releaseForUI = true;
+      void document.exitPointerLock();
+    }
+  }
   consume() {
     this.look.set(0, 0);
     this.orbit.set(0, 0);

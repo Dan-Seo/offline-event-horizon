@@ -9,6 +9,7 @@ import { CreationSystem } from "./creation";
 import { pass, uniform, uv, float, smoothstep } from "three/tsl";
 import { bloom } from "three/addons/tsl/display/BloomNode.js";
 import { initialSnapshot, type UniverseSnapshot } from "./state";
+import type { ReleaseKind } from "./orbit-model";
 export class UniverseEngine {
   scene = new T.Scene();
   camera = new T.PerspectiveCamera(57, 1, 0.5, 20000000);
@@ -196,7 +197,12 @@ export class UniverseEngine {
     }
   }
   action = (a: InputAction) => {
+    if (["help", "hud", "places", "experiment"].includes(a)) {
+      this.input?.releasePointer();
+      this.flight.cancel();
+    }
     if (a === "focus") this.flight.focus();
+    else if (a === "orbit") this.flight.orbit();
     else if (a === "reset") {
       this.input.clear();
       this.flight.reset();
@@ -236,6 +242,28 @@ export class UniverseEngine {
     this.flight.selected = b;
     this.input.selected = true;
     if (travel) this.flight.focus(b);
+  }
+  releaseMatter(kind: ReleaseKind) {
+    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    if (
+      this.state.paused ||
+      this.flight.position.distanceTo(hole.position) > hole.radius * 12
+    )
+      return;
+    const local = this.flight.position
+      .clone()
+      .sub(hole.position)
+      .applyQuaternion(this.world.anomaly.diskRotation.clone().invert());
+    this.world.anomaly.experiment.release(
+      kind,
+      Math.atan2(local.y, local.x) + 0.75,
+    );
+  }
+  setGravity(value: number) {
+    this.world.anomaly.experiment.model.setGravity(value);
+  }
+  clearExperiment() {
+    this.world.anomaly.experiment.clear();
   }
   private pick = (p: T.Vector2, travel: boolean) => {
     this.raycaster.setFromCamera(p, this.camera);
@@ -318,6 +346,7 @@ export class UniverseEngine {
       this.world.sanctuaries.respond(this.flight.velocity.length());
       this.flight.holdBeauty = this.world.sanctuaries.event !== "none";
       this.world.update(this.flight.position, this.state.time, this.camera);
+      this.world.anomaly.simulate(this.state.paused ? 0 : dt);
       this.world.sanctuaries.life.update(
         this.renderer,
         this.state.paused ? 0 : dt,
@@ -391,12 +420,24 @@ export class UniverseEngine {
     this.state.sanctuary = this.world.sanctuaries.active;
     const selected = this.flight.selected;
     this.state.selected = selected?.name ?? null;
+    this.state.selectedId = selected?.id ?? "";
     this.state.selectedKind = selected?.kind ?? "";
     this.state.mode = this.flight.mode;
     this.state.velocity = this.flight.velocity.length();
     this.state.speedDial = this.flight.speedDial;
     this.state.particles = this.matter.count;
     this.state.field = this.matter.fieldActive;
+    this.state.learning = { ...this.input.learning };
+    this.state.experiment = this.world.anomaly.experiment.model.snapshot();
+    const encounter = this.world.bodies.find(
+      (b) =>
+        b.id === selected?.id &&
+        ![4, 5, 7].includes(b.archetype) &&
+        this.flight.position.distanceTo(b.position) <
+          b.radius * (b.archetype === 3 ? 12 : 7.5),
+    );
+    this.state.encounter =
+      this.flight.mode === "TRAVEL" ? "" : (encounter?.id ?? "");
     let nearest = Infinity;
     for (const b of this.world.bodies) {
       const d = this.flight.position.distanceTo(b.position) - b.radius;
@@ -469,6 +510,9 @@ export class UniverseEngine {
         .length,
       benchmark: this.benchmarkMode,
       computeSubmitMs: this.matter.computeMs,
+      orbitSample: Array.from(
+        this.world.anomaly.experiment.model.positions.slice(0, 9),
+      ),
       sanctuary: this.world.sanctuaries.active,
       stillness: this.world.sanctuaries.stillness,
       beautyEvent: this.world.sanctuaries.event,

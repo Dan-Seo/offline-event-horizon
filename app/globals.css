@@ -236,6 +236,21 @@ a {
   font-size: 12px;
   color: #b5c8cb;
 }
+.control-row {
+  display: contents;
+}
+.controls-help {
+  overflow: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+}
+.replay-guide {
+  margin-top: 18px;
+  padding: 10px 0;
+  min-height: 44px;
+  font-size: 13px;
+  text-align: left;
+}
 .controls-help kbd {
   font: 11px DM;
   letter-spacing: 0.025em;
@@ -434,6 +449,236 @@ a {
   visibility: hidden;
   pointer-events: none;
 }
+.quiet > .arrival-guide,
+.quiet > .encounter-note,
+.has-panel > .focus-marker,
+.has-panel > .arrival-guide {
+  display: none;
+}
+.arrival-guide,
+.encounter-note {
+  position: absolute;
+  z-index: 3;
+  left: 42px;
+  bottom: 125px;
+  width: 400px;
+  max-height: calc(100dvh - 230px);
+  overflow: auto;
+  padding: 28px;
+  background: linear-gradient(120deg, #08171eee, #08171ec9);
+  border: 1px solid #b0cdcb2b;
+  box-shadow: 0 8px 48px #02080c26;
+  animation: appear 0.7s;
+  pointer-events: auto;
+  overscroll-behavior: contain;
+}
+.arrival-guide h1,
+.arrival-guide h2,
+.encounter-note h2 {
+  font-family: Manrope, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  margin: 18px 0 12px;
+}
+.arrival-guide p,
+.encounter-note > p:not(.eyebrow),
+.experiment-intro {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #bfd0d1;
+  margin: 0 0 20px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.language-choice {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.language-choice button {
+  min-height: 44px;
+  padding: 8px 4px;
+  color: #90a7ad;
+}
+.language-choice button[aria-pressed="true"] {
+  color: #f0f4e7;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+.language-choice > span {
+  color: #91b1b04d;
+}
+.guide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.guide-actions button,
+.encounter-note button {
+  padding: 12px 14px;
+  min-height: 46px;
+  font-size: 14px;
+  border: 1px solid #acc6bf36;
+  text-align: left;
+}
+.guide-actions .guide-primary {
+  width: 100%;
+  border-color: #d0e3cf73;
+  background: #b9d6d810;
+  display: flex;
+  justify-content: space-between;
+}
+.guide-actions > button:not(.guide-primary) {
+  flex: 1;
+}
+.guide-actions > .guide-skip {
+  border: 0;
+}
+.guide-skip {
+  font-size: 12px;
+  color: #a9bdbf;
+  padding: 12px 2px 0;
+  min-height: 44px;
+}
+.guide-progress {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.guide-progress i {
+  width: 16px;
+  height: 2px;
+  background: #bdd1c833;
+}
+.guide-progress i.current {
+  background: #aac6b9;
+}
+.guide-progress i.complete {
+  background: #e1eed6;
+}
+.guide-progress span {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #b6c7c6;
+}
+.guide-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.guide-bottom small,
+.encounter-note small {
+  font-size: 12px;
+  color: #a4babc;
+  line-height: 1.7;
+}
+.guide-bottom button {
+  color: #bed0ca;
+  padding: 10px 0;
+  min-height: 44px;
+  font-size: 12px;
+}
+.movement-guide {
+  pointer-events: none;
+}
+.movement-guide button {
+  pointer-events: auto;
+}
+.encounter-note {
+  width: 340px;
+  padding: 22px 25px;
+}
+.encounter-note h2 {
+  margin-top: 0;
+}
+.encounter-note .eyebrow {
+  margin: 0 0 8px;
+}
+.encounter-note button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.encounter-note small {
+  display: block;
+  margin-top: 14px;
+}
+.experiment-intro {
+  margin-top: -6px;
+}
+.release-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+.release-options button {
+  border: 1px solid var(--line);
+  padding: 13px 3px;
+  min-height: 77px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.release-options button > span {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #d2daca;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.experiment-status {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--dim);
+}
+.experiment-readout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.experiment-readout .muted-link {
+  min-height: 44px;
+  padding: 8px 0;
+  margin: 0;
+  white-space: nowrap;
+}
+.experiment details {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--dim);
+}
+.experiment summary {
+  cursor: pointer;
+  min-height: 32px;
+}
+.experiment details p {
+  margin-bottom: 0;
+}
+.vastness[lang="ko"] {
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", DM, sans-serif;
+}
+.vastness[lang="ko"] .flight-bar button,
+.vastness[lang="ko"] .eyebrow,
+.vastness[lang="ko"] .masthead button,
+.vastness[lang="ko"] .focus-marker span {
+  letter-spacing: 0;
+}
+.vastness[lang="ko"] .flight-bar button {
+  font-size: 13px;
+}
+.vastness[lang="ko"] .small-panel {
+  line-height: 1.6;
+}
 .leave-quiet {
   position: absolute;
   right: 30px;
@@ -499,6 +744,11 @@ a {
     bottom: 155px;
   }
 }
+@media (max-width: 1250px) {
+  .input-hint {
+    bottom: 101px;
+  }
+}
 @media (max-width: 600px) {
   .masthead {
     top: 18px;
@@ -534,6 +784,50 @@ a {
   }
   .flight-actions {
     gap: 0;
+  }
+  .vastness[lang="ko"] .flight-actions button {
+    font-size: 11px;
+    padding-inline: 8px;
+  }
+  .arrival-guide,
+  .encounter-note {
+    left: 18px;
+    right: 18px;
+    bottom: 114px;
+    width: auto;
+    padding: 22px;
+    max-height: calc(100dvh - 203px);
+  }
+  .arrival-guide h1,
+  .arrival-guide h2 {
+    font-size: 21px;
+  }
+  .arrival-guide p,
+  .encounter-note > p:not(.eyebrow) {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .movement-guide {
+    top: 86px;
+    bottom: auto;
+    padding: 18px;
+  }
+  .movement-guide h2 {
+    font-size: 18px;
+    margin: 12px 0 7px;
+  }
+  .movement-guide p {
+    margin-bottom: 8px;
+  }
+  .guide-bottom {
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+  .encounter-note {
+    padding: 18px;
+  }
+  .encounter-note h2 {
+    font-size: 20px;
   }
   .flight-bar button {
     padding: 12px 11px;
@@ -574,6 +868,35 @@ a {
     width: auto;
     max-height: calc(100dvh - 190px);
     padding: 22px;
+  }
+  .small-panel.experiment {
+    padding: 18px;
+  }
+  .experiment .eyebrow {
+    margin: 4px 0 14px;
+  }
+  .experiment-intro {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+  .release-options button {
+    min-height: 60px;
+    padding: 8px 3px;
+  }
+  .release-options button > span {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .experiment label {
+    margin: 12px 0;
+  }
+  .experiment details {
+    margin-top: 4px;
+    padding-top: 8px;
+  }
+  .experiment summary {
+    min-height: 44px;
   }
   .controls-help > div {
     gap: 9px;
@@ -633,6 +956,19 @@ a {
   }
   .touch-zones {
     bottom: 107px;
+  }
+  .arrival-guide,
+  .encounter-note {
+    top: 70px;
+    bottom: auto;
+    max-height: calc(100dvh - 157px);
+    width: min(400px, calc(100% - 36px));
+    padding: 16px 20px;
+  }
+  .arrival-guide h1,
+  .arrival-guide h2 {
+    margin: 10px 0;
+    font-size: 20px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -59,6 +59,7 @@ export class PlanetLibrary {
       metalness: 0.015,
     });
     const p = positionLocal.normalize();
+    const living = kind === 0 || kind === 10;
     const q = p.mul(3.6).add(vec3(kind * 13.7, 1.3, 3.1));
     const base = mx_noise_float(q)
       .add(mx_noise_float(q.mul(2.7)).mul(0.32))
@@ -86,8 +87,20 @@ export class PlanetLibrary {
     );
     let albedo = mix(mix(ocean, ground, land), color(0xc8d2c8), frost);
     let relief = max(base, 0).mul(0.004);
+    let detailRelief = base
+      .mul(0.002)
+      .add(
+        mx_noise_float(p.mul(75)).mul(
+          living ? land.mul(0.0012).add(0.000018) : float(0.0005),
+        ),
+      );
     if (kind === 1) {
-      const warp = mx_noise_float(p.mul(7))
+      const wind = vec3(
+        this.time.mul(0.007).mul(p.y.sin()),
+        0,
+        this.time.mul(0.002),
+      );
+      const warp = mx_noise_float(p.mul(7).add(wind))
         .mul(0.1)
         .add(mx_noise_float(p.mul(24)).mul(0.018));
       const bands = sin(p.y.add(warp.mul(0.4)).mul(46))
@@ -103,12 +116,45 @@ export class PlanetLibrary {
       );
       relief = float(0);
     } else if (kind === 2) {
-      albedo = mix(
-        color(0x697e89),
-        color(0xbccac9),
-        variation.mul(0.5).add(base.mul(0.5)).add(0.25),
+      let basins: T.Node<"float"> = float(0);
+      for (const [x, y, z, size] of [
+        [0.7, 0.45, 0.5, 0.16],
+        [-0.65, 0.2, 0.72, 0.21],
+        [0.15, -0.7, 0.68, 0.12],
+        [-0.35, 0.85, -0.38, 0.17],
+        [0.8, -0.4, -0.45, 0.11],
+        [-0.6, -0.6, -0.52, 0.19],
+        [0.2, 0.3, -0.93, 0.22],
+        [0.43, 0.82, 0.38, 0.06],
+        [0.86, 0.18, 0.44, 0.065],
+      ]) {
+        const d = length(p.sub(vec3(x, y, z).normalize())).div(size);
+        const bowl = float(1)
+          .sub(smoothstep(0.05, 0.86, d))
+          .mul(-0.006);
+        const rim = pow(max(0, float(1).sub(d.sub(0.88).abs().mul(8))), 2).mul(
+          0.003,
+        );
+        basins = basins.add(bowl).add(rim);
+      }
+      const fractures = float(1).sub(
+        smoothstep(
+          0.009,
+          0.023,
+          mx_noise_float(p.mul(14))
+            .add(mx_noise_float(p.mul(85)).mul(0.13))
+            .abs(),
+        ),
       );
-      relief = base.mul(0.003);
+      albedo = mix(
+        color(0x405e70),
+        color(0xc5d4d1),
+        variation.mul(0.5).add(base.mul(0.5)).add(0.25),
+      )
+        .mul(fractures.mul(-0.16).add(1))
+        .mul(basins.mul(28).add(1));
+      relief = base.mul(0.0015).add(basins);
+      detailRelief = relief.add(fractures.mul(-0.00025)).add(fine.mul(0.00006));
     } else if (kind === 6) {
       const cracks = pow(
         float(1).sub(smoothstep(0.015, 0.055, mx_noise_float(p.mul(25)).abs())),
@@ -118,8 +164,45 @@ export class PlanetLibrary {
       material.emissiveNode = color(0xfc4d0c)
         .mul(cracks)
         .mul(smoothstep(-0.08, 0.3, base))
-        .mul(2.4);
+        .mul(
+          sin(this.time.mul(0.35).add(base.mul(19)))
+            .mul(0.2)
+            .add(1.9),
+        );
       relief = max(base, 0).mul(0.009);
+      detailRelief = relief.mul(0.4).add(cracks.mul(-0.0008));
+    } else if (kind === 9) {
+      const basin = smoothstep(-0.3, -0.14, base);
+      const dunes = sin(
+        p.y
+          .mul(210)
+          .add(mx_noise_float(p.mul(11)).mul(24))
+          .add(p.x.mul(70)),
+      )
+        .mul(0.5)
+        .add(0.5);
+      const strata = sin(base.mul(145)).mul(0.08).add(0.88);
+      albedo = mix(
+        color(0xc9c6ab),
+        mix(
+          color(0x8c5940),
+          color(0xd1ac76),
+          variation.mul(0.6).add(dunes.mul(0.22)),
+        ),
+        basin,
+      ).mul(strata);
+      relief = max(base, -0.14).mul(0.008).add(dunes.mul(basin).mul(0.00012));
+      detailRelief = relief
+        .mul(0.4)
+        .add(dunes.mul(0.00024))
+        .add(fine.mul(0.00004));
+    } else if (kind === 10) {
+      albedo = mix(
+        mix(color(0x042b30), color(0x277767), smoothstep(-0.35, 0.08, base)),
+        mix(color(0x102e21), color(0x769680), variation),
+        land,
+      );
+      albedo = mix(albedo, color(0xd0e4da), frost);
     } else if (kind === 8) {
       // The sanctuary ocean is the north cap of this same sphere. Its local
       // reflection mesh recedes gradually into this continuous far surface.
@@ -130,23 +213,13 @@ export class PlanetLibrary {
       .mul(0.1)
       .add(mx_noise_float(p.mul(490)).mul(0.035));
     material.colorNode = albedo.mul(
-      surfaceDetail.mul(kind === 0 ? land : float(0.5)).add(1),
+      surfaceDetail.mul(living ? land : float(0.5)).add(1),
     );
     material.positionNode = positionLocal.mul(float(1).add(relief));
     material.normalNode =
-      kind === 1 || kind === 8
-        ? normalView
-        : reliefNormal(
-            base
-              .mul(0.002)
-              .add(
-                mx_noise_float(p.mul(75)).mul(
-                  kind === 0 ? land.mul(0.0012).add(0.000018) : float(0.0005),
-                ),
-              ),
-          );
-    material.roughnessNode = kind === 0 ? mix(0.23, 0.87, land) : float(0.87);
-    if (kind === 0) {
+      kind === 1 || kind === 8 ? normalView : reliefNormal(detailRelief);
+    material.roughnessNode = living ? mix(0.23, 0.87, land) : float(0.87);
+    if (living) {
       const night = float(1).sub(
         smoothstep(-0.15, 0.22, normalWorld.dot(sunDirection)),
       );
@@ -157,7 +230,13 @@ export class PlanetLibrary {
       material.emissiveNode = color(0x52cc9e)
         .mul(organisms)
         .mul(night)
-        .mul(0.9);
+        .mul(
+          kind === 10
+            ? sin(this.time.mul(0.23).sub(base.mul(17)))
+                .mul(0.3)
+                .add(1.45)
+            : float(0.9),
+        );
     }
     this.surfaces.set(kind, material);
     return material;
@@ -174,7 +253,7 @@ export class PlanetLibrary {
     lod.autoUpdate = false;
     group.add(lod);
     group.userData.lod = lod;
-    if (kind === 0 || kind === 1 || kind === 6 || kind === 8) {
+    if ([0, 1, 2, 6, 8, 9, 10].includes(kind)) {
       let atmo = this.atmospheres.get(kind);
       if (!atmo) {
         const m = new T.MeshBasicNodeMaterial({
@@ -193,12 +272,16 @@ export class PlanetLibrary {
         );
         const day = smoothstep(-0.3, 0.6, normalWorld.dot(sunDirection));
         m.colorNode =
-          kind === 0 || kind === 8
+          kind === 0 || kind === 8 || kind === 10
             ? mix(color(0x165d91), color(0x6eb7bd), day)
             : kind === 1
               ? color(0xa9a393)
-              : color(0x873913);
-        m.opacityNode = rim.mul(day.mul(0.27).add(0.04));
+              : kind === 2
+                ? color(0x8babb4)
+                : kind === 9
+                  ? color(0xc7a37a)
+                  : color(0x873913);
+        m.opacityNode = rim.mul(day.mul(kind === 2 ? 0.08 : 0.27).add(0.04));
         atmo = m;
         this.atmospheres.set(kind, m);
       }
@@ -207,7 +290,7 @@ export class PlanetLibrary {
       shell.renderOrder = 3;
       group.add(shell);
     }
-    if (kind === 0) {
+    if (kind === 0 || kind === 10) {
       let material = this.clouds.get(kind);
       if (!material) {
         const m = new T.MeshStandardNodeMaterial({
@@ -227,7 +310,7 @@ export class PlanetLibrary {
           color(0xe4e8df),
           smoothstep(0.0, 0.6, cloud),
         );
-        m.opacityNode = smoothstep(0.18, 0.3, cloud).mul(0.8);
+        m.opacityNode = (kind === 10 ? smoothstep(0.06, 0.43, cloud).mul(0.7) : smoothstep(0.18, 0.3, cloud).mul(0.8));
         m.normalNode = reliefNormal(cloud.mul(0.00035));
         material = m;
         this.clouds.set(kind, m);

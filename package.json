@@ -1,6 +1,6 @@
 {
   "name": "offline-vastness",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -17,6 +17,9 @@
     "qa:devices": "node scripts/sanctuary-devices.mjs",
     "qa:performance": "node scripts/sanctuary-performance.mjs",
     "qa:resilience": "node scripts/sanctuary-resilience.mjs",
+    "qa:onboarding": "node scripts/vastness-onboarding.mjs",
+    "qa:touch-guide": "node scripts/vastness-touch-guide.mjs",
+    "qa:encounters": "node scripts/vastness-encounters.mjs",
     "qa:place": "node scripts/sanctuary-journey.mjs",
     "test:reconstruction": "python -m unittest discover -s tests -p test_reconstruction_report.py"
   },

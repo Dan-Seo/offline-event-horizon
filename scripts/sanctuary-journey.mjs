@@ -1,5 +1,6 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
+import { enterEnglishExperience } from "./qa-entry.mjs";
 const browser = await chromium.launch({
   channel: process.env.QA_BROWSER || "chrome",
   headless: true,
@@ -34,6 +35,7 @@ try {
       (fallback ? "&backend=webgl&quality=BATTERY" : ""),
   );
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
+  await enterEnglishExperience(page);
   if (titles[place]) {
     await page
       .getByRole("button", { name: "Comfort settings", exact: true })

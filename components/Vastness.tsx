@@ -1,23 +1,25 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { initialSnapshot } from "@/universe/state";
 import type { UniverseEngine } from "@/universe/engine";
 import type { Quality } from "@/universe/config";
 import type { InputAction } from "@/universe/input";
-const refuges = [
-  ["last-light", "The Last Light", "Water holding the sky"],
-  ["moonfall", "Moonfall", "Silver water, falling softly"],
-  ["forest", "The Breathing Forest", "A little light, a little life"],
-  ["veil", "The Veil", "A garden held by clouds"],
-  ["living-sky", "The Living Sky", "Room for a thousand quiet lives"],
-];
-const distant = [
-  ["giant", "The Silent Giant", "Beyond the atmosphere"],
-  ["wound", "The Wound", "An absence of light"],
-  ["cathedral", "The Cathedral", "Something left behind"],
-  ["bloom", "The Bloom", "Interstellar dust"],
-];
-function Mark({ kind }: { kind: "wander" | "quiet" | "settings" | "sound" }) {
+import {
+  copy,
+  LANGUAGE_KEY,
+  preferredLanguage,
+  placeText,
+  refugeIds,
+  distantIds,
+  type Language,
+} from "@/universe/language";
+import { ArrivalGuide, LanguageChoice } from "./ArrivalGuide";
+import GravityExperiment from "./GravityExperiment";
+function Mark({
+  kind,
+}: {
+  kind: "wander" | "quiet" | "settings" | "sound" | "explore";
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -35,6 +37,11 @@ function Mark({ kind }: { kind: "wander" | "quiet" | "settings" | "sound" }) {
         </>
       ) : kind === "quiet" ? (
         <circle cx="12" cy="12" r="7" />
+      ) : kind === "explore" ? (
+        <>
+          <circle cx="12" cy="12" r="8" />
+          <path d="m15.8 8.2-2.1 5.5-5.5 2.1 2.1-5.5z" />
+        </>
       ) : kind === "sound" ? (
         <>
           <path d="m4 10 4 0 5-4v12l-5-4H4z" />
@@ -62,10 +69,54 @@ export default function Vastness() {
     [intro, setIntro] = useState(true),
     [benchmark, setBenchmark] = useState("NONE"),
     [further, setFurther] = useState(false);
+  const [language, setLanguage] = useState<Language>("en"),
+    [guideRun, setGuideRun] = useState(0),
+    [guideActive, setGuideActive] = useState(true);
+  const c = copy[language];
+  const finishLesson = useCallback(() => {
+    engine.current?.input.releasePointer();
+  }, []);
+  const changeLanguage = (value: Language) => {
+    setLanguage(value);
+    try {
+      localStorage.setItem(LANGUAGE_KEY, value);
+    } catch {
+      /* Device-local preference is optional. */
+    }
+  };
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(LANGUAGE_KEY);
+    } catch {
+      /* Use the browser language. */
+    }
+    setLanguage(preferredLanguage(saved, navigator.languages));
+  }, []);
+  useEffect(() => {
+    document.documentElement.lang = language;
+    host.current
+      ?.querySelector("canvas")
+      ?.setAttribute(
+        "aria-label",
+        `${c.flightControls}. ${c.clickHint}. ${c.helpLabel}: H.`,
+      );
+  }, [language, state.ready, c]);
   useEffect(() => {
     let cancelled = false;
     const onAction = (a: InputAction) => {
-      if (a === "help") setHelp((v) => !v);
+      if (a === "help") {
+        setHelp((v) => !v);
+        setPanel(null);
+      }
+      if (a === "places") {
+        setPanel((v) => (v === "places" ? null : "places"));
+        setHelp(false);
+      }
+      if (a === "experiment" && engine.current?.state.encounter === "wound") {
+        setPanel((v) => (v === "experiment" ? null : "experiment"));
+        setHelp(false);
+      }
       if (a === "hud")
         setPanel((v) => (v === "benchmark" ? null : "benchmark"));
       if (a === "cancel") {
@@ -102,43 +153,50 @@ export default function Vastness() {
   }, [state.ready]);
   const action = (a: InputAction) => engine.current?.action(a);
   const toggle = (name: string) => setPanel((v) => (v === name ? null : name));
+  const encounter = placeText(language, state.encounter);
+  const selected = placeText(language, state.selectedId, state.selected ?? "");
+  useEffect(() => {
+    if (panel === "experiment" && state.encounter !== "wound") setPanel(null);
+  }, [panel, state.encounter]);
   return (
     <main
-      className={`vastness${state.quiet ? " quiet" : ""}${state.locked ? " pointer-locked" : ""}`}
+      className={`vastness${state.quiet ? " quiet" : ""}${state.locked ? " pointer-locked" : ""}${panel || help ? " has-panel" : ""}`}
+      lang={language}
       data-ready={state.ready}
       data-backend={state.backend}
       data-mode={state.mode}
       data-paused={state.paused}
       data-seeds={state.seeds}
       data-sanctuary={state.sanctuary}
+      data-encounter={state.encounter}
     >
       <div ref={host} className="universe-canvas" />
       <div className="vignette" aria-hidden="true" />
       <header className="masthead">
-        <a href="/" aria-label="Offline Vastness home">
+        <a href="/" aria-label={c.home}>
           OFFLINE <span>//</span> VASTNESS
         </a>
         <button
-          onClick={() => setHelp((v) => !v)}
-          aria-label="Controls help"
+          onClick={() => action("help")}
+          aria-label={c.helpLabel}
           aria-pressed={help}
         >
-          H <span>HELP</span>
+          H <span>{c.help}</span>
         </button>
       </header>
       {!state.ready && !error && (
         <div className="arrival" role="status">
-          <p>Take your time.</p>
+          <p>{c.loading}</p>
         </div>
       )}
       {state.ready && (
         <>
           <div
-            className={`arrival-thought${intro ? " visible" : ""}`}
-            aria-hidden={!intro}
+            className={`arrival-thought${intro && !guideActive && !state.encounter && !panel && !help ? " visible" : ""}`}
+            aria-hidden={!intro || guideActive || !!state.encounter || !!panel || help}
           >
-            <p>Nothing needs you right now.</p>
-            <span>You can stay a while.</span>
+            <p>{c.thought}</p>
+            <span>{c.stay}</span>
           </div>
           {state.selectionVisible && (
             <div
@@ -150,57 +208,50 @@ export default function Vastness() {
             >
               <i />
               <span>
-                {state.selected}
-                <small>{state.selectedKind}</small>
+                {selected.name}
+                <small>{selected.kind || state.selectedKind}</small>
               </span>
             </div>
           )}
           {state.locked && <div className="look-dot" aria-hidden="true" />}
           {help && (
-            <aside className="controls-help" aria-label="Flight controls">
-              <p>Make yourself comfortable.</p>
+            <aside className="controls-help" aria-label={c.flightControls}>
+              <p>{c.guideTitle}</p>
               <div>
-                <kbd>CLICK</kbd>
-                <span>Take the view</span>
-                <kbd>MOUSE</kbd>
-                <span>Look around</span>
-                <kbd>W A S D</kbd>
-                <span>Move</span>
-                <kbd>SCROLL</kbd>
-                <span>Travel speed</span>
-                <kbd>SHIFT / CTRL</kbd>
-                <span>Faster / slower</span>
-                <kbd>Q E</kbd>
-                <span>Roll</span>
-                <kbd>SPACE / X</kbd>
-                <span>Rise / descend</span>
-                <kbd>CLICK / F</kbd>
-                <span>Select / approach</span>
-                <kbd>RIGHT DRAG</kbd>
-                <span>Orbit selection</span>
-                <kbd>B / K</kbd>
-                <span>Wander / quiet</span>
-                <kbd>P / R</kbd>
-                <span>Pause / return</span>
-                <kbd>G / V / N</kbd>
-                <span>Gather / release / light</span>
-                <kbd>ESC / H</kbd>
-                <span>Free cursor / help</span>
+                {[
+                  "CLICK",
+                  "MOUSE",
+                  "W A S D",
+                  "SCROLL",
+                  "SHIFT / CTRL",
+                  "Q E",
+                  "SPACE / X",
+                  "CLICK / F",
+                  "RIGHT DRAG",
+                  "B / K",
+                  "P / R",
+                  "G / V / N",
+                  "M / O / T",
+                  "ESC / H",
+                ].map((key, i) => (
+                  <div className="control-row" key={key}>
+                    <kbd>{key}</kbd>
+                    <span>{c.controls[i]}</span>
+                  </div>
+                ))}
               </div>
-              <small className="desktop-help">
-                Click once to look freely. Esc gives you the cursor.
-                <br />
-                If pointer lock is unavailable, drag to look.
-                <br />
-                Your movement always takes over.
-              </small>
-              <small className="touch-help">
-                Left thumb to move. Right thumb to look.
-                <br />
-                Pinch to change speed. Tap to select.
-                <br />
-                Double tap to approach.
-              </small>
+              <small className="desktop-help">{c.desktopHelp}</small>
+              <small className="touch-help">{c.touchHelp}</small>
+              <button
+                className="replay-guide"
+                onClick={() => {
+                  setHelp(false);
+                  setGuideRun((v) => v + 1);
+                  engine.current?.flight.cancel();
+                }}
+              >
+                {c.replay} ↗
+              </button>
             </aside>
           )}
           <footer className="flight-bar">
@@ -208,14 +259,22 @@ export default function Vastness() {
               <button
                 onClick={() => action("wander")}
                 aria-pressed={state.mode === "WANDER"}
-                aria-label="WANDER"
+                aria-label={c.wander}
               >
                 <Mark kind="wander" />
-                <span>{state.mode === "WANDER" ? "WANDERING" : "WANDER"}</span>
+                <span>{state.mode === "WANDER" ? c.wandering : c.wander}</span>
               </button>
-              <button onClick={() => action("quiet")} aria-label="QUIET">
+              <button onClick={() => action("quiet")} aria-label={c.quiet}>
                 <Mark kind="quiet" />
-                <span>QUIET</span>
+                <span>{c.quiet}</span>
+              </button>
+              <button
+                onClick={() => action("places")}
+                aria-label={c.exploreLabel}
+                aria-expanded={panel === "places"}
+              >
+                <Mark kind="explore" />
+                <span>{c.explore}</span>
               </button>
             </div>
             <div className="flight-tools">
@@ -227,15 +286,15 @@ export default function Vastness() {
                     setSound(false);
                   }
                 }}
-                aria-label={sound ? "Mute sound" : "Enable sound"}
+                aria-label={sound ? c.mute : c.enableSound}
                 aria-pressed={sound}
               >
                 <Mark kind="sound" />
-                <span>{sound ? "SOUND ON" : "SOUND OFF"}</span>
+                <span>{sound ? c.soundOn : c.soundOff}</span>
               </button>
               <button
                 onClick={() => toggle("settings")}
-                aria-label="Comfort settings"
+                aria-label={c.settings}
                 aria-expanded={panel === "settings"}
               >
                 <Mark kind="settings" />
@@ -243,23 +302,19 @@ export default function Vastness() {
             </div>
           </footer>
           <div
-            className={`input-hint${intro || state.paused || state.lockFailed ? " visible" : ""}`}
+            className={`input-hint${(!guideActive && intro) || state.paused || state.lockFailed ? " visible" : ""}`}
             role="status"
           >
             {state.paused ? (
-              "The world is resting. P to resume."
+              c.paused
             ) : state.lockFailed ? (
-              "Drag to look · WASD to move"
+              c.dragHint
             ) : state.locked ? (
-              "Mouse to look · Esc for the cursor"
+              c.lockedHint
             ) : (
               <>
-                <span className="desktop-help">
-                  Click to look around <b>·</b> WASD to move
-                </span>
-                <span className="touch-help">
-                  Left thumb moves <b>·</b> Right thumb looks
-                </span>
+                <span className="desktop-help">{c.clickHint}</span>
+                <span className="touch-help">{c.touchHint}</span>
               </>
             )}
           </div>
@@ -268,40 +323,48 @@ export default function Vastness() {
               className={`small-panel ${panel}`}
               aria-label={
                 panel === "places"
-                  ? "Quiet places"
+                  ? c.places
                   : panel === "settings"
-                    ? "Comfort settings"
-                    : "Technical benchmark"
+                    ? c.settings
+                    : panel === "experiment"
+                      ? c.experimentLabel
+                      : c.technicalLabel
               }
             >
               <button
                 className="close-panel"
                 onClick={() => setPanel(null)}
-                aria-label="Close panel"
+                aria-label={c.close}
               >
                 ×
               </button>
               {panel === "settings" && (
                 <>
-                  <p className="eyebrow">AT YOUR OWN PACE</p>
+                  <p className="eyebrow">{c.atYourPace}</p>
+                  <LanguageChoice
+                    language={language}
+                    onChange={changeLanguage}
+                  />
                   <label>
-                    Detail
+                    {c.detail}
                     <select
-                      aria-label="Detail"
+                      aria-label={c.detail}
                       value={state.quality}
                       onChange={(e) =>
                         engine.current?.setQuality(e.target.value as Quality)
                       }
                     >
                       {["ULTRA", "HIGH", "BALANCED", "BATTERY"].map((q) => (
-                        <option key={q}>{q}</option>
+                        <option key={q} value={q}>
+                          {c.quality[q as Quality]}
+                        </option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Look sensitivity
+                    {c.sensitivity}
                     <input
-                      aria-label="Look sensitivity"
+                      aria-label={c.sensitivity}
                       type="range"
                       min="0.3"
                       max="2"
@@ -314,7 +377,7 @@ export default function Vastness() {
                     />
                   </label>
                   <label>
-                    Gentler movement
+                    {c.gentle}
                     <input
                       type="checkbox"
                       checked={gentle}
@@ -326,7 +389,7 @@ export default function Vastness() {
                     />
                   </label>
                   <button onClick={() => setPanel("places")}>
-                    Find somewhere quiet <span>↗</span>
+                    {c.findQuiet} <span>↗</span>
                   </button>
                   <button
                     onClick={() => {
@@ -334,10 +397,10 @@ export default function Vastness() {
                       setPanel(null);
                     }}
                   >
-                    Leave a little light
+                    {c.seed}
                   </button>
                   <button onClick={() => action("pause")}>
-                    {state.paused ? "Resume the world" : "Pause the world"}
+                    {state.paused ? c.resume : c.pause}
                   </button>
                   <button
                     onClick={() => {
@@ -345,31 +408,33 @@ export default function Vastness() {
                       setPanel(null);
                     }}
                   >
-                    Return to the water
+                    {c.reset}
                   </button>
                   <button
                     className="muted-link"
                     onClick={() => setPanel("benchmark")}
                   >
-                    Technical observatory
+                    {c.observatory}
                   </button>
                 </>
               )}
               {panel === "places" && (
                 <>
-                  <p className="eyebrow">SOMEWHERE TO STAY</p>
-                  {(further ? distant : refuges).map(([id, title, kind]) => (
+                  <p className="eyebrow">{further ? c.beyond : c.somewhere}</p>
+                  {(further ? distantIds : refugeIds).map((id) => (
                     <button
                       className="destination"
                       key={id}
+                      data-destination={id}
                       onClick={() => {
                         engine.current?.select(id, true);
+                        setIntro(false);
                         setPanel(null);
                       }}
                     >
                       <span>
-                        {title}
-                        <small>{kind}</small>
+                        {placeText(language, id).name}
+                        <small>{placeText(language, id).kind}</small>
                       </span>
                       <span>↗</span>
                     </button>
@@ -378,19 +443,28 @@ export default function Vastness() {
                     className="muted-link"
                     onClick={() => setFurther((v) => !v)}
                   >
-                    {further ? "Back to the water" : "Beyond this world"}
+                    {further ? c.backWater : c.beyond}
                   </button>
-                  <small>Move at any moment to take over.</small>
+                  <small>{c.takeOver}</small>
                 </>
+              )}
+              {panel === "experiment" && (
+                <GravityExperiment
+                  language={language}
+                  state={state}
+                  onRelease={(kind) => engine.current?.releaseMatter(kind)}
+                  onGravity={(value) => engine.current?.setGravity(value)}
+                  onClear={() => engine.current?.clearExperiment()}
+                />
               )}
               {panel === "benchmark" && (
                 <>
-                  <p className="eyebrow">TECHNICAL OBSERVATORY</p>
-                  <pre>{`${state.fps} FPS · ${state.frameMs.toFixed(2)} ms\n${state.backend} · ${state.quality}\n${state.drawCalls} draws · ${state.triangles.toLocaleString()} triangles\n${state.particles.toLocaleString()} matter particles\n${engine.current?.world.sanctuaries.life.count.toLocaleString() ?? 0} living particles\nDPR ${state.dpr.toFixed(2)} · ${state.sectors} resident sectors\n${engine.current?.world.generatedSectors ?? 0} sectors generated\nCamera-relative / logarithmic far field\n${state.nearest}\n${Math.round(state.velocity).toLocaleString()} local units / s`}</pre>
+                  <p className="eyebrow">{c.technical}</p>
+                  <pre>{`${state.fps} FPS · ${state.frameMs.toFixed(2)} ms\n${state.backend} · ${c.quality[state.quality]}\n${state.drawCalls} ${c.draws} · ${state.triangles.toLocaleString()} ${c.triangles}\n${state.particles.toLocaleString()} ${c.particles}\n${engine.current?.world.sanctuaries.life.count.toLocaleString() ?? 0} ${c.life}\nDPR ${state.dpr.toFixed(2)} · ${state.sectors} ${c.resident}\n${engine.current?.world.generatedSectors ?? 0} ${c.generated}\n${c.coordinates}\n${state.nearest}\n${Math.round(state.velocity).toLocaleString()} ${c.localUnits}`}</pre>
                   <label>
-                    Stress field
+                    {c.stress}
                     <select
-                      aria-label="Technical scenario"
+                      aria-label={c.scenario}
                       value={benchmark}
                       onChange={(e) => {
                         setBenchmark(e.target.value);
@@ -408,21 +482,56 @@ export default function Vastness() {
                       ))}
                     </select>
                   </label>
-                  <small>
-                    Physics-inspired art. Frame cadence, not GPU timestamps.
-                    <br />
-                    Press ` to hide.
-                  </small>
+                  <small>{c.technicalNote}</small>
                 </>
               )}
             </section>
           )}
+          <ArrivalGuide
+            language={language}
+            onLanguage={changeLanguage}
+            state={state}
+            run={guideRun}
+            onActive={setGuideActive}
+            onLessonComplete={finishLesson}
+            onWander={() => {
+              engine.current?.input.releasePointer();
+              action("wander");
+            }}
+            onExplore={() => action("places")}
+          />
+          {!guideActive &&
+            !panel &&
+            !help &&
+            state.encounter &&
+            encounter.description && (
+              <aside className="encounter-note" aria-label={encounter.name}>
+                <p className="eyebrow">{encounter.kind}</p>
+                <h2>{encounter.name}</h2>
+                <p>{encounter.description}</p>
+                {state.encounter === "wound" ? (
+                  <button onClick={() => action("experiment")}>
+                    {c.experiment} <span aria-hidden="true">↗</span>
+                  </button>
+                ) : (
+                  <button onClick={() => action("orbit")}>
+                    {state.mode === "ORBIT" ? c.orbiting : c.orbit}{" "}
+                    <span aria-hidden="true">↻</span>
+                  </button>
+                )}
+                <small>
+                  {state.encounter === "wound"
+                    ? c.experimentHint
+                    : c.freeFlight}
+                </small>
+              </aside>
+            )}
           <div
-            className={`touch-zones${intro ? " visible" : ""}`}
+            className={`touch-zones${intro && !guideActive ? " visible" : ""}`}
             aria-hidden="true"
           >
-            <span>MOVE</span>
-            <span>LOOK</span>
+            <span>{c.move}</span>
+            <span>{c.look}</span>
           </div>
         </>
       )}
@@ -430,16 +539,16 @@ export default function Vastness() {
         <button
           className="leave-quiet"
           onClick={() => action("quiet")}
-          aria-label="Leave quiet mode"
+          aria-label={c.leaveQuiet}
         >
           <Mark kind="quiet" />
         </button>
       )}
       {error && (
         <div className="error-state" role="alert">
-          <p>There is still room for quiet.</p>
-          <small>{error}</small>
-          <a href="/?backend=webgl&quality=BATTERY">Try lighter graphics</a>
+          <p>{c.errorTitle}</p>
+          <small>{c.errorBody}</small>
+          <a href="/?backend=webgl&quality=BATTERY">{c.retry}</a>
         </div>
       )}
     </main>

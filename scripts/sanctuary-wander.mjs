@@ -1,5 +1,6 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
+import { enterEnglishExperience } from "./qa-entry.mjs";
 const url = process.env.QA_URL || "http://localhost:4173",
   browser = await chromium.launch({
     channel: process.env.QA_BROWSER || "chrome",
@@ -15,6 +16,7 @@ page.on("console", (m) => {
 try {
   await page.goto(url + "/?qa=1");
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
+  await enterEnglishExperience(page);
   await page.getByRole("button", { name: "WANDER", exact: true }).click();
   for (let i = 0; i < 11; i++) {
     await page.waitForTimeout(10000);

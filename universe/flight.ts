@@ -29,7 +29,8 @@ export class FlightController {
   sensitivity = 1;
   quiet = false;
   gentle = false;
-  mode: "FREE" | "WANDER" | "TRAVEL" = "FREE";
+  mode: "FREE" | "WANDER" | "TRAVEL" | "ORBIT" = "FREE";
+  private orbitRadius = 0;
   selected?: Destination;
   holdBeauty = false;
   private wanderTime = 0;
@@ -66,6 +67,26 @@ export class FlightController {
       this.angular.set(0, 0, 0);
       this.pendingLook.set(0, 0);
     }
+  }
+  orbit(target = this.selected) {
+    if (this.mode === "ORBIT") {
+      this.cancel();
+      return;
+    }
+    if (
+      !target ||
+      target.solid === false ||
+      target.kind === "Gravitational anomaly"
+    )
+      return;
+    this.selected = target;
+    this.orbitRadius = Math.max(
+      target.radius * 1.3,
+      this.position.distanceTo(target.position),
+    );
+    this.angular.set(0, 0, 0);
+    this.pendingLook.set(0, 0);
+    this.mode = "ORBIT";
   }
   wander() {
     if (this.mode === "WANDER") {
@@ -125,6 +146,7 @@ export class FlightController {
       this.velocity.multiplyScalar(0.15);
     }
     this.speedDial = clamp(this.speedDial * Math.exp(input.wheel), 0.03, 200);
+    input.learning.speed += Math.abs(input.wheel);
     let clearance = 1e8;
     for (const b of bodies)
       if (b.solid !== false)
@@ -160,6 +182,7 @@ export class FlightController {
         turnY = clamp(this.pendingLook.y * smoothing, -limit, limit);
       this.pendingLook.x -= turnX;
       this.pendingLook.y -= turnY;
+      input.learning.look += Math.abs(turnX) + Math.abs(turnY);
       this.angular.x = turnX / dt;
       this.angular.y = turnY / dt;
       this.angular.z +=
@@ -185,6 +208,21 @@ export class FlightController {
         this.velocity.set(0, 0, 0);
         this.lookAt(this.selected.position, dt, 30);
       }
+    } else if (this.mode === "ORBIT" && this.selected) {
+      this.offset.copy(this.position).sub(this.selected.position);
+      const distance = this.offset.length();
+      this.direction
+        .crossVectors(new T.Vector3(0, 1, 0), this.offset)
+        .normalize();
+      if (this.direction.lengthSq() < 0.01) this.direction.set(1, 0, 0);
+      this.desired
+        .copy(this.direction)
+        .multiplyScalar(this.orbitRadius * (softer ? 0.008 : 0.012));
+      this.desired.addScaledVector(
+        this.offset.normalize(),
+        (this.orbitRadius - distance) * 0.4,
+      );
+      this.lookAt(this.selected.position, dt, 0.8);
     } else if (this.mode === "WANDER") {
       // Wander stays with a place. It does not count down to the next attraction.
       this.wanderTime += dt;
@@ -266,10 +304,14 @@ export class FlightController {
           const stop = target.radius * factor + 35;
           this.direction.copy(this.offset).normalize();
           if (this.mode === "TRAVEL") {
+            // Framing can require backing away from a large body. Use the same
+            // flight envelope in either direction: a nearby moon must not limit
+            // a long retreat to its local precision-navigation speed.
+            const travelLimit = Math.max(800, distance * 0.3);
             const speed = clamp(
               (distance - stop) * 0.7,
-              -contextual * 0.4,
-              Math.max(800, distance * 0.3),
+              -travelLimit,
+              travelLimit,
             );
             this.desired.copy(this.direction).multiplyScalar(-speed);
             if (
@@ -313,6 +355,8 @@ export class FlightController {
       }
     }
     this.velocity.lerp(this.desired, damp(softer ? 3.5 : 6, dt));
+    if (this.mode === "FREE" && movement)
+      input.learning.move += this.velocity.length() * dt;
     this.position.addScaledVector(this.velocity, dt);
     for (const b of bodies) {
       if (b.solid === false) continue;
