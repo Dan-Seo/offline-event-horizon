@@ -2,7 +2,7 @@
   "url": "https://offline-vastness.vercel.app",
   "viewport": "2560x1440",
   "dpr": 1,
-  "readyMs": 2309,
+  "readyMs": 2988,
   "adapter": {
     "vendor": "nvidia",
     "architecture": "ampere",
@@ -15,10 +15,10 @@
         "p50": 6.900000000000546,
         "p95": 7,
         "p99": 7.100000000000364,
-        "max": 125.09999999999991,
-        "over50": 1,
-        "mean": 7.057437275985665,
-        "frames": 1116
+        "max": 7.100000000000364,
+        "over50": 0,
+        "mean": 6.945320623916812,
+        "frames": 1154
       },
       "state": {
         "ready": true,
@@ -34,7 +34,7 @@
         "nearest": "ORPHEUS IV",
         "quality": "HIGH",
         "fps": 144,
-        "frameMs": 6.944999999999997,
+        "frameMs": 6.945833333333334,
         "drawCalls": 49,
         "triangles": 515468,
         "particles": 80000,
@@ -45,7 +45,7 @@
         "speedDial": 1,
         "seeds": 0,
         "field": false,
-        "time": 7.867666666666651,
+        "time": 8.33716666666665,
         "assetFallback": false,
         "generatedSectors": 27,
         "createdVisible": 0,
@@ -77,10 +77,10 @@
       "frameMs": {
         "p50": 6.900000000001455,
         "p95": 7,
-        "p99": 7.099999999998545,
-        "max": 7.100000000002183,
+        "p99": 7.100000000000364,
+        "max": 7.200000000000728,
         "over50": 0,
-        "mean": 6.945391414141408,
+        "mean": 6.945391414141407,
         "frames": 3168
       },
       "state": {
@@ -91,46 +91,46 @@
         "quiet": false,
         "selected": "THE WOUND",
         "selectedKind": "Gravitational anomaly",
-        "selectionX": 50.00396453724824,
-        "selectionY": 49.99759021218933,
+        "selectionX": 50.001362290657845,
+        "selectionY": 49.999210057480305,
         "selectionVisible": true,
-        "nearest": "SELENE",
+        "nearest": "THE BLOOM",
         "quality": "HIGH",
         "fps": 144,
         "frameMs": 6.945833333333334,
-        "drawCalls": 63,
-        "triangles": 512728,
+        "drawCalls": 59,
+        "triangles": 431928,
         "particles": 80000,
         "dpr": 1,
         "sectors": 27,
-        "distance": 23802.82859616838,
-        "velocity": 8.439314980523382e-37,
+        "distance": 69176.48097566645,
+        "velocity": 1.3069008402243862e-34,
         "speedDial": 1,
         "seeds": 0,
         "field": false,
-        "time": 30.210966666668178,
+        "time": 30.68046666666818,
         "assetFallback": false,
         "generatedSectors": 36,
         "createdVisible": 0,
         "benchmark": "NONE",
-        "computeSubmitMs": 0,
+        "computeSubmitMs": 0.09999999403953552,
         "position": [
-          41832.92153709773,
-          24321.009041358106,
-          -91165.90909721293
+          81209.14243193436,
+          40606.728838164374,
+          -187140.2589019347
         ],
         "quaternion": [
-          0.07122951180463732,
-          -0.19240619386177923,
-          0.014007174003370017,
-          0.9786265949217483
+          0.06870711087696107,
+          -0.19222412491679086,
+          0.013493478680830886,
+          0.9788499092036559
         ],
         "velocityVector": [
-          1.917014558743119e-37,
-          7.410464220278024e-38,
-          -4.685731123460171e-37
+          3.9742856309382836e-35,
+          1.4826244926175598e-35,
+          -9.72802837144365e-35
         ],
-        "speed": 4284.509147310308,
+        "speed": 19971.14650588566,
         "keys": [],
         "locked": false
       }
@@ -141,9 +141,9 @@
         "p50": 6.900000000001455,
         "p95": 7,
         "p99": 7.099999999998545,
-        "max": 7.100000000005821,
+        "max": 7.200000000004366,
         "over50": 0,
-        "mean": 6.945359848484849,
+        "mean": 6.945391414141414,
         "frames": 3168
       },
       "state": {
@@ -154,46 +154,46 @@
         "quiet": false,
         "selected": "THE CATHEDRAL",
         "selectedKind": "Ancient structure",
-        "selectionX": 49.99867844419389,
-        "selectionY": 50.00001782094849,
+        "selectionX": 49.99999565060312,
+        "selectionY": 50.00000006237886,
         "selectionVisible": true,
         "nearest": "THE CATHEDRAL",
         "quality": "HIGH",
         "fps": 144,
         "frameMs": 6.945833333333334,
-        "drawCalls": 40,
-        "triangles": 339541,
+        "drawCalls": 44,
+        "triangles": 499381,
         "particles": 80000,
         "dpr": 1,
         "sectors": 27,
-        "distance": 4733.573996380785,
-        "velocity": 7.913429391505622e-32,
+        "distance": 4733.593801250313,
+        "velocity": 9.240723155153649e-19,
         "speedDial": 1,
         "seeds": 0,
         "field": false,
-        "time": 52.540366666666436,
+        "time": 53.01686666666624,
         "assetFallback": false,
         "generatedSectors": 36,
         "createdVisible": 0,
         "benchmark": "NONE",
-        "computeSubmitMs": 0.09999999403953552,
+        "computeSubmitMs": 0,
         "position": [
-          24631.01792407613,
-          26339.31161275012,
-          -81246.95505972437
+          22216.610955906195,
+          27703.55499760788,
+          -83643.25015247612
         ],
         "quaternion": [
-          0.025325844375507122,
-          0.8647715601865119,
-          -0.04383602935994141,
-          0.4996069983789341
+          -0.013811251969477564,
+          0.9652323038624582,
+          0.05212094304172559,
+          0.2557718831221444
         ],
         "velocityVector": [
-          -5.538354059920466e-32,
-          6.49816118720359e-33,
-          3.1935232634431e-32
+          -2.239810600512284e-19,
+          -4.899038035022786e-20,
+          3.929543139076056e-19
         ],
-        "speed": 4571.768407446545,
+        "speed": 4661.5110801039555,
         "keys": [],
         "locked": false
       }
@@ -217,46 +217,46 @@
         "quiet": false,
         "selected": "THE BLOOM",
         "selectedKind": "Nebula",
-        "selectionX": 50.00485168545884,
-        "selectionY": 50.00005116454675,
+        "selectionX": 50.007675918402185,
+        "selectionY": 49.99907949189172,
         "selectionVisible": true,
         "nearest": "THE BLOOM",
         "quality": "HIGH",
         "fps": 144,
-        "frameMs": 6.945833333333334,
+        "frameMs": 6.944999999999951,
         "drawCalls": 51,
         "triangles": 343750,
         "particles": 80000,
         "dpr": 1,
         "sectors": 27,
-        "distance": -44345.427201425424,
-        "velocity": 3.3932903007366575e-34,
+        "distance": -44346.549499769295,
+        "velocity": 1.4728305377479164e-34,
         "speedDial": 1,
         "seeds": 0,
         "field": false,
-        "time": 74.86976666666341,
+        "time": 75.36706666666312,
         "assetFallback": false,
         "generatedSectors": 45,
         "createdVisible": 0,
         "benchmark": "NONE",
-        "computeSubmitMs": 0.09999999403953552,
+        "computeSubmitMs": 0,
         "position": [
-          -34674.13737946492,
-          34567.37781407539,
-          -148321.39544636843
+          -34691.15509255225,
+          34727.59480734684,
+          -148289.35466069137
         ],
         "quaternion": [
-          0.04283617558762275,
-          0.35381737792317264,
-          -0.016224081129929024,
-          0.9341922202266976
+          0.03805279426722793,
+          0.3529037962576115,
+          -0.014358504302087741,
+          0.9347752290201261
         ],
         "velocityVector": [
-          -1.1492259825227803e-34,
-          1.5944494902817085e-35,
-          -1.2997805883985796e-34
+          -5.638860814618455e-35,
+          6.959960932174418e-36,
+          -6.405635132798884e-35
         ],
-        "speed": 15522.238552213392,
+        "speed": 15531.281929825303,
         "keys": [],
         "locked": false
       }
@@ -267,10 +267,10 @@
         "p50": 6.900000000008731,
         "p95": 7,
         "p99": 7.100000000005821,
-        "max": 27.70000000001164,
+        "max": 20.89999999999418,
         "over50": 0,
-        "mean": 6.964177949709862,
-        "frames": 2585
+        "mean": 6.953438948995363,
+        "frames": 2588
       },
       "state": {
         "ready": true,
@@ -280,33 +280,33 @@
         "quiet": false,
         "selected": "THE BLOOM",
         "selectedKind": "Nebula",
-        "selectionX": 50.00185447392058,
-        "selectionY": 50.002577278554284,
+        "selectionX": 50.001863840126916,
+        "selectionY": 50.002588902202675,
         "selectionVisible": false,
-        "nearest": "VESPER A4DD",
+        "nearest": "VESPER 8E88",
         "quality": "HIGH",
         "fps": 144,
-        "frameMs": 6.945833333333334,
-        "drawCalls": 41,
-        "triangles": 316358,
+        "frameMs": 6.944999999999951,
+        "drawCalls": 48,
+        "triangles": 478290,
         "particles": 80000,
         "dpr": 1,
         "sectors": 27,
-        "distance": 365883.71994662023,
-        "velocity": 70529986.77614053,
+        "distance": 319816.26230888703,
+        "velocity": 72752244.03311294,
         "speedDial": 200,
         "seeds": 0,
         "field": false,
-        "time": 92.91386666666023,
+        "time": 93.39726666665975,
         "assetFallback": false,
-        "generatedSectors": 18915,
+        "generatedSectors": 18924,
         "createdVisible": 0,
         "benchmark": "NONE",
-        "computeSubmitMs": 0.09999999403953552,
+        "computeSubmitMs": 0,
         "position": [
-          -93.17411262086705,
-          894.4714811603195,
-          -1256445836.8383749
+          -95.31513982149622,
+          915.025342286367,
+          -1256487883.481308
         ],
         "quaternion": [
           0,
@@ -315,11 +315,11 @@
           1
         ],
         "velocityVector": [
-          -1.2854364173848221e-44,
-          1.234018960689431e-43,
-          -68685883.92646985
+          -1.3693095818366098e-44,
+          1.3145371985631497e-43,
+          -68713968.74446301
         ],
-        "speed": 59903987.31253551,
+        "speed": 60009061.75529081,
         "keys": [
           "KeyW",
           "ShiftLeft"
@@ -333,9 +333,9 @@
         "p50": 6.900000000008731,
         "p95": 7,
         "p99": 7.100000000005821,
-        "max": 13.80000000000291,
+        "max": 7.100000000005821,
         "over50": 0,
-        "mean": 6.953294797687851,
+        "mean": 6.9453179190751415,
         "frames": 865
       },
       "state": {
@@ -352,7 +352,7 @@
         "nearest": "ORPHEUS IV",
         "quality": "HIGH",
         "fps": 144,
-        "frameMs": 6.944999999999951,
+        "frameMs": 6.945833333333334,
         "drawCalls": 53,
         "triangles": 518662,
         "particles": 80000,
@@ -363,7 +363,7 @@
         "speedDial": 1,
         "seeds": 1,
         "field": true,
-        "time": 98.94936666665912,
+        "time": 99.4258666666586,
         "assetFallback": false,
         "generatedSectors": 18951,
         "createdVisible": 1,
@@ -394,9 +394,9 @@
     }
   ],
   "streamedPosition": [
-    -93.17411262086705,
-    894.4714811603195,
-    -1256928105.626034
+    -95.31513982149622,
+    915.025342286367,
+    -1256942781.8005464
   ],
   "errors": []
 }

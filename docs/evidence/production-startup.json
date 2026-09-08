@@ -1,0 +1,32 @@
+[
+  {
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.82",
+    "requestedBackend": "webgpu",
+    "backend": "WebGPU",
+    "readyMs": 3586,
+    "immediateMovement": true,
+    "frameMs": {
+      "frames": 1125,
+      "max": 34.69999999999982,
+      "p95": 7,
+      "over50": 0
+    },
+    "errors": []
+  },
+  {
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.82",
+    "requestedBackend": "webgl",
+    "backend": "WebGL2",
+    "readyMs": 5800,
+    "immediateMovement": true,
+    "frameMs": {
+      "frames": 1106,
+      "max": 34.79999999999927,
+      "p95": 7,
+      "over50": 0
+    },
+    "errors": []
+  }
+]

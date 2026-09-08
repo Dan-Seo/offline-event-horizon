@@ -112,10 +112,11 @@ npm run qa:controls
 npm run qa:devices
 npm run qa:resilience
 npm run qa:performance
+node scripts/vastness-startup.mjs
 npm run qa
 ```
 
-These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, and visual scripts accept `QA_BROWSER=msedge`. `QA_TOUR=1` adds visits to the major landmarks. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions.
+These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, and visual scripts accept `QA_BROWSER=msedge`. The startup check measures post-readiness frame intervals and immediately flies forward on both rendering backends. `QA_TOUR=1` adds visits to the major landmarks. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions.
 
 See [the verification record](docs/QA.md) for measured results, corrected visual issues, and coverage limits. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 

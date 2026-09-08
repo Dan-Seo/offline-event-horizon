@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-08",
+  "runtimeCommit": "4f6f0b8",
+  "deploymentId": "dpl_ACrLd6wVa6JPdWSCwJTvbCFfRbHD",
+  "immutableUrl": "https://offline-event-horizon-k55mbhsdp-sf-i455.vercel.app",
+  "publicUrl": "https://offline-vastness.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "build": "Next.js production build and TypeScript passed on Vercel",
+  "source": "https://github.com/Dan-Seo/offline-event-horizon",
+  "verification": "Reports with the production- prefix in this directory test the public URL. production-before-prewarm.json preserves the earlier aec3704 performance sample."
+}

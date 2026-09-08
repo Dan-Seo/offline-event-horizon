@@ -35,7 +35,8 @@
     "Missing WebGPU automatically selects WebGL2",
     "WebGL2 remains navigable",
     "WebGL2 runs reduced CPU gravity",
-    "Context loss gives a visible recovery path"
+    "Context loss gives a visible recovery path",
+    "Recovery link restarts WebGL2 with working keyboard input"
   ],
   "errors": [],
   "expectedErrors": [

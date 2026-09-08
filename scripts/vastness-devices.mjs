@@ -252,8 +252,19 @@ await gl.evaluate(() =>
     .getExtension("WEBGL_lose_context")
     .loseContext(),
 );
-await expect(gl.getByRole("alert")).toBeVisible();
+// Next.js also owns an empty route-announcer alert. Assert the artwork's
+// recovery message specifically, without depending on announcer timing.
+await expect(gl.locator(".error-state[role=alert]")).toBeVisible();
 checks.push("Context loss gives a visible recovery path");
+testingContextLoss = false;
+await gl.getByRole("link", { name: "Try lighter graphics" }).click();
+await gl
+  .locator('main[data-ready=true][data-backend="WebGL2"]')
+  .waitFor({ timeout: 90000 });
+await expect(gl.locator(".error-state")).toHaveCount(0);
+await gl.keyboard.press("p");
+await expect(gl.locator("main")).toHaveAttribute("data-paused", "true");
+checks.push("Recovery link restarts WebGL2 with working keyboard input");
 await fallback.close();
 await browser.close();
 const report = { url, checks, errors, expectedErrors };
