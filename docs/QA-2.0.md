@@ -64,6 +64,29 @@ After the other QA browser instances closed, the public build was measured at 25
 
 High renders 80,000 matter particles plus 8,192 living particles; geometry counters include the reflected scene. Procedural streaming continued beyond 600,000 local units and retained 27 resident sectors. See [the initial production measurement](evidence/vastness-2.0-initial/production-performance.json) for per-scenario intervals and counters. These are short workstation observations, not GPU timestamp queries or a guarantee for other devices.
 
+## Final depth-refinement deployment
+
+Runtime commit `f4dd0d4` passed the local production build and Vercel's build, then replaced the production alias. Deployment `dpl_5f8TSBVmxZ4oewBEpFv65NBwT544`; [immutable deployment](https://offline-event-horizon-9bst2gq9i-sf-i455.vercel.app). [Final reports and screenshots](evidence/vastness-2.0) are separate from the initial deployment evidence above.
+
+The public URL was reopened after publication. Chrome and Edge again passed **40 controls each**. The device/fallback suite again passed **33 checks**, including two-thumb movement and look, pinch, DPR/resize, local creation persistence, opt-in audio, absent-WebGPU selection, and context-loss recovery. No unexpected browser or shader errors occurred. A continuous flight into the forest on WebGL2/Battery also completed without errors; its rendered trunks were inspected for the corrected fog bands.
+
+The final sea, Moonfall, Living Sky, and mobile portrait were visually inspected. An additional 110-second production Wander run paused repeatedly, held its composition during the sea visitor, and yielded immediately to W afterward. The visitor and its reflection are recorded in `production-signature.jpg`. The opening visual check reported no browser warnings or errors. Five production assets again returned HTTP 200 and matched local SHA-256 hashes.
+
+After those browser instances closed, the final public runtime was measured independently at **2560×1440, DPR 1, High**, Chrome **152.0.7977.82**, NVIDIA **Ampere**. Initial readiness was **3,487ms**. All eight scenarios had p95 **7.0ms**; the longest interval was **48.6ms**, during surface-to-space travel. Frames over 50ms: **0**. Unexpected errors: **0**. High remained selected throughout. The final forest, cloud garden, and anomaly screenshots from this run were opened and inspected.
+
+| Final runtime scenario | p95 interval | Largest interval | Frames over 50ms |
+| ---------------------- | -----------: | ---------------: | ---------------: |
+| Opening                |        7.0ms |           20.9ms |                0 |
+| Water to forest        |        7.0ms |            7.1ms |                0 |
+| Forest stillness       |        7.0ms |            7.1ms |                0 |
+| Cloud garden flight    |        7.0ms |            7.1ms |                0 |
+| Inside clouds          |        7.0ms |            7.1ms |                0 |
+| Surface to anomaly     |        7.0ms |           48.6ms |                0 |
+| Procedural streaming   |        7.0ms |           13.9ms |                0 |
+| Light and gravity      |        7.0ms |            7.1ms |                0 |
+
+[Full final performance report](evidence/vastness-2.0/production-performance.json). These are short observed browser frame intervals on this workstation, not direct GPU duration measurements or a guarantee for physical mobile devices.
+
 ## Practical limits
 
 - Only Chrome/Edge Chromium paths available in this environment can be exercised. Safari, Firefox, physical phones/tablets, thermals, and long-duration memory stability are not covered.

@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-08",
+  "runtimeCommit": "f4dd0d4",
+  "deploymentId": "dpl_5f8TSBVmxZ4oewBEpFv65NBwT544",
+  "immutableUrl": "https://offline-event-horizon-9bst2gq9i-sf-i455.vercel.app",
+  "publicUrl": "https://offline-vastness.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "source": "https://github.com/Dan-Seo/offline-event-horizon",
+  "verification": "These reports and screenshots were collected from the public URL after the final depth-aware mist refinement. Earlier runtime evidence is retained separately in vastness-2.0-initial. Subsequent documentation-only commits do not change the deployed runtime. Performance was measured separately after the other QA browser instances closed."
+}
