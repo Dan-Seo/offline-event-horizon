@@ -55,6 +55,40 @@ The initial 2.1 runtime, `3d22d29`, built successfully on GitHub and Vercel. The
 
 During a subsequent WebGL2 encounter run, a held W had reached the input manager but automatic orbit had not yielded within the 80ms check. Cancellation previously waited for the next render-loop update. Input events now relinquish automation synchronously, retaining the same velocity damping and frame-loop safety check. A browser listener registered after the application observes FREE during the real W event, before a later render. This directly checks the corrected ownership rule instead of relaxing the timeout. The initial failed check is retained as `production-input-delay.json`.
 
-Final deployment and performance results are appended after verification of the corrected runtime.
-
 The final local free-cursor check passed 48 desktop controls, 19 onboarding checks, and 18 touch-guide checks. New acceptance checks cover unlocked canvas clicks and L, hover without camera steering, simultaneous left-drag/W input, immediate menu access after release, uninterrupted Wander on hover, synchronous drag takeover, and cancellation during an active drag. The production export compiled successfully with TypeScript; all nine numerical/language tests passed.
+
+## Final public runtime
+
+Runtime commit: `4d7f3d296f23811b53684785768456efb4edd915`.
+
+- Public URL: https://offline-vastness.vercel.app
+- Immutable deployment: https://offline-event-horizon-q5c5dxd9m-sf-i455.vercel.app
+- Vercel deployment: `dpl_9SiK9WDqYBjcwxzSRvkJF7iQ9ubT`, READY.
+- [GitHub build](https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34233047830): passed installation, TypeScript, numerical tests, and production build.
+
+The public alias was opened in actual installed browsers, and these tests ran against the deployed runtime. Playwright supplied real keyboard/mouse events and CDP touch gestures; this is automated browser acceptance testing, not a human usability study. Both browsers kept the cursor free throughout clicking, dragging, choosing a planet, opening controls, and interrupting automatic travel.
+
+| Public suite | Passed | Browser / coverage |
+| --- | ---: | --- |
+| Desktop controls | 48 | Chrome 152.0.7977.82; free cursor, drag, simultaneous inputs, automation ownership, selection, cancellation and resize |
+| Desktop controls | 48 | Edge 152.0.4191.66; same acceptance sequence |
+| Korean/English onboarding | 19 | Actual three-step guide, immediate menu access, preference persistence, replay and optional Wander |
+| Touch guide | 18 | Touch look, movement and pinch; portrait, landscape, tablet and laptop viewport layouts |
+| Continuous encounters | 26 | Five planets and the anomaly, actual orbit motion, event-level manual takeover, capture/escape, pause and gravity |
+| WebGL2 encounters | 20 | Both new planets and the anomaly on Battery quality; the previously failing immediate takeover now passes |
+| Devices and fallback | 34 | DPR, touch, rotation, audio/mute, creation persistence, Quiet, missing WebGPU and context-loss recovery |
+| Public assets | 5 | HTTP 200 and SHA-256 equality for both hero GLBs, the recovery poster, and both fonts |
+
+There were no unexpected runtime or shader errors in these completed public suites. The device suite deliberately lost a WebGL context and verified the visible recovery path; that expected error is recorded separately.
+
+Production screenshots of Korean arrival and the drag lesson, English help, mobile guidance, Serein, Nacre, and desktop/portrait orbit trails were opened and visually inspected. The tutorial stays out of the central view, translated copy is readable, and the compact experiment leaves the surrounding world visible. New and existing planets remain in the same continuous world. The cursor uses a visible grab/grabbing affordance and never enters pointer lock.
+
+Reports and selected screenshots are committed in [`evidence/vastness-2.1`](evidence/vastness-2.1/). `deployment.json` identifies this final runtime; `deployment-initial.json`, `production-devices-initial.json`, and `production-input-delay.json` retain the earlier deployment and observed failure history. Local reports are explicitly named as local records.
+
+## Final production performance
+
+The public runtime was then measured alone after closing the other automated QA browsers. Chrome 152.0.7977.82 used WebGPU on an NVIDIA Ampere adapter at 2560×1440, DPR 1, High quality. Initial readiness took **3,902ms**. All **13 scenarios** completed with no browser/shader errors, and High remained selected with 80,000 ambient matter particles.
+
+Every scenario had a p95 browser frame interval of **7.0ms**. The largest interval was **41.7ms** during the surface-to-space approach; no measured interval exceeded 50ms. The 144-tracer interaction scenario had a maximum of 7.2ms. Procedural streaming and light/gravity peaked at 20.8ms and 20.9ms respectively. The record includes water, forest stillness, clouds, the anomaly, both new planetary approaches and orbital detail, streaming, and active gravitational interaction.
+
+These are independent `requestAnimationFrame` intervals under headless browser automation, not GPU timestamp measurements or a guarantee of physical-device frame rate. The observation covers approximately 192 seconds of timed scenes, not a long thermal soak. [`production-performance.json`](evidence/vastness-2.1/production-performance.json) retains adapter details, exact per-scenario distributions, and renderer snapshots. Physical phones, Safari, Firefox, and a human navigation/usability study remain untested for this update.

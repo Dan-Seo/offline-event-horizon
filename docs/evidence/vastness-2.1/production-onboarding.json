@@ -15,11 +15,11 @@
       "passed": true
     },
     {
-      "name": "Guide click acquires actual pointer lock",
+      "name": "Guide click keeps the cursor free",
       "passed": true
     },
     {
-      "name": "Actual mouse look advances the guide",
+      "name": "Actual left-drag look advances the guide",
       "passed": true
     },
     {
@@ -31,7 +31,7 @@
       "passed": true
     },
     {
-      "name": "Completed guide returns the cursor for its visible choices",
+      "name": "Completed guide keeps its choices directly clickable",
       "passed": true
     },
     {
@@ -59,7 +59,7 @@
       "passed": true
     },
     {
-      "name": "M releases pointer lock and opens an operable menu",
+      "name": "M opens an operable menu with the cursor still free",
       "passed": true
     },
     {

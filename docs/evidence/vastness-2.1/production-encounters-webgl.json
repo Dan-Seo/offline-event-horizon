@@ -31,30 +31,6 @@
       "passed": true
     },
     {
-      "name": "moon starts continuous flight",
-      "passed": true
-    },
-    {
-      "name": "moon is rendered without errors",
-      "passed": true
-    },
-    {
-      "name": "ember starts continuous flight",
-      "passed": true
-    },
-    {
-      "name": "ember is rendered without errors",
-      "passed": true
-    },
-    {
-      "name": "giant starts continuous flight",
-      "passed": true
-    },
-    {
-      "name": "giant is rendered without errors",
-      "passed": true
-    },
-    {
       "name": "wound starts continuous flight",
       "passed": true
     },
@@ -110,74 +86,38 @@
   "samples": [
     {
       "id": "serein",
-      "travelMs": 12628,
+      "travelMs": 12587,
       "fps": 144,
-      "frameMs": 6.945833333333334,
-      "backend": "WebGPU",
+      "frameMs": 6.945000000000012,
+      "backend": "WebGL2",
       "position": [
-        -159942.4359828617,
-        -34468.44316178602,
-        -246334.44085837307
+        -159942.54043731437,
+        -34468.3916861842,
+        -246334.60132487764
       ]
     },
     {
       "id": "nacre",
-      "travelMs": 12044,
-      "fps": 144,
-      "frameMs": 6.944999999999982,
-      "backend": "WebGPU",
-      "position": [
-        121400.11546928345,
-        32241.132233800825,
-        -358752.62184008094
-      ]
-    },
-    {
-      "id": "moon",
-      "travelMs": 16095,
+      "travelMs": 12077,
       "fps": 144,
       "frameMs": 6.945000000000012,
-      "backend": "WebGPU",
+      "backend": "WebGL2",
       "position": [
-        -20622.405765139498,
-        12878.02845508414,
-        -135628.01447696742
-      ]
-    },
-    {
-      "id": "ember",
-      "travelMs": 11742,
-      "fps": 144,
-      "frameMs": 6.944999999999951,
-      "backend": "WebGPU",
-      "position": [
-        79337.53082944748,
-        -12710.632274713586,
-        -89529.00734048047
-      ]
-    },
-    {
-      "id": "giant",
-      "travelMs": 8127,
-      "fps": 144,
-      "frameMs": 6.945833333333334,
-      "backend": "WebGPU",
-      "position": [
-        108177.69869421172,
-        -46164.69078735667,
-        -42430.966321878805
+        121404.01011659382,
+        32240.695641406463,
+        -358743.27297630184
       ]
     },
     {
       "id": "wound",
-      "travelMs": 8282,
+      "travelMs": 10359,
       "fps": 144,
-      "frameMs": 6.945000000000073,
-      "backend": "WebGPU",
+      "frameMs": 6.945833333333334,
+      "backend": "WebGL2",
       "position": [
-        135041.5209162077,
-        -3100.9013332314735,
-        47013.26698345219
+        165746.89112095925,
+        66346.16408481517,
+        21840.969259501147
       ]
     }
   ],
