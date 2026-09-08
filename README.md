@@ -4,7 +4,9 @@ A quiet, freely explorable universe. Start above Orpheus IV, follow a distant ri
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. Created stars are saved on this device.
 
-[Public edition](https://offline-event-horizon.vercel.app) · [Source](https://github.com/Dan-Seo/offline-event-horizon)
+[Public edition](https://offline-vastness.vercel.app) · [Source](https://github.com/Dan-Seo/offline-event-horizon)
+
+![An actual rendered view above Orpheus IV](public/poster.jpg)
 
 ## Run
 
@@ -117,4 +119,4 @@ These scripts use installed Chrome through Playwright and real input events agai
 
 See [the verification record](docs/QA.md) for measured results, corrected visual issues, and coverage limits. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
-The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.
+The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

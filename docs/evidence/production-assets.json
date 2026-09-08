@@ -1,0 +1,38 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "date": "2026-09-08T09:40:37.807Z",
+  "pageStatus": 200,
+  "title": "OFFLINE // VASTNESS",
+  "assets": [
+    {
+      "path": "/poster.jpg",
+      "status": 200,
+      "bytes": 112122,
+      "exactMatch": true
+    },
+    {
+      "path": "/assets/cathedral.glb",
+      "status": 200,
+      "bytes": 863452,
+      "exactMatch": true
+    },
+    {
+      "path": "/assets/cathedral-low.glb",
+      "status": 200,
+      "bytes": 288196,
+      "exactMatch": true
+    },
+    {
+      "path": "/fonts/manrope-latin.woff2",
+      "status": 200,
+      "bytes": 24836,
+      "exactMatch": true
+    },
+    {
+      "path": "/fonts/dm-sans-latin.woff2",
+      "status": 200,
+      "bytes": 36932,
+      "exactMatch": true
+    }
+  ]
+}

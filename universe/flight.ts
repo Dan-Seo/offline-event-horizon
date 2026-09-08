@@ -160,7 +160,7 @@ export class FlightController {
           target.kind === "Nebula"
             ? 0.25
             : target.kind === "Gravitational anomaly"
-              ? 9
+              ? 6
               : target.kind === "Ringed giant"
                 ? 6.5
                 : target.kind === "Ancient structure"

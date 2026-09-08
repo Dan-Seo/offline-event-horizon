@@ -13,7 +13,7 @@
 
 The local production preview passed 30 desktop control checks. They exercise W, A, S, D, simultaneous W+D, mouse look during flight, wheel speed, Shift boost, settling, Q/E roll, Space, Ctrl precision, actual planet clicking, F approach, manual override, left-drag orbit, double-click travel, H help, P pause/resume, R recovery, Drift interruption, pointer lock/Escape, blur clearing, resize, canvas hit-testing, and horizontal overflow.
 
-Another 32 checks covered laptop 1366×768, tablet 1024×768 at DPR 2, mobile 390×844 at DPR 2, and 844×390 landscape. Touch input is delivered with actual browser touch events: simultaneous movement/look, pinch speed, release damping, tap selection, and rotation. The mobile context requests reduced motion. The suite also checks gravity input, visible star creation, persistence after reload, Quiet, sound opt-in/mute, automatic WebGL2 fallback, CPU matter forces, and context-loss recovery.
+Another 35 checks covered laptop 1366×768, tablet 1024×768 at DPR 2, mobile 390×844 at DPR 2, and 844×390 landscape. Touch input is delivered with actual browser touch events: simultaneous movement/look, pinch speed, release damping, tap selection, and rotation. The mobile context requests reduced motion. The suite also checks gravity input, visible star creation, persistence after reload, the visible Create/gather controls, Quiet, sound opt-in/mute, automatic WebGL2 fallback, CPU matter forces, and context-loss recovery.
 
 No unexpected console errors occurred in those runs. The deliberately injected WebGL device-loss error is recorded separately. Sound controls were exercised; this is not a subjective listening evaluation.
 
@@ -37,10 +37,24 @@ These are animation-frame cadence measurements, capped by the workstation's disp
 
 ## Production record
 
-Pending the VASTNESS deployment and tests against its actual public URL. The existing Event Horizon deployment is not evidence for this edition.
+Public URL: **https://offline-vastness.vercel.app**. Runtime commit: `aec3704`. Vercel deployment: `dpl_6jo2cZip1KXv2xvjvk2Upgxzjx93`, built and published on 2026-09-08. Both this URL and the previous project URL are registered production domains.
+
+The first attempt to use the new address exposed a deployment-domain issue: an alias alone redirected unauthenticated visitors to Vercel login. Registering it as a verified production project domain fixed this. A fresh unauthenticated browser session then loaded VASTNESS successfully; the root returned HTTP 200.
+
+Tests against the actual public URL passed:
+
+- Chrome: all 30 desktop control checks.
+- Edge: all 30 desktop control checks.
+- Chrome responsive/touch, creation, sound controls, WebGL2, and recovery: all 35 checks.
+- Technical stress, quality tiers, missing hero downloads, and adaptive quality: all 15 resilience checks.
+- Poster, both GLBs, and both fonts returned HTTP 200 and exactly matched local SHA-256 digests.
+
+No unexpected console errors occurred. Deliberate GLB failures and WebGL context loss remain separately identified in the reports. The test harness waits for the 120 ms diagnostic snapshot to publish complete changes rather than treating a shorter fixed delay as a failed control.
+
+Raw reports: [Chrome controls](evidence/production-chrome-controls.json), [Edge controls](evidence/production-edge-controls.json), [devices and recovery](evidence/production-devices.json), [resilience](evidence/production-resilience.json), and [asset verification](evidence/production-assets.json). Final performance and landmark captures are recorded below after their dedicated run.
 
 ## Coverage limits
 
 Physical phones/tablets, Safari, Firefox, battery drain, thermal throttling, and multi-hour GPU memory behavior have not been tested. Reduced motion preserves damped free flight and live simulation; P pauses the latter. Close orbital inspection is supported, but full ground landing and an ecological surface are not implemented. Lensing, atmosphere, stellar growth, and companion orbits are cinematic approximations. No UE5 edition or cross-engine benchmark was built.
 
-Reproduction scripts are in `scripts/`; final production reports will be retained in `docs/evidence/`.
+Reproduction scripts are in `scripts/`; production reports are retained in `docs/evidence/`.

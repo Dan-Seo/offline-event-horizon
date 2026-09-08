@@ -1,0 +1,402 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "viewport": "2560x1440",
+  "dpr": 1,
+  "readyMs": 2309,
+  "adapter": {
+    "vendor": "nvidia",
+    "architecture": "ampere",
+    "description": ""
+  },
+  "runs": [
+    {
+      "name": "opening-cold",
+      "frameMs": {
+        "p50": 6.900000000000546,
+        "p95": 7,
+        "p99": 7.100000000000364,
+        "max": 125.09999999999991,
+        "over50": 1,
+        "mean": 7.057437275985665,
+        "frames": 1116
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": null,
+        "selectedKind": "",
+        "selectionX": 0,
+        "selectionY": 0,
+        "selectionVisible": false,
+        "nearest": "ORPHEUS IV",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.944999999999997,
+        "drawCalls": 49,
+        "triangles": 515468,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": 6350.712966804771,
+        "velocity": 0,
+        "speedDial": 1,
+        "seeds": 0,
+        "field": false,
+        "time": 7.867666666666651,
+        "assetFallback": false,
+        "generatedSectors": 27,
+        "createdVisible": 0,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0,
+        "position": [
+          0,
+          0,
+          9000
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "velocityVector": [
+          0,
+          0,
+          0
+        ],
+        "speed": 1143.1283340248588,
+        "keys": [],
+        "locked": false
+      }
+    },
+    {
+      "name": "travel-to-The Wound",
+      "frameMs": {
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "max": 7.100000000002183,
+        "over50": 0,
+        "mean": 6.945391414141408,
+        "frames": 3168
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": "THE WOUND",
+        "selectedKind": "Gravitational anomaly",
+        "selectionX": 50.00396453724824,
+        "selectionY": 49.99759021218933,
+        "selectionVisible": true,
+        "nearest": "SELENE",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.945833333333334,
+        "drawCalls": 63,
+        "triangles": 512728,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": 23802.82859616838,
+        "velocity": 8.439314980523382e-37,
+        "speedDial": 1,
+        "seeds": 0,
+        "field": false,
+        "time": 30.210966666668178,
+        "assetFallback": false,
+        "generatedSectors": 36,
+        "createdVisible": 0,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0,
+        "position": [
+          41832.92153709773,
+          24321.009041358106,
+          -91165.90909721293
+        ],
+        "quaternion": [
+          0.07122951180463732,
+          -0.19240619386177923,
+          0.014007174003370017,
+          0.9786265949217483
+        ],
+        "velocityVector": [
+          1.917014558743119e-37,
+          7.410464220278024e-38,
+          -4.685731123460171e-37
+        ],
+        "speed": 4284.509147310308,
+        "keys": [],
+        "locked": false
+      }
+    },
+    {
+      "name": "travel-to-The Cathedral",
+      "frameMs": {
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "max": 7.100000000005821,
+        "over50": 0,
+        "mean": 6.945359848484849,
+        "frames": 3168
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": "THE CATHEDRAL",
+        "selectedKind": "Ancient structure",
+        "selectionX": 49.99867844419389,
+        "selectionY": 50.00001782094849,
+        "selectionVisible": true,
+        "nearest": "THE CATHEDRAL",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.945833333333334,
+        "drawCalls": 40,
+        "triangles": 339541,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": 4733.573996380785,
+        "velocity": 7.913429391505622e-32,
+        "speedDial": 1,
+        "seeds": 0,
+        "field": false,
+        "time": 52.540366666666436,
+        "assetFallback": false,
+        "generatedSectors": 36,
+        "createdVisible": 0,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0.09999999403953552,
+        "position": [
+          24631.01792407613,
+          26339.31161275012,
+          -81246.95505972437
+        ],
+        "quaternion": [
+          0.025325844375507122,
+          0.8647715601865119,
+          -0.04383602935994141,
+          0.4996069983789341
+        ],
+        "velocityVector": [
+          -5.538354059920466e-32,
+          6.49816118720359e-33,
+          3.1935232634431e-32
+        ],
+        "speed": 4571.768407446545,
+        "keys": [],
+        "locked": false
+      }
+    },
+    {
+      "name": "travel-to-The Bloom",
+      "frameMs": {
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "max": 7.100000000005821,
+        "over50": 0,
+        "mean": 6.945391414141414,
+        "frames": 3168
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": "THE BLOOM",
+        "selectedKind": "Nebula",
+        "selectionX": 50.00485168545884,
+        "selectionY": 50.00005116454675,
+        "selectionVisible": true,
+        "nearest": "THE BLOOM",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.945833333333334,
+        "drawCalls": 51,
+        "triangles": 343750,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": -44345.427201425424,
+        "velocity": 3.3932903007366575e-34,
+        "speedDial": 1,
+        "seeds": 0,
+        "field": false,
+        "time": 74.86976666666341,
+        "assetFallback": false,
+        "generatedSectors": 45,
+        "createdVisible": 0,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0.09999999403953552,
+        "position": [
+          -34674.13737946492,
+          34567.37781407539,
+          -148321.39544636843
+        ],
+        "quaternion": [
+          0.04283617558762275,
+          0.35381737792317264,
+          -0.016224081129929024,
+          0.9341922202266976
+        ],
+        "velocityVector": [
+          -1.1492259825227803e-34,
+          1.5944494902817085e-35,
+          -1.2997805883985796e-34
+        ],
+        "speed": 15522.238552213392,
+        "keys": [],
+        "locked": false
+      }
+    },
+    {
+      "name": "procedural-streaming-flight",
+      "frameMs": {
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.100000000005821,
+        "max": 27.70000000001164,
+        "over50": 0,
+        "mean": 6.964177949709862,
+        "frames": 2585
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": "THE BLOOM",
+        "selectedKind": "Nebula",
+        "selectionX": 50.00185447392058,
+        "selectionY": 50.002577278554284,
+        "selectionVisible": false,
+        "nearest": "VESPER A4DD",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.945833333333334,
+        "drawCalls": 41,
+        "triangles": 316358,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": 365883.71994662023,
+        "velocity": 70529986.77614053,
+        "speedDial": 200,
+        "seeds": 0,
+        "field": false,
+        "time": 92.91386666666023,
+        "assetFallback": false,
+        "generatedSectors": 18915,
+        "createdVisible": 0,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0.09999999403953552,
+        "position": [
+          -93.17411262086705,
+          894.4714811603195,
+          -1256445836.8383749
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "velocityVector": [
+          -1.2854364173848221e-44,
+          1.234018960689431e-43,
+          -68685883.92646985
+        ],
+        "speed": 59903987.31253551,
+        "keys": [
+          "KeyW",
+          "ShiftLeft"
+        ],
+        "locked": false
+      }
+    },
+    {
+      "name": "creation-and-gravity",
+      "frameMs": {
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.100000000005821,
+        "max": 13.80000000000291,
+        "over50": 0,
+        "mean": 6.953294797687851,
+        "frames": 865
+      },
+      "state": {
+        "ready": true,
+        "backend": "WebGPU",
+        "paused": false,
+        "mode": "FREE",
+        "quiet": false,
+        "selected": "A SMALL BEGINNING 1",
+        "selectedKind": "Young star",
+        "selectionX": 50,
+        "selectionY": 50,
+        "selectionVisible": true,
+        "nearest": "ORPHEUS IV",
+        "quality": "HIGH",
+        "fps": 144,
+        "frameMs": 6.944999999999951,
+        "drawCalls": 53,
+        "triangles": 518662,
+        "particles": 80000,
+        "dpr": 1,
+        "sectors": 27,
+        "distance": 6350.712966804771,
+        "velocity": 0,
+        "speedDial": 1,
+        "seeds": 1,
+        "field": true,
+        "time": 98.94936666665912,
+        "assetFallback": false,
+        "generatedSectors": 18951,
+        "createdVisible": 1,
+        "benchmark": "NONE",
+        "computeSubmitMs": 0.10000000894069672,
+        "position": [
+          0,
+          0,
+          9000
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "velocityVector": [
+          0,
+          0,
+          0
+        ],
+        "speed": 1143.1283340248588,
+        "keys": [
+          "KeyG"
+        ],
+        "locked": false
+      }
+    }
+  ],
+  "streamedPosition": [
+    -93.17411262086705,
+    894.4714811603195,
+    -1256928105.626034
+  ],
+  "errors": []
+}

@@ -148,6 +148,11 @@ export class UniverseEngine {
       await pending;
       this.matter.prepare(this.renderer);
       if (this.disposed) return;
+      // Scene compilation does not warm the post-processing graph. Complete its
+      // first draw while the arrival poster is visible, before accepting flight.
+      this.pipeline!.render();
+      if (device) await device.queue.onSubmittedWorkDone();
+      if (this.disposed) return;
       this.state.ready = true;
       this.renderer.setAnimationLoop(this.frame);
       void this.world.loadHero(async (objects) => {

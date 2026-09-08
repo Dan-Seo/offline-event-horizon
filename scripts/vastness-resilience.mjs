@@ -115,11 +115,17 @@ await slowed.addInitScript(() => {
 });
 const slow = await ready(slowed);
 await expect
-  .poll(async () => (await inspect(slow)).quality, {
-    timeout: 26000,
-    intervals: [1000],
-  })
-  .toBe("BALANCED");
+  .poll(
+    async () => {
+      const state = await inspect(slow);
+      return [state.quality, state.particles];
+    },
+    {
+      timeout: 26000,
+      intervals: [1000],
+    },
+  )
+  .toEqual(["BALANCED", 36000]);
 check(
   "Sustained slow frames automatically lower detail",
   (await inspect(slow)).particles === 36000,
