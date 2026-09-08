@@ -24,7 +24,8 @@ const server = http.createServer((req, res) => {
     res.writeHead(403).end();
     return;
   }
-  if (!fs.existsSync(file) && fs.existsSync(file + ".html")) file += ".html";
+  // Static app routes also have an RSC payload directory with the same name.
+  if ((!fs.existsSync(file) || fs.statSync(file).isDirectory()) && fs.existsSync(file + ".html")) file += ".html";
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
     res.writeHead(404).end("Not found");
     return;

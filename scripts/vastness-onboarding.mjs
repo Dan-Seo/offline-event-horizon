@@ -53,11 +53,11 @@ try {
   await page.keyboard.press("h");
   await page.getByRole("button", { name: /움직이는 법 다시 배우기/ }).click();
   check("Help can replay the movement guide", await page.locator('[data-step="welcome"]').isVisible());
-  await page.getByRole("button", { name: "풍경에 맡기기", exact: true }).last().click();
+  await page.locator('[data-step="welcome"]').getByRole("button", { name: "어디든 데려다줘", exact: true }).click();
   await page.waitForTimeout(250);
-  check("Welcome wander works without mandatory lessons", (await read()).mode === "WANDER");
+  check("Welcome Carry works without mandatory lessons", (await read()).pilgrim.carry);
   await page.keyboard.down("w"); await page.waitForTimeout(80);
-  check("Manual input immediately overrides welcome wander", (await read()).mode === "FREE");
+  check("Manual input immediately overrides welcome Carry", !(await read()).pilgrim.carry);
   await page.keyboard.up("w"); await page.keyboard.press("r");
   await page.mouse.click(900, 400); await page.waitForTimeout(120); await page.keyboard.press("m");
   await page.getByRole("button", { name: "패널 닫기" }).waitFor();

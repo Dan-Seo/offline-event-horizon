@@ -25,6 +25,7 @@ import { RegionalLagoon } from "./approach-water";
 import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
 import type { WalkSurface } from "./walk";
 import { NacreGarden } from "./nacre-garden";
+import { markSurface } from "./perception/surfaces";
 
 type Region = {
   body: Body;
@@ -142,7 +143,14 @@ export class PlanetApproaches {
             .pow(18)
             .mul(0.07),
         );
-      if (kind !== 1) root.add(new T.Mesh(geometry, material));
+      if (kind !== 1)
+        root.add(
+          markSurface(
+            new T.Mesh(geometry, material),
+            kind === 9 ? "sand" : kind === 2 ? "ice" : "terrain",
+            true,
+          ),
+        );
       else {
         geometry.dispose();
         material.dispose();
@@ -266,6 +274,7 @@ export class PlanetApproaches {
               leaves.setMatrixAt(i * tree.tips.length + j, leaf.matrix);
             });
         }
+        markSurface(forms, kind === 10 ? "vegetation" : "ice", true);
         root.add(forms);
         if (leaves) root.add(leaves);
       }
@@ -391,6 +400,21 @@ export class PlanetApproaches {
       up: region.up,
       height: (x, z) => groundHeight(10, x, z),
       water: lagoonHeight,
+    };
+  }
+  pilgrimSurface(id: string): WalkSurface | undefined {
+    const region = this.regions.find(
+      (r) => r.body.id === id && r.body.archetype !== 1,
+    );
+    if (!region) return;
+    return {
+      id,
+      radius: region.body.radius,
+      center: region.body.position,
+      frame: region.frame,
+      up: region.up,
+      height: (x, z) => groundHeight(region.body.archetype, x, z),
+      water: id === "nacre" ? lagoonHeight : () => -10,
     };
   }
   inspectGarden() {

@@ -12,6 +12,10 @@ export type InputAction =
   | "experiment"
   | "orbit"
   | "walk"
+  | "pilgrim"
+  | "carry"
+  | "rest"
+  | "fly"
   | "manual"
   | "cancel";
 type Touch = {
@@ -49,6 +53,9 @@ const actions: Record<string, InputAction> = {
   KeyT: "experiment",
   KeyO: "orbit",
   KeyJ: "walk",
+  KeyC: "carry",
+  KeyZ: "rest",
+  KeyY: "pilgrim",
   Backquote: "hud",
   Escape: "cancel",
 };
@@ -120,6 +127,13 @@ export class InputManager {
   }
   private keyDown = (e: KeyboardEvent) => {
     if (this.editable(e.target)) return;
+    // Keep browser shortcuts such as Ctrl+C/F/R available; Ctrl+movement is precision travel.
+    if (
+      e.metaKey ||
+      e.altKey ||
+      (e.ctrlKey && (actions[e.code] || e.code === "KeyV"))
+    )
+      return;
     if (e.code === "Escape") {
       this.clear();
       this.action("cancel");

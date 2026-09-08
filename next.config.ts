@@ -4,5 +4,6 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   reactStrictMode: true,
   poweredByHeader: false,
+  devIndicators: false,
 };
 export default nextConfig;

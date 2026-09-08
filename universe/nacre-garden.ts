@@ -6,6 +6,7 @@ import {
   mix,
   mx_noise_float,
   positionLocal,
+  positionWorld,
   sin,
   smoothstep,
   uniform,
@@ -17,6 +18,7 @@ import {
 import { seeded, damp, type Quality } from "./config";
 import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { grassInfluence, pilgrimObserver } from "./pilgrim/influence";
 
 /** Local life and human-scale detail, attached to Nacre's existing spherical cap. */
 export class NacreGarden {
@@ -152,7 +154,14 @@ export class NacreGarden {
     grass.colorNode = mix(color(0x183530), color(0x9ba995), h.mul(h)).mul(0.65);
     grass.positionNode = positionLocal.add(
       vec3(
-        sin(this.time.mul(0.7).add(phase)).mul(h.pow(2)).mul(0.13),
+        sin(this.time.mul(0.7).add(phase))
+          .mul(h.pow(2))
+          .mul(0.13)
+          .add(
+            grassInfluence(positionWorld.add(pilgrimObserver))
+              .mul(h.pow(2))
+              .mul(0.6),
+          ),
         0,
         sin(this.time.mul(0.4).add(phase.mul(1.8)))
           .mul(h.pow(2))

@@ -2,6 +2,8 @@ import * as T from "three/webgpu";
 import { InputManager, type InputAction } from "./input";
 import { FlightController } from "./flight";
 import { SurfaceWalker } from "./walk";
+import { PilgrimSystem } from "./pilgrim/system";
+import type { Condition } from "./perception/types";
 import { UniverseWorld } from "./world";
 import { QUALITY, type Quality } from "./config";
 import { Ambience } from "./audio";
@@ -17,6 +19,7 @@ export class UniverseEngine {
   camera = new T.PerspectiveCamera(57, 1, 0.5, 20000000);
   flight = new FlightController();
   walker = new SurfaceWalker();
+  pilgrim!: PilgrimSystem;
   renderer!: T.WebGPURenderer;
   input!: InputManager;
   world!: UniverseWorld;
@@ -53,6 +56,7 @@ export class UniverseEngine {
     private report: (s: UniverseSnapshot) => void,
     private uiAction: (a: InputAction) => void,
     private error: (s: string) => void,
+    readonly research = false,
   ) {}
   async init() {
     try {
@@ -91,6 +95,10 @@ export class UniverseEngine {
         params.has("profile") &&
         this.state.backend === "WebGPU" &&
         this.renderer.hasFeature("timestamp-query");
+      // Present on the r183 backend; omitted by its companion type declarations.
+      (
+        this.renderer.backend as unknown as { trackTimestamp: boolean }
+      ).trackTimestamp = this.profile;
       this.renderer.toneMapping = T.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.08;
       this.scene.background = new T.Color(0x020407);
@@ -105,6 +113,9 @@ export class UniverseEngine {
       );
       mark("world");
       this.world.setQuality(this.state.quality);
+      this.pilgrim = new PilgrimSystem(this.scene, this.renderer);
+      this.pilgrim.quality = this.state.quality;
+      this.pilgrim.lab = this.research;
       this.matter = new MatterField(
         this.scene,
         this.state.backend === "WebGPU",
@@ -146,6 +157,8 @@ export class UniverseEngine {
             this.fail("The graphics device was interrupted.");
         });
       this.world.update(this.flight.position, 0);
+      this.scene.updateMatrixWorld(true);
+      this.pilgrim.contact.observer.copy(this.flight.position);
       this.camera.quaternion.copy(this.flight.quaternion);
       this.camera.updateMatrixWorld();
       this.setupPost();
@@ -192,6 +205,7 @@ export class UniverseEngine {
       if (device) await device.queue.onSubmittedWorkDone();
       if (this.disposed) return;
       this.state.ready = true;
+      if (this.research) this.resetLab();
       this.renderer.setAnimationLoop(this.frame);
       void this.world.loadHero(async (objects) => {
         const old = this.renderer.getRenderTarget();
@@ -228,6 +242,39 @@ export class UniverseEngine {
     this.walker.stop();
   }
   action = (a: InputAction) => {
+    if (a === "manual") this.pilgrim?.manual();
+    if (["reset", "focus", "orbit", "walk", "fly"].includes(a))
+      this.leavePilgrim();
+    if (["pilgrim", "carry", "rest"].includes(a)) {
+      if (a === "rest") {
+        this.pilgrim.rest();
+        this.flight.cancel();
+        this.input.clear();
+      } else {
+        if (!this.pilgrim.active && this.state.pilgrimAvailable) {
+          this.walker.stop();
+          this.pilgrim.start(
+            this.flight,
+            this.world.approaches.pilgrimSurface(this.state.approach),
+          );
+        }
+        if (this.pilgrim.active) {
+          if (a === "carry") void this.pilgrim.carry();
+          else {
+            this.pilgrim.manual();
+            this.pilgrim.cruise = true;
+          }
+        }
+      }
+      this.updateSnapshot();
+      this.report({ ...this.state });
+      return;
+    }
+    if (a === "wander" && this.pilgrim.active) {
+      void this.pilgrim.carry();
+      return;
+    }
+    if (a === "cancel") this.pilgrim?.rest();
     if (["reset", "focus", "wander", "orbit"].includes(a)) this.leaveGround();
     if (a === "walk") {
       if (this.walker.active) this.leaveGround();
@@ -342,7 +389,10 @@ export class UniverseEngine {
   };
   select(id: string, travel = false) {
     this.endObservation();
-    if (travel) this.leaveGround();
+    if (travel) {
+      this.leaveGround();
+      this.leavePilgrim();
+    }
     const b = [...this.world.bodies, ...this.creation.stars].find(
       (b) => b.id === id,
     );
@@ -423,6 +473,7 @@ export class UniverseEngine {
     const target = this.world.bodies.find((b) => b.id === id);
     if (target?.approachArrival) {
       this.leaveGround();
+      this.leavePilgrim();
       this.select(target.id);
       this.flight.approach(target);
     }
@@ -486,6 +537,39 @@ export class UniverseEngine {
       this.input.selected = false;
     }
   };
+  private leavePilgrim() {
+    if (!this.pilgrim?.active) return;
+    const surface = this.world.approaches.pilgrimSurface(this.state.approach);
+    if (surface)
+      this.flight.departSurface(surface.id, (position) => {
+        const local = this.pilgrim.contact.toLocal(position);
+        local.y = this.pilgrim.contact.sample(local.x, local.z).height + 6;
+        return this.pilgrim.contact.toWorld(local).distanceTo(surface.center);
+      });
+    this.pilgrim.stop();
+    this.flight.cancel();
+  }
+  resetLab(condition: Condition = "CLEAR") {
+    if (!this.research) return;
+    this.pilgrim.stop();
+    this.walker.stop();
+    this.flight.cancel();
+    this.input.clear();
+    // An explicit lab fixture; never used by Carry or its perception worker.
+    this.flight.position.set(1600, 40, -1090);
+    this.flight.quaternion.setFromEuler(new T.Euler(0.01, 0.58, 0));
+    this.world.update(this.flight.position, this.state.time);
+    this.scene.updateMatrixWorld(true);
+    this.pilgrim.contact.observer.copy(this.flight.position);
+    this.pilgrim.start(this.flight);
+    void this.pilgrim.enableSensors().then(() => {
+      if (this.pilgrim.perception) {
+        this.pilgrim.perception.lab = true;
+        this.pilgrim.perception.setCondition(condition);
+        this.pilgrim.perception.reset();
+      }
+    });
+  }
   private setupPost() {
     this.scenePass = pass(this.scene, this.camera);
     const sceneColor = this.scenePass.getTextureNode("output");
@@ -537,7 +621,16 @@ export class UniverseEngine {
           : this.benchmarkMode === "GRAVITY"
             ? 2
             : 0;
-      if (this.walker.active) this.walker.update(dt, this.input, this.flight);
+      if (this.pilgrim.active)
+        this.pilgrim.update(
+          dt,
+          this.input,
+          this.flight,
+          this.state.paused,
+          this.world.sanctuaries.event !== "none",
+        );
+      else if (this.walker.active)
+        this.walker.update(dt, this.input, this.flight);
       else
         this.flight.update(
           dt,
@@ -561,6 +654,9 @@ export class UniverseEngine {
       this.camera.updateMatrixWorld();
       if (!this.state.paused) this.state.time += dt;
       this.world.sanctuaries.respond(this.flight.velocity.length());
+      this.world.sanctuaries.sea.wakeSource = this.pilgrim.active
+        ? this.pilgrim.worldPosition
+        : undefined;
       this.flight.holdBeauty = this.world.sanctuaries.event !== "none";
       this.world.update(
         this.flight.position,
@@ -577,6 +673,8 @@ export class UniverseEngine {
         this.world.sanctuaries.eventTime,
       );
       this.creation.update(this.flight.position, this.state.time);
+      this.scene.updateMatrixWorld(true);
+      this.pilgrim.afterWorld(this.flight.position, this.state.time);
       const hole = this.world.bodies.find((b) => b.id === "wound")!;
       const pull =
         this.creation.nearest(this.flight.position) ??
@@ -676,6 +774,14 @@ export class UniverseEngine {
     if (this.relativity) this.state.relativity = this.relativity.snapshot();
     this.state.approach = this.world.approaches?.active ?? "";
     this.state.walking = this.walker.active;
+    this.state.pilgrim = this.pilgrim.active;
+    this.state.carrying = this.pilgrim.director.active;
+    this.state.resting = this.pilgrim.director.active
+      ? this.pilgrim.director.resting
+      : this.pilgrim.model.velocity.length() < 0.3 && !this.pilgrim.cruise;
+    this.state.pilgrimAvailable =
+      this.world.sanctuaries.presence > 0.8 ||
+      !!this.world.approaches.pilgrimSurface(this.state.approach);
     const walkSurface = this.world.approaches.walkSurface(this.state.approach);
     this.state.walkAvailable =
       !!walkSurface && this.walker.canStart(walkSurface, this.flight.position);
@@ -748,6 +854,7 @@ export class UniverseEngine {
     this.qualityAt = performance.now();
     this.world?.setQuality(q);
     this.matter?.setQuality(q);
+    if (this.pilgrim) this.pilgrim.quality = q;
     this.relativity?.setQuality(q);
     this.glowStrength.value = q === "BATTERY" ? 0 : 0.15;
     this.resize();
@@ -792,6 +899,7 @@ export class UniverseEngine {
       eventsSeen: this.world.sanctuaries.eventsSeen,
       livingParticles: this.world.sanctuaries.life.count,
       waterWakes: this.world.sanctuaries.sea.wakeCount,
+      pilgrim: this.pilgrim.snapshot(),
       position: this.flight.position.toArray(),
       quaternion: this.flight.quaternion.toArray(),
       velocityVector: this.flight.velocity.toArray(),
@@ -822,6 +930,7 @@ export class UniverseEngine {
     this.resizeObserver?.disconnect();
     this.input?.dispose();
     this.audio.dispose();
+    this.pilgrim?.dispose();
     this.world?.dispose();
     this.matter?.dispose();
     this.pipeline?.dispose();

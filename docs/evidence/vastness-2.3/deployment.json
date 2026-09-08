@@ -1,0 +1,11 @@
+{
+  "runtimeCommit": "9b0abf2cc712d367f36659c74a93526a9f24c0de",
+  "version": "2.3.0",
+  "production": "https://offline-vastness.vercel.app",
+  "immutable": "https://offline-event-horizon-p1jzxi97a-sf-i455.vercel.app",
+  "deploymentId": "dpl_5m8UPSTNMwaSuX6ZDQjpKwA8VK4m",
+  "readyState": "READY",
+  "cliVersion": "59.11.7",
+  "readyObservedAt": "2026-09-08T16:00:06Z",
+  "githubCheck": "https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34248260571"
+}

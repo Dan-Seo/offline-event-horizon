@@ -17,6 +17,8 @@ import { ArrivalGuide, LanguageChoice } from "./ArrivalGuide";
 import GravityExperiment from "./GravityExperiment";
 import RelativityPanel from "./RelativityPanel";
 import { approachText } from "@/universe/approach-text";
+import dynamic from "next/dynamic";
+const ResearchLens = dynamic(() => import("./ResearchLens"), { ssr: false });
 function Mark({
   kind,
 }: {
@@ -59,7 +61,7 @@ function Mark({
     </svg>
   );
 }
-export default function Vastness() {
+export default function Vastness({ research = false }: { research?: boolean }) {
   const host = useRef<HTMLDivElement>(null),
     engine = useRef<UniverseEngine | null>(null);
   const [state, setState] = useState(initialSnapshot),
@@ -73,7 +75,7 @@ export default function Vastness() {
     [further, setFurther] = useState(false);
   const [language, setLanguage] = useState<Language>("en"),
     [guideRun, setGuideRun] = useState(0),
-    [guideActive, setGuideActive] = useState(true);
+    [guideActive, setGuideActive] = useState(!research);
   const c = copy[language];
   const finishLesson = useCallback(() => {
     engine.current?.input.clear();
@@ -134,6 +136,7 @@ export default function Vastness() {
           setState,
           onAction,
           setError,
+          research,
         );
         engine.current = instance;
         void instance.init();
@@ -162,7 +165,7 @@ export default function Vastness() {
   }, [panel, state.encounter]);
   return (
     <main
-      className={`vastness${state.quiet ? " quiet" : ""}${panel || help ? " has-panel" : ""}`}
+      className={`vastness${research ? " research-world" : ""}${state.quiet ? " quiet" : ""}${panel || help ? " has-panel" : ""}`}
       lang={language}
       data-ready={state.ready}
       data-backend={state.backend}
@@ -173,6 +176,8 @@ export default function Vastness() {
       data-encounter={state.encounter}
       data-approach={state.approach}
       data-observation={state.relativity.active}
+      data-pilgrim={state.pilgrim}
+      data-carrying={state.carrying}
     >
       <div ref={host} className="universe-canvas" />
       <div className="vignette" aria-hidden="true" />
@@ -223,6 +228,14 @@ export default function Vastness() {
             <aside className="controls-help" aria-label={c.flightControls}>
               <p>{c.guideTitle}</p>
               <div>
+                <div className="control-row">
+                  <kbd>Y / C / Z</kbd>
+                  <span>
+                    {language === "ko"
+                      ? "PILGRIM 타기 / 맡기기 / 쉬기"
+                      : "PILGRIM / carry / rest"}
+                  </span>
+                </div>
                 {[
                   "DRAG",
                   "W A S D",
@@ -259,6 +272,8 @@ export default function Vastness() {
                 onClick={() => {
                   setHelp(false);
                   setGuideRun((v) => v + 1);
+                  if (engine.current?.pilgrim.active)
+                    engine.current.action("fly");
                   engine.current?.flight.cancel();
                 }}
               >
@@ -268,14 +283,51 @@ export default function Vastness() {
           )}
           <footer className="flight-bar">
             <div className="flight-actions">
-              <button
-                onClick={() => action("wander")}
-                aria-pressed={state.mode === "WANDER"}
-                aria-label={c.wander}
-              >
-                <Mark kind="wander" />
-                <span>{state.mode === "WANDER" ? c.wandering : c.wander}</span>
-              </button>
+              {state.pilgrimAvailable && (
+                <>
+                  <button
+                    onClick={() => action("pilgrim")}
+                    aria-label={
+                      language === "ko"
+                        ? "PILGRIM 타고 가기"
+                        : "Go with PILGRIM"
+                    }
+                  >
+                    <span>{language === "ko" ? "가보기" : "Go"}</span>
+                  </button>
+                  <button
+                    onClick={() => action("rest")}
+                    aria-label={
+                      language === "ko" ? "멈춰서 쉬기" : "Stop and rest"
+                    }
+                  >
+                    <span>{language === "ko" ? "쉬기" : "Rest"}</span>
+                  </button>
+                  <button
+                    onClick={() => action("carry")}
+                    aria-pressed={state.carrying}
+                  >
+                    <Mark kind="wander" />
+                    <span>
+                      {language === "ko"
+                        ? "어디든 데려다줘"
+                        : "Carry me somewhere"}
+                    </span>
+                  </button>
+                </>
+              )}
+              {!state.pilgrimAvailable && (
+                <button
+                  onClick={() => action("wander")}
+                  aria-pressed={state.mode === "WANDER"}
+                  aria-label={c.wander}
+                >
+                  <Mark kind="wander" />
+                  <span>
+                    {state.mode === "WANDER" ? c.wandering : c.wander}
+                  </span>
+                </button>
+              )}
               <button onClick={() => action("quiet")} aria-label={c.quiet}>
                 <Mark kind="quiet" />
                 <span>{c.quiet}</span>
@@ -290,6 +342,18 @@ export default function Vastness() {
               </button>
             </div>
             <div className="flight-tools">
+              {state.pilgrim && (
+                <button
+                  onClick={() => action("fly")}
+                  aria-label={
+                    language === "ko"
+                      ? "자유롭게 날기"
+                      : "Leave PILGRIM and fly"
+                  }
+                >
+                  ↗ <span>{language === "ko" ? "날기" : "Fly"}</span>
+                </button>
+              )}
               <button
                 onClick={async () => {
                   try {
@@ -314,7 +378,7 @@ export default function Vastness() {
             </div>
           </footer>
           <div
-            className={`input-hint${((!guideActive && intro) || state.paused) && !state.relativity.active && !state.walking ? " visible" : ""}`}
+            className={`input-hint${((!guideActive && intro && !state.pilgrim) || state.paused) && !state.relativity.active && !state.walking ? " visible" : ""}`}
             role="status"
           >
             {state.paused ? (
@@ -516,24 +580,58 @@ export default function Vastness() {
               )}
             </section>
           )}
-          <ArrivalGuide
-            language={language}
-            onLanguage={changeLanguage}
-            state={state}
-            run={guideRun}
-            onActive={setGuideActive}
-            onLessonComplete={finishLesson}
-            onWander={() => {
-              engine.current?.input.clear();
-              action("wander");
-            }}
-            onExplore={() => action("places")}
-          />
+          {!research && (
+            <ArrivalGuide
+              language={language}
+              onLanguage={changeLanguage}
+              state={state}
+              run={guideRun}
+              onActive={setGuideActive}
+              onLessonComplete={finishLesson}
+              onWander={() => {
+                engine.current?.input.clear();
+                action(state.pilgrimAvailable ? "carry" : "wander");
+              }}
+              onExplore={() => action("places")}
+            />
+          )}
+          {research && engine.current && (
+            <ResearchLens engine={engine.current} language={language} />
+          )}
+          {state.pilgrim && !panel && !help && (
+            <div className="pilgrim-whisper" aria-live="polite">
+              {state.carrying ? (
+                state.resting ? (
+                  language === "ko" ? (
+                    "잠깐, 여기 머물러도 좋아."
+                  ) : (
+                    "We can stay here a while."
+                  )
+                ) : (
+                  ""
+                )
+              ) : (
+                <>
+                  <span className="desktop-help">
+                    {language === "ko"
+                      ? "WASD로 움직이고, 드래그로 둘러봐. 커서는 자유로워."
+                      : "WASD to move. Drag to look. Your cursor stays free."}
+                  </span>
+                  <span className="touch-help">
+                    {language === "ko"
+                      ? "왼손으로 움직이고, 오른손으로 둘러봐."
+                      : "Left thumb to move. Right thumb to look."}
+                  </span>
+                </>
+              )}
+            </div>
+          )}
           {!guideActive &&
             !panel &&
             !help &&
             !state.relativity.active &&
             !state.walking &&
+            !state.pilgrim &&
             state.encounter &&
             encounter.description && (
               <aside className="encounter-note" aria-label={encounter.name}>
@@ -655,7 +753,7 @@ export default function Vastness() {
             </aside>
           )}
           <div
-            className={`touch-zones${intro && !guideActive ? " visible" : ""}`}
+            className={`touch-zones${intro && !guideActive && !state.pilgrim ? " visible" : ""}`}
             aria-hidden="true"
           >
             <span>{c.move}</span>

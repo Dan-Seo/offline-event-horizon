@@ -1,0 +1,83 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "152.0.7977.83",
+  "checks": [
+    {
+      "name": "Korean browser opens Korean welcome",
+      "passed": true
+    },
+    {
+      "name": "Welcome can switch to English",
+      "passed": true
+    },
+    {
+      "name": "Instruction does not cover the central canvas",
+      "passed": true
+    },
+    {
+      "name": "Guide click keeps the cursor free",
+      "passed": true
+    },
+    {
+      "name": "Actual left-drag look advances the guide",
+      "passed": true
+    },
+    {
+      "name": "Actual W movement advances the guide",
+      "passed": true
+    },
+    {
+      "name": "Wheel speed change completes the guide",
+      "passed": true
+    },
+    {
+      "name": "Completed guide keeps its choices directly clickable",
+      "passed": true
+    },
+    {
+      "name": "All five distinct distant planets are accessible",
+      "passed": true
+    },
+    {
+      "name": "Completed guide stays dismissed after reload",
+      "passed": true
+    },
+    {
+      "name": "Korean preference and document language persist",
+      "passed": true
+    },
+    {
+      "name": "Help can replay the movement guide",
+      "passed": true
+    },
+    {
+      "name": "Welcome Carry works without mandatory lessons",
+      "passed": true
+    },
+    {
+      "name": "Manual input immediately overrides welcome Carry",
+      "passed": true
+    },
+    {
+      "name": "M opens an operable menu with the cursor still free",
+      "passed": true
+    },
+    {
+      "name": "Settings and labels switch language immediately",
+      "passed": true
+    },
+    {
+      "name": "English help remains accessible",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "No runtime or shader errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

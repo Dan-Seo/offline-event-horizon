@@ -21,6 +21,8 @@ import {
 } from "three/tsl";
 import { seeded, type Quality } from "./config";
 import type { SanctuaryAtmosphere } from "./sanctuary-atmosphere";
+import { markSurface } from "./perception/surfaces";
+import { grassInfluence } from "./pilgrim/influence";
 
 type Places = { id: string; object: T.Group; position: T.Vector3 }[];
 function rockGeometry() {
@@ -194,7 +196,11 @@ export class SanctuaryNature {
       0.00036,
     );
     const rockGroup = (root: T.Group, specs: number[][]) => {
-      const mesh = new T.InstancedMesh(rock, stone, specs.length),
+      const mesh = markSurface(
+          new T.InstancedMesh(rock, stone, specs.length),
+          "rock",
+          true,
+        ),
         d = new T.Object3D();
       specs.forEach(([x, y, z, sx, sy, sz, rot], i) => {
         d.position.set(x, y, z);
@@ -233,7 +239,11 @@ export class SanctuaryNature {
       ]);
     }
     rockGroup(falls, cliffs);
-    const crown = new T.Mesh(islandGeometry(1000, 490, 510, 170, 23), stone);
+    const crown = markSurface(
+      new T.Mesh(islandGeometry(1000, 490, 510, 170, 23), stone),
+      "terrain",
+      true,
+    );
     crown.position.set(-100, 20, -710);
     falls.add(crown);
     rockGroup(falls, [
@@ -281,12 +291,20 @@ export class SanctuaryNature {
     bow.position.set(0, 5, 130);
     falls.add(bow);
     const forest = get("forest");
-    const ground = new T.Mesh(islandGeometry(760, 1060, 40, 180, 41), stone);
+    const ground = markSurface(
+      new T.Mesh(islandGeometry(760, 1060, 40, 180, 41), stone),
+      "terrain",
+      true,
+    );
     ground.position.y = -10;
     forest.add(ground);
     this.forest(forest, 62, 720, 950, 30, seeded(6984));
     const veil = get("veil");
-    const floating = new T.Mesh(islandGeometry(490, 590, 40, 460, 92), stone);
+    const floating = markSurface(
+      new T.Mesh(islandGeometry(490, 590, 40, 460, 92), stone),
+      "terrain",
+      true,
+    );
     floating.position.y = 70;
     veil.add(floating);
     this.forest(veil, 16, 430, 430, 104, seeded(456), 0.65);
@@ -408,7 +426,11 @@ export class SanctuaryNature {
     for (let variant = 0; variant < 3; variant++) {
       const source = treeGeometry(9743 + variant * 587),
         n = Math.ceil(count / 3);
-      const trees = new T.InstancedMesh(source.geometry, bark, n);
+      const trees = markSurface(
+        new T.InstancedMesh(source.geometry, bark, n),
+        "vegetation",
+        true,
+      );
       for (let i = 0; i < n; i++) {
         const a = random() * Math.PI * 2,
           r = 0.16 + Math.sqrt(random()) * 0.78;
@@ -507,7 +529,10 @@ export class SanctuaryNature {
     const blade = new T.BufferGeometry();
     blade.setAttribute(
       "position",
-      new T.Float32BufferAttribute([-0.25, 0, 0, 0.25, 0, 0, 0.08, 1, 0], 3),
+      new T.Float32BufferAttribute(
+        [-0.035, 0, 0, 0.035, 0, 0, 0.025, 0.42, 0],
+        3,
+      ),
     );
     blade.computeVertexNormals();
     blade.setAttribute("aBladeTip", new T.Float32BufferAttribute([0, 0, 1], 1));
@@ -516,7 +541,12 @@ export class SanctuaryNature {
       vec3(
         sin(this.air.time.mul(0.4).add(positionWorld.x.mul(0.2)))
           .mul(positionLocal.y.pow(2))
-          .mul(0.3),
+          .mul(0.3)
+          .add(
+            grassInfluence(positionWorld.add(this.air.observer))
+              .mul(positionLocal.y.pow(2))
+              .mul(0.65),
+          ),
         0,
         0,
       ),

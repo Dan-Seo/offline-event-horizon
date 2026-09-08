@@ -15,6 +15,7 @@ import {
   vec3,
 } from "three/tsl";
 import type { Quality } from "./config";
+import { markSurface } from "./perception/surfaces";
 
 /** A local spherical lagoon, with a tangent reflection plane following the observer. */
 export class RegionalLagoon {
@@ -81,7 +82,7 @@ export class RegionalLagoon {
       this.mirror.rgb.mul(vec3(0.68, 0.89, 0.91)),
       fresnel,
     ).add(color(0x70d4ad).mul(response.mul(0.4)));
-    this.mesh = new T.Mesh(geometry, material);
+    this.mesh = markSurface(new T.Mesh(geometry, material), "water");
     root.add(this.mesh);
   }
   update(local: T.Vector3) {

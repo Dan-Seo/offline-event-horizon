@@ -59,6 +59,11 @@ export function ArrivalGuide({
   const latest = useRef(state.learning);
   latest.current = state.learning;
   const c = copy[language];
+  const carryLabel = state.pilgrimAvailable
+    ? language === "ko"
+      ? "어디든 데려다줘"
+      : "Carry me somewhere"
+    : c.justWander;
   useEffect(() => {
     let complete = false;
     try {
@@ -140,10 +145,12 @@ export function ArrivalGuide({
           <h1>{c.welcome}</h1>
           <p>{c.welcomeBody}</p>
           <div className="guide-actions">
-            <button className="guide-primary" onClick={() => setStage(0)}>
+            <button className="guide-primary" onClick={() => finish(onWander)}>
+              {carryLabel}
+            </button>
+            <button onClick={() => setStage(0)}>
               {c.learn} <span aria-hidden="true">↗</span>
             </button>
-            <button onClick={() => finish(onWander)}>{c.justWander}</button>
           </div>
           <button className="guide-skip" onClick={() => finish()}>
             {c.skip}
@@ -181,7 +188,7 @@ export function ArrivalGuide({
               >
                 {c.explore} <span aria-hidden="true">↗</span>
               </button>
-              <button onClick={() => finish(onWander)}>{c.justWander}</button>
+              <button onClick={() => finish(onWander)}>{carryLabel}</button>
               <button className="guide-skip" onClick={() => finish()}>
                 {c.finish}
               </button>

@@ -1,0 +1,30 @@
+{
+  "file": "docs/evidence/vastness-3.0/clear-eight-frames.tar.gz",
+  "frames": 8,
+  "compared": 7,
+  "maxTranslationDifference": 0,
+  "maxRotationDifference": 0,
+  "analysisMs": 69.54330000000002,
+  "evaluation": {
+    "samples": 8,
+    "tracked": 7,
+    "lost": 0,
+    "trackingFraction": 0.875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 7,
+        "distance": 2.078825185669955,
+        "alignment": "stationary / near-collinear — ATE unavailable",
+        "ate": null,
+        "rotation": null,
+        "rpeTranslation": null,
+        "rpeRotation": null,
+        "rpePairs": 0,
+        "rpeInterval": 1,
+        "endpointDrift": 0.13845234084484653,
+        "driftFraction": 0.06660124275924947
+      }
+    ]
+  }
+}

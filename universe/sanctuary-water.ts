@@ -18,6 +18,7 @@ import {
 import type { SanctuaryAtmosphere } from "./sanctuary-atmosphere";
 import type { Quality } from "./config";
 import { SEA_RADIUS } from "./sanctuary-layout";
+import { markSurface } from "./perception/surfaces";
 
 export class MirrorSea {
   mesh: T.Mesh;
@@ -33,6 +34,7 @@ export class MirrorSea {
   private wakeIndex = 0;
   private lastWake = -1;
   wakeCount = 0;
+  wakeSource?: T.Vector3;
   constructor(
     scene: T.Scene,
     private air: SanctuaryAtmosphere,
@@ -135,7 +137,7 @@ export class MirrorSea {
     material.colorNode = albedo.add(
       vec3(0.1, 0.65, 0.6).mul(light).mul(sparkle),
     );
-    this.mesh = new T.Mesh(geometry, material);
+    this.mesh = markSurface(new T.Mesh(geometry, material), "water");
     this.mesh.renderOrder = 2;
     this.mesh.frustumCulled = false;
     scene.add(this.mesh);
@@ -144,19 +146,19 @@ export class MirrorSea {
     this.mesh.position.copy(observer).negate();
     this.mesh.visible = presence > 0.001;
     this.mirror.target.position.set(-observer.x, -observer.y, -observer.z);
+    const source = this.wakeSource ?? observer;
     const localSeaY =
-      Math.sqrt(
-        Math.max(0, SEA_RADIUS ** 2 - observer.x ** 2 - observer.z ** 2),
-      ) - SEA_RADIUS;
+      Math.sqrt(Math.max(0, SEA_RADIUS ** 2 - source.x ** 2 - source.z ** 2)) -
+      SEA_RADIUS;
     if (
       speed > 0.65 &&
-      observer.y - localSeaY < 95 &&
+      source.y - localSeaY < 95 &&
       time - this.lastWake > 0.45 &&
       presence > 0.8
     ) {
       this.wakes[this.wakeIndex++ % this.wakes.length].set(
-        observer.x,
-        observer.z,
+        source.x,
+        source.z,
         time,
         Math.min(1, speed / 22),
       );

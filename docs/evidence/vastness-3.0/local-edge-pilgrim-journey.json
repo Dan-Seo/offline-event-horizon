@@ -1,0 +1,589 @@
+{
+  "url": "http://localhost:4173",
+  "browser": "152.0.4191.66",
+  "channel": "msedge",
+  "at": "2026-09-08T23:38:32.793Z",
+  "checks": [
+    {
+      "name": "Ordinary arrival does not run research sensors",
+      "passed": true
+    },
+    {
+      "name": "Arrival can hand over without a tutorial",
+      "passed": true
+    },
+    {
+      "name": "Quiet hides the interface while Carry stays active",
+      "passed": true
+    },
+    {
+      "name": "A sustained quiet ride alternates motion and rests",
+      "passed": true,
+      "detail": {
+        "seconds": 60,
+        "distance": 141.7466922398084,
+        "stops": 1
+      }
+    },
+    {
+      "name": "Live state remains bounded throughout the ride",
+      "passed": true
+    },
+    {
+      "name": "W interrupts Carry directly even in Quiet",
+      "passed": true
+    },
+    {
+      "name": "Manual rest stops disabled research work",
+      "passed": true
+    },
+    {
+      "name": "Ctrl+C does not start a ride",
+      "passed": true
+    },
+    {
+      "name": "Flight remains available",
+      "passed": true
+    },
+    {
+      "name": "The same craft boards the planetary coastal frame",
+      "passed": true
+    },
+    {
+      "name": "Planetary surface traversal moves and settles",
+      "passed": true,
+      "detail": {
+        "distance": 246.1075915055352,
+        "water": true,
+        "gliding": false
+      }
+    },
+    {
+      "name": "Scenic sensing also works in a planetary frame",
+      "passed": true
+    },
+    {
+      "name": "Portrait craft controls fit the viewport",
+      "passed": true
+    },
+    {
+      "name": "Two-thumb input interrupts Carry and drives the craft",
+      "passed": true
+    },
+    {
+      "name": "Recovery returns to the original sea without trapping input",
+      "passed": true
+    },
+    {
+      "name": "No browser or shader errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "performance": {
+    "frames": 8737,
+    "p50": 6.900000000001455,
+    "p95": 7,
+    "p99": 7.099999999998545,
+    "max": 7.19999999999709,
+    "over50": 0,
+    "quality": "HIGH",
+    "dpr": 1,
+    "viewport": {
+      "width": 1600,
+      "height": 1000
+    }
+  },
+  "samples": [
+    {
+      "time": 1.9068999999999987,
+      "frameMs": 9.492500000000003,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        0,
+        14.978583333333336,
+        460
+      ],
+      "speed": 2.380000000000005,
+      "water": true,
+      "gliding": true,
+      "distance": 0,
+      "stops": 0,
+      "carry": true,
+      "captures": 6,
+      "tracking": "TRACKING",
+      "points": 10656,
+      "contactCache": 51
+    },
+    {
+      "time": 6.956299999999978,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        1.2357934326652453,
+        0.9835093046253525,
+        446.2177205214031
+      ],
+      "speed": 5.759076791269222,
+      "water": true,
+      "gliding": false,
+      "distance": 13.838195292887796,
+      "stops": 0,
+      "carry": true,
+      "captures": 46,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 663
+    },
+    {
+      "time": 12.040299999999984,
+      "frameMs": 6.944166666666676,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        5.378538631404904,
+        1.2634274717712637,
+        417.2554769992887
+      ],
+      "speed": 5.76144268617813,
+      "water": true,
+      "gliding": false,
+      "distance": 43.11704209243903,
+      "stops": 0,
+      "carry": true,
+      "captures": 86,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 993
+    },
+    {
+      "time": 17.09650000000011,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        7.652935920687188,
+        1.5177444650380338,
+        388.47990196346814
+      ],
+      "speed": 5.756431665094945,
+      "water": true,
+      "gliding": false,
+      "distance": 72.24188737433172,
+      "stops": 0,
+      "carry": true,
+      "captures": 126,
+      "tracking": "TRACKING",
+      "points": 11292,
+      "contactCache": 1267
+    },
+    {
+      "time": 22.145800000000644,
+      "frameMs": 6.944999999999982,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        2.6776529794074233,
+        1.69958553980443,
+        359.8404652173529
+      ],
+      "speed": 5.761258055960055,
+      "water": true,
+      "gliding": false,
+      "distance": 101.32737341279699,
+      "stops": 0,
+      "carry": true,
+      "captures": 166,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 1460
+    },
+    {
+      "time": 27.195100000001172,
+      "frameMs": 6.945000000000012,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -2.6192841949869354,
+        1.9829973560964609,
+        331.3873765768497
+      ],
+      "speed": 5.756945714236063,
+      "water": true,
+      "gliding": false,
+      "distance": 130.4084351752567,
+      "stops": 0,
+      "carry": true,
+      "captures": 206,
+      "tracking": "TRACKING",
+      "points": 11289,
+      "contactCache": 1856
+    },
+    {
+      "time": 32.251400000001624,
+      "frameMs": 6.945000000000012,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533782376575974,
+        1.9638073095836248,
+        321.1765615620124
+      ],
+      "speed": 0.08017833318637307,
+      "water": true,
+      "gliding": false,
+      "distance": 141.74666127773816,
+      "stops": 1,
+      "carry": true,
+      "captures": 247,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 37.307500000001184,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059896998,
+        2.0997634601155903,
+        321.1765328888589
+      ],
+      "speed": 0.07579900344195542,
+      "water": true,
+      "gliding": false,
+      "distance": 141.74669223980692,
+      "stops": 1,
+      "carry": true,
+      "captures": 286,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 42.405400000000704,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        1.9398611205052294,
+        321.1765328888574
+      ],
+      "speed": 0.07186769649526809,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 325,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 47.45470000000022,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        2.1226597366216446,
+        321.1765328888574
+      ],
+      "speed": 0.0657224178087966,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 364,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 52.50399999999973,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        1.9154101321607966,
+        321.1765328888574
+      ],
+      "speed": 0.05875955206319567,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 402,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 57.53949999999928,
+      "frameMs": 6.945000000000012,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        2.145380631743665,
+        321.1765328888574
+      ],
+      "speed": 0.05034376351252585,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 441,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 62.595699999998835,
+      "frameMs": 6.945000000000073,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        1.8960314743054454,
+        321.1765328888574
+      ],
+      "speed": 0.04235018973682381,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 480,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 67.65199999999798,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.533794059897863,
+        2.1604681350573314,
+        321.1765328888574
+      ],
+      "speed": 0.03387588879500349,
+      "water": true,
+      "gliding": false,
+      "distance": 141.7466922398084,
+      "stops": 1,
+      "carry": true,
+      "captures": 519,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 72.5345999999972,
+      "frameMs": 6.945000000000073,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        -7.856244764828247,
+        1.8822846890762903,
+        320.8540821839275
+      ],
+      "speed": 0.015593674492985128,
+      "water": true,
+      "gliding": false,
+      "distance": 142.2027063999172,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 2037
+    },
+    {
+      "time": 144.44696666666883,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163045.99228850487,
+        50129.197158678064,
+        -362819.547052918
+      ],
+      "speed": 9.421321283241,
+      "water": false,
+      "gliding": true,
+      "distance": 10.511147298273112,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 149.04476666667296,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163053.91412650645,
+        50138.8194381732,
+        -362852.07446277444
+      ],
+      "speed": 10.00003460942771,
+      "water": false,
+      "gliding": true,
+      "distance": 34.454580819552035,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 154.09406666667752,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163053.11367206456,
+        50172.85648078158,
+        -362906.2011517979
+      ],
+      "speed": 13.192869649654815,
+      "water": true,
+      "gliding": true,
+      "distance": 92.05153464738045,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 159.1502666666821,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163051.39501071838,
+        50209.1945491513,
+        -362962.18556302495
+      ],
+      "speed": 13.200361948773882,
+      "water": true,
+      "gliding": true,
+      "distance": 152.74473478335187,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 164.20656666668668,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163036.06358513026,
+        50252.96526215934,
+        -363001.5186165781
+      ],
+      "speed": 12.090521159060884,
+      "water": true,
+      "gliding": false,
+      "distance": 213.34472602347293,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 168.76276666669082,
+      "frameMs": 6.945833333333334,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163023.20212404468,
+        50278.98170600935,
+        -363017.42454830045
+      ],
+      "speed": 0.03006478866699863,
+      "water": true,
+      "gliding": false,
+      "distance": 246.1075915055352,
+      "stops": 1,
+      "carry": false,
+      "captures": 535,
+      "tracking": "TRACKING",
+      "points": 11232,
+      "contactCache": 0
+    },
+    {
+      "time": 173.90926666669546,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163023.34287715922,
+        50278.90788755791,
+        -363017.60224588093
+      ],
+      "speed": 0.04558195182173123,
+      "water": true,
+      "gliding": false,
+      "distance": 246.1140826269311,
+      "stops": 1,
+      "carry": true,
+      "captures": 576,
+      "tracking": "TRACKING",
+      "points": 14000,
+      "contactCache": 0
+    },
+    {
+      "time": 178.95856666670002,
+      "frameMs": 6.944999999999951,
+      "sectors": 27,
+      "quality": "HIGH",
+      "position": [
+        163023.1875471424,
+        50278.99331906734,
+        -363017.4132610275
+      ],
+      "speed": 0.036886762533443786,
+      "water": true,
+      "gliding": false,
+      "distance": 246.1140826272867,
+      "stops": 2,
+      "carry": true,
+      "captures": 616,
+      "tracking": "TRACKING",
+      "points": 14000,
+      "contactCache": 0
+    }
+  ],
+  "sampleSummary": {
+    "count": 111,
+    "maxContactCache": 2037,
+    "maxMapPoints": 14000,
+    "note": "Per-second checks used every sample. Repository trace retains every fifth sample and the final sample."
+  }
+}

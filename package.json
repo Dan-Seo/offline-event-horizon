@@ -1,6 +1,6 @@
 {
   "name": "offline-vastness",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -22,6 +22,10 @@
     "qa:encounters": "node scripts/vastness-encounters.mjs",
     "qa:approaches": "node scripts/vastness-approaches.mjs",
     "qa:walk": "node scripts/vastness-walk.mjs",
+    "qa:pilgrim": "node scripts/pilgrim-smoke.mjs",
+    "qa:journey": "node scripts/pilgrim-journey.mjs",
+    "qa:lab": "node scripts/pilgrim-lab.mjs",
+    "replay:rgbd": "node --experimental-strip-types scripts/replay-rgbd.ts",
     "qa:place": "node scripts/sanctuary-journey.mjs",
     "test:reconstruction": "python -m unittest discover -s tests -p test_reconstruction_report.py"
   },

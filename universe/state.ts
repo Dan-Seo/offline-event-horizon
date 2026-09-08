@@ -32,6 +32,10 @@ export type UniverseSnapshot = {
   approach: string;
   walking: boolean;
   walkAvailable: boolean;
+  pilgrim: boolean;
+  carrying: boolean;
+  resting: boolean;
+  pilgrimAvailable: boolean;
   gas: { active: number; released: number; absorbed: number; time: number };
   relativity: {
     active: boolean;
@@ -85,6 +89,10 @@ export const initialSnapshot: UniverseSnapshot = {
   approach: "",
   walking: false,
   walkAvailable: false,
+  pilgrim: false,
+  carrying: false,
+  resting: true,
+  pilgrimAvailable: true,
   gas: { active: 0, released: 0, absorbed: 0, time: 0 },
   relativity: {
     active: false,
