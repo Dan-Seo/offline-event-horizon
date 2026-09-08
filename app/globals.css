@@ -74,7 +74,10 @@ a {
 .universe-canvas canvas {
   outline: none;
   display: block;
-  cursor: crosshair;
+  cursor: grab;
+}
+.universe-canvas canvas:active {
+  cursor: grabbing;
 }
 .vignette {
   position: absolute;
@@ -199,18 +202,6 @@ a {
   font-weight: 400;
   margin: 0 9px;
   opacity: 0.4;
-}
-.look-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #d7e4e682;
-  box-shadow: 0 0 6px #163840;
-  pointer-events: none;
-  z-index: 2;
 }
 .controls-help {
   position: absolute;
@@ -443,8 +434,7 @@ a {
 .quiet > .focus-marker,
 .quiet > .small-panel,
 .quiet > .input-hint,
-.quiet > .touch-zones,
-.quiet > .look-dot {
+.quiet > .touch-zones {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

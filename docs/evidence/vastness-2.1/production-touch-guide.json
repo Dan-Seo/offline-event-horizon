@@ -1,0 +1,78 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "checks": [
+    {
+      "name": "Portrait welcome stays inside the viewport",
+      "passed": true
+    },
+    {
+      "name": "Touch guide uses touch-specific instructions",
+      "passed": true
+    },
+    {
+      "name": "Right thumb advances the actual look step",
+      "passed": true
+    },
+    {
+      "name": "Left thumb movement advances the move step",
+      "passed": true
+    },
+    {
+      "name": "Two-finger spread completes speed instruction",
+      "passed": true
+    },
+    {
+      "name": "390x844 has no overflow",
+      "passed": true
+    },
+    {
+      "name": "390x844 central canvas is unobstructed",
+      "passed": true
+    },
+    {
+      "name": "390x844 every destination remains reachable",
+      "passed": true
+    },
+    {
+      "name": "844x390 has no overflow",
+      "passed": true
+    },
+    {
+      "name": "844x390 central canvas is unobstructed",
+      "passed": true
+    },
+    {
+      "name": "844x390 every destination remains reachable",
+      "passed": true
+    },
+    {
+      "name": "1024x768 has no overflow",
+      "passed": true
+    },
+    {
+      "name": "1024x768 central canvas is unobstructed",
+      "passed": true
+    },
+    {
+      "name": "1024x768 every destination remains reachable",
+      "passed": true
+    },
+    {
+      "name": "1366x768 has no overflow",
+      "passed": true
+    },
+    {
+      "name": "1366x768 central canvas is unobstructed",
+      "passed": true
+    },
+    {
+      "name": "1366x768 every destination remains reachable",
+      "passed": true
+    },
+    {
+      "name": "No touch guide runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

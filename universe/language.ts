@@ -29,7 +29,7 @@ const en = {
   flightControls: "Flight controls",
   guideLook: "First, look around.",
   guideLookBody:
-    "Click the open sky, then move your mouse. Esc gives you the cursor back.",
+    "Hold the left mouse button over the scene and drag to look around. Let go to use the cursor freely.",
   guideLookTouch:
     "Slide your finger on the right half of the scene to look around.",
   guideMove: "Go a little closer.",
@@ -48,7 +48,7 @@ const en = {
   next: "Next",
   finish: "Stay here",
   guideProgress: "Movement guide",
-  unlockedHint: "Esc for the cursor · H for help",
+  guideHint: "Drag to look · H for help",
   wander: "WANDER",
   wandering: "WANDERING",
   quiet: "QUIET",
@@ -61,8 +61,6 @@ const en = {
   settings: "Comfort settings",
   paused: "The world is resting. P to resume.",
   dragHint: "Drag to look · WASD to move",
-  lockedHint: "Mouse to look · Esc for the cursor",
-  clickHint: "Click to look around · WASD to move",
   touchHint: "Left thumb moves · Right thumb looks",
   atYourPace: "AT YOUR OWN PACE",
   detail: "Detail",
@@ -100,7 +98,6 @@ const en = {
     BATTERY: "BATTERY",
   },
   controls: [
-    "Take the view",
     "Look around",
     "Move",
     "Travel speed",
@@ -113,10 +110,10 @@ const en = {
     "Pause / return",
     "Gather / release / light",
     "Explore / orbit / experiment",
-    "Free cursor / help",
+    "Cancel movement / help",
   ],
   desktopHelp:
-    "Click once to look freely. Esc gives you the cursor. If pointer lock is unavailable, drag to look. Your movement always takes over.",
+    "Drag with the left mouse button to look around. The cursor stays free. Click to select; double click to approach. Your movement always takes over.",
   touchHelp:
     "Left thumb to move. Right thumb to look. Pinch to change speed. Tap to select. Double tap to approach.",
   approach: "Approaching",
@@ -136,7 +133,7 @@ const en = {
   physics: "About this simulation",
   physicsBody:
     "These particles keep their own position and velocity. A softened inverse-square gravity model changes their paths; crossing the dark sphere absorbs them. The luminous disk and bending of light are artistic approximations, not a relativistic simulation.",
-  experimentHint: "T opens the experiment · Esc for the cursor",
+  experimentHint: "T opens the experiment · H for help",
   absorbed: "absorbed",
   escaped: "escaped",
   orbitingMatter: "in flight",
@@ -175,7 +172,7 @@ const ko: Copy = {
   flightControls: "이동과 조작 안내",
   guideLook: "먼저, 주위를 둘러봐요.",
   guideLookBody:
-    "빈 하늘을 한 번 클릭한 뒤 마우스를 움직여 보세요. Esc를 누르면 커서가 돌아와요.",
+    "풍경 위에서 마우스 왼쪽 버튼을 누른 채 움직여 보세요. 버튼을 놓으면 커서를 자유롭게 쓸 수 있어요.",
   guideLookTouch: "화면 오른쪽에서 손가락을 움직이면 주위를 둘러볼 수 있어요.",
   guideMove: "조금 가까이 가 볼까요.",
   guideMoveBody:
@@ -193,7 +190,7 @@ const ko: Copy = {
   next: "다음",
   finish: "여기 머물기",
   guideProgress: "이동 안내",
-  unlockedHint: "Esc 커서 되찾기 · H 도움말",
+  guideHint: "드래그로 둘러보기 · H 도움말",
   wander: "풍경에 맡기기",
   wandering: "천천히 둘러보는 중",
   quiet: "고요하게",
@@ -206,8 +203,6 @@ const ko: Copy = {
   settings: "편안하게 설정",
   paused: "세상이 잠시 쉬고 있어요. P를 누르면 다시 움직여요.",
   dragHint: "드래그로 둘러보기 · WASD로 이동",
-  lockedHint: "마우스로 둘러보기 · Esc로 커서 되찾기",
-  clickHint: "풍경을 클릭해 둘러보기 · WASD로 이동",
   touchHint: "왼손은 이동 · 오른손은 둘러보기",
   atYourPace: "나에게 편안한 속도로",
   detail: "화질",
@@ -245,7 +240,6 @@ const ko: Copy = {
     BATTERY: "배터리 절약",
   },
   controls: [
-    "시선 조종 시작",
     "둘러보기",
     "이동",
     "이동 속도",
@@ -258,10 +252,10 @@ const ko: Copy = {
     "일시 정지 / 처음으로",
     "모으기 / 흩뜨리기 / 빛 남기기",
     "장소 / 공전 / 중력 실험",
-    "커서 되찾기 / 도움말",
+    "자동 이동 취소 / 도움말",
   ],
   desktopHelp:
-    "풍경을 한 번 클릭하면 시선을 조종해요. Esc는 커서를 돌려줘요. 클릭 조종이 지원되지 않으면 드래그해 보세요. 직접 움직이면 자동 이동은 멈춰요.",
+    "왼쪽 버튼을 누른 채 드래그하면 둘러봐요. 커서는 항상 자유로워요. 클릭하면 대상을 선택하고 두 번 클릭하면 가까이 가요. 직접 움직이면 자동 이동은 멈춰요.",
   touchHelp:
     "왼손으로 이동하고 오른손으로 둘러봐요. 두 손가락으로 속도를 바꿔요. 탭하면 선택하고, 두 번 탭하면 가까이 가요.",
   approach: "가까이 가는 중",
@@ -281,7 +275,7 @@ const ko: Copy = {
   physics: "어떻게 움직이나요?",
   physicsBody:
     "입자마다 위치와 속도를 계산하고, 거리에 따라 약해지는 중력으로 궤적을 바꿔요. 검은 구 안으로 들어간 입자는 흡수돼요. 빛의 휘어짐과 밝은 원반은 시각적 근사이며, 상대론을 정확히 재현한 시뮬레이션은 아니에요.",
-  experimentHint: "T 중력 실험 열기 · Esc 커서 되찾기",
+  experimentHint: "T 중력 실험 열기 · H 도움말",
   absorbed: "흡수",
   escaped: "탈출",
   orbitingMatter: "이동 중",

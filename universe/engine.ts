@@ -197,8 +197,15 @@ export class UniverseEngine {
     }
   }
   action = (a: InputAction) => {
+    if (a === "manual") {
+      if (this.flight.mode !== "FREE") {
+        this.flight.cancel();
+        this.flight.velocity.multiplyScalar(0.15);
+      }
+      return;
+    }
     if (["help", "hud", "places", "experiment"].includes(a)) {
-      this.input?.releasePointer();
+      this.input?.clear();
       this.flight.cancel();
     }
     if (a === "focus") this.flight.focus();
@@ -415,8 +422,6 @@ export class UniverseEngine {
     }
   };
   private updateSnapshot() {
-    this.state.locked = this.input.locked;
-    this.state.lockFailed = this.input.lockFailed;
     this.state.sanctuary = this.world.sanctuaries.active;
     const selected = this.flight.selected;
     this.state.selected = selected?.name ?? null;
@@ -526,7 +531,6 @@ export class UniverseEngine {
       speed: this.flight.speed,
       mode: this.flight.mode,
       keys: [...this.input.keys],
-      locked: this.input.locked,
       bodies: this.world.bodies.map((b) => {
         const p = b.object.position.clone().project(this.camera);
         return {

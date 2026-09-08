@@ -5,7 +5,7 @@ Date: 2026-09-08. This update extends the existing sanctuary renderer. It adds K
 ## Changes checked
 
 - Saved language takes precedence over browser language; Korean and English can be selected both on arrival and in settings. Main controls, help, destinations, experiments, and recovery copy are translated.
-- Look, movement, and speed lessons advance from actual accumulated input. Desktop uses pointer lock, WASD, and wheel; touch uses right-side look, left-side movement, and pinch. The completed desktop lesson returns the cursor. Skipping, immediate Wander, persistence, and help replay are supported.
+- Look, movement, and speed lessons advance from actual accumulated input. Desktop uses left-drag look, WASD, and wheel; touch uses right-side look, left-side movement, and pinch. The cursor remains free throughout. Skipping, immediate Wander, persistence, and help replay are supported.
 - Explore is visible in the footer. Serein adds dunes and salt basins; Nacre adds green oceans, clouds, and luminous coasts. Ice basins/fractures, volcanic seams, and gas bands distinguish the existing worlds. Optional planet orbit yields to manual flight.
 - Released matter has independent position and velocity, three starting-speed choices, mutable gravity, actual capture/escape outcomes, and measured trail history. P freezes it exactly. The idle scene contains no experiment panel.
 
@@ -15,7 +15,9 @@ An interplanetary route through Serein → Nacre → Selene → Ember → the Si
 
 Arrival text could remain visible behind the planet note; destination travel now dismisses it and mutually exclusive overlays suppress it. Nacre's cloud thresholds were softened, ice fractures were broken up with finer procedural variation, and faint touch-zone labels were hidden behind the welcome guide. Screenshots of both new planets, Selene, the anomaly/trails, Korean arrival, and phone-sized guidance were opened and inspected.
 
-Keyboard-opened UI panels now release pointer lock without treating that intentional release as Esc cancellation. The guide also releases lock when its final buttons appear. Existing regression selectors were made exact after translated canvas accessibility text introduced a second matching label; the precision-speed check now samples while Ctrl is held rather than racing its release. These were test corrections, not suppressed application errors.
+The first 2.1 build corrected intentional cursor release when opening panels and completing the guide. The user's subsequent request to never confine the mouse superseded that design: pointer lock and the L shortcut have now been removed entirely. Desktop look uses left drag, hover does not steer or interrupt Wander, and clicking a visible object selects it without changing cursor ownership. Drag capture is released on pointer-up, blur, Esc, or opening a panel. English/Korean guidance and the control checks follow that behavior.
+
+Existing regression selectors were made exact after translated canvas accessibility text introduced a second matching label; the precision-speed check now samples while Ctrl is held rather than racing its release. These were test corrections, not suppressed application errors.
 
 ## Numerical checks
 
@@ -23,9 +25,9 @@ Keyboard-opened UI panels now release pointer lock without treating that intenti
 
 The orbit model uses softened Newtonian gravity and velocity Verlet at 1/120 second. It integrates at most 144 CPU test particles; dense ambient matter retains its existing GPU simulation. The absorbing radius, escape boundary, disk appearance, and lensing are artistic choices. This is not general relativity or an N-body simulation.
 
-## Local browser checks
+## Initial local browser checks
 
-Static production export at `http://localhost:4173`, actual installed Chrome through Playwright. All interactions use real browser keyboard, pointer, wheel, or CDP touch events. Diagnostics are read-only; tests do not teleport the camera or substitute simulation state.
+The following records preceded the final free-cursor refinement. Static production export at `http://localhost:4173`, actual installed Chrome through Playwright. All interactions use real browser keyboard, pointer, wheel, or CDP touch events. Diagnostics are read-only; tests do not teleport the camera or substitute simulation state.
 
 | Suite | Passed | Coverage |
 | --- | ---: | --- |
@@ -47,4 +49,12 @@ A local timing pass used Chrome 152.0.7977.82, an NVIDIA Ampere adapter, 2560×1
 
 Browser-emulated touch and viewport testing is not a physical-phone test. Safari, Firefox, physical mobile GPUs, prolonged thermal behavior, and long-duration memory behavior need separate coverage. Planetary approach is orbital inspection, not terrain landing. No new Blender assets or UE5 edition were added. No human participant study or clinical benefit is claimed.
 
-Production deployment and the final performance record are appended after validation of the public build.
+## Production refinement
+
+The initial 2.1 runtime, `3d22d29`, built successfully on GitHub and Vercel. The public Korean guide, touch guide, Chrome/Edge controls, six continuous encounters, and device/fallback recovery passed. Five public assets returned HTTP 200 and matched committed SHA-256 hashes.
+
+During a subsequent WebGL2 encounter run, a held W had reached the input manager but automatic orbit had not yielded within the 80ms check. Cancellation previously waited for the next render-loop update. Input events now relinquish automation synchronously, retaining the same velocity damping and frame-loop safety check. A browser listener registered after the application observes FREE during the real W event, before a later render. This directly checks the corrected ownership rule instead of relaxing the timeout. The initial failed check is retained as `production-input-delay.json`.
+
+Final deployment and performance results are appended after verification of the corrected runtime.
+
+The final local free-cursor check passed 48 desktop controls, 19 onboarding checks, and 18 touch-guide checks. New acceptance checks cover unlocked canvas clicks and L, hover without camera steering, simultaneous left-drag/W input, immediate menu access after release, uninterrupted Wander on hover, synchronous drag takeover, and cancellation during an active drag. The production export compiled successfully with TypeScript; all nine numerical/language tests passed.

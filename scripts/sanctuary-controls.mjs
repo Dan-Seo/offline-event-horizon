@@ -39,7 +39,7 @@ try {
   await wait(400);
   const w = await inspect();
   check(
-    "W moves immediately before pointer lock",
+    "W moves immediately with a free cursor",
     w.position[2] < home.position[2] - 0.5,
   );
   await page.keyboard.down("d");
@@ -56,17 +56,24 @@ try {
   await page.mouse.click(720, 440);
   await wait(160);
   check(
-    "Canvas click enters real pointer lock",
+    "Canvas click leaves the cursor unlocked and visible",
     await page.evaluate(
-      () => document.pointerLockElement?.tagName === "CANVAS",
+      () => !document.pointerLockElement && getComputedStyle(document.querySelector("canvas")).cursor !== "none",
     ),
   );
+  await page.keyboard.press("l");
+  check("L cannot confine the cursor", !await page.evaluate(() => Boolean(document.pointerLockElement)));
   const rot = (await inspect()).quaternion;
+  await page.mouse.move(770, 415, { steps: 8 });
+  await wait(150);
+  check("Moving the free cursor does not rotate the camera", delta((await inspect()).quaternion, rot) < 0.001);
   await page.keyboard.down("w");
+  await page.mouse.down();
   await page.mouse.move(810, 415, { steps: 12 });
+  await page.mouse.up();
   await wait(200);
   check(
-    "Mouse look responds while W is held",
+    "Left-drag look responds while W is held",
     delta((await inspect()).quaternion, rot) > 0.01,
   );
   const dial = (await inspect()).speedDial;
@@ -87,11 +94,21 @@ try {
   await page.keyboard.up("w");
   await wait(1800);
   check("Released motion settles", (await inspect()).velocity < 0.5);
+  const settled = (await inspect()).quaternion;
+  await page.mouse.move(1020, 350, { steps: 6 });
+  await wait(150);
+  check("Releasing a drag stops mouse steering", delta((await inspect()).quaternion, settled) < 0.002);
+  await page.getByRole("button", { name: "Comfort settings", exact: true }).click();
+  await expect(page.getByLabel("Look sensitivity")).toBeVisible();
+  check("UI is clickable immediately after a drag without Esc", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await page.keyboard.press("b");
+  await wait(100);
   await page.keyboard.press("Escape");
   await wait(100);
   check(
-    "Esc releases pointer lock",
-    !(await page.evaluate(() => document.pointerLockElement)),
+    "Esc cancels automation with the cursor still free",
+    (await inspect()).mode === "FREE" && !await page.evaluate(() => Boolean(document.pointerLockElement)),
   );
   await reset();
   const planet = (await inspect()).bodies.find((b) => b.id === "giant");
@@ -123,8 +140,14 @@ try {
   await wait(100);
   await page.mouse.move(780, 440, { steps: 5 });
   await wait(120);
+  check("Free cursor movement leaves WANDER undisturbed", (await inspect()).mode === "WANDER");
+  await page.mouse.down();
+  check("A real drag interrupts WANDER in its pointer-down event", (await inspect()).mode === "FREE");
+  await page.mouse.move(840, 450, { steps: 5 });
+  await page.mouse.up();
+  await wait(120);
   check(
-    "Mouse look immediately interrupts WANDER",
+    "Drag look keeps manual control after interrupting WANDER",
     (await inspect()).mode === "FREE",
   );
   await page.keyboard.press("Escape");
@@ -151,7 +174,7 @@ try {
   await page.mouse.dblclick(dbl.x, dbl.y, { delay: 100 });
   await wait(200);
   check(
-    "Double click retains its target across pointer-lock recentering",
+    "Double click approaches the visible target with a free cursor",
     (await inspect()).mode === "TRAVEL" &&
       (await inspect()).selected === "THE SILENT GIANT",
   );
@@ -228,6 +251,18 @@ try {
   await wait(100);
   check("Window blur clears held keys", (await inspect()).keys.length === 0);
   await page.keyboard.up("w");
+  await reset();
+  await page.mouse.move(720, 400);
+  await page.mouse.down();
+  await page.keyboard.press("Escape");
+  await page.mouse.move(850, 420, { steps: 5 });
+  await page.mouse.up();
+  await wait(150);
+  check("Esc during a drag releases steering without a stuck gesture", delta((await inspect()).quaternion, home.quaternion) < 0.001);
+  await page.getByRole("button", { name: "Comfort settings", exact: true }).click();
+  await expect(page.getByLabel("Look sensitivity")).toBeVisible();
+  check("Cancelled drag releases its capture for the next UI click", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await reset();
   await hold(["w"], 1200);
   check(

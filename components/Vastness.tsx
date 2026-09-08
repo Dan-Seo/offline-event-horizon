@@ -74,7 +74,7 @@ export default function Vastness() {
     [guideActive, setGuideActive] = useState(true);
   const c = copy[language];
   const finishLesson = useCallback(() => {
-    engine.current?.input.releasePointer();
+    engine.current?.input.clear();
   }, []);
   const changeLanguage = (value: Language) => {
     setLanguage(value);
@@ -99,7 +99,7 @@ export default function Vastness() {
       ?.querySelector("canvas")
       ?.setAttribute(
         "aria-label",
-        `${c.flightControls}. ${c.clickHint}. ${c.helpLabel}: H.`,
+        `${c.flightControls}. ${c.dragHint}. ${c.helpLabel}: H.`,
       );
   }, [language, state.ready, c]);
   useEffect(() => {
@@ -160,7 +160,7 @@ export default function Vastness() {
   }, [panel, state.encounter]);
   return (
     <main
-      className={`vastness${state.quiet ? " quiet" : ""}${state.locked ? " pointer-locked" : ""}${panel || help ? " has-panel" : ""}`}
+      className={`vastness${state.quiet ? " quiet" : ""}${panel || help ? " has-panel" : ""}`}
       lang={language}
       data-ready={state.ready}
       data-backend={state.backend}
@@ -213,14 +213,12 @@ export default function Vastness() {
               </span>
             </div>
           )}
-          {state.locked && <div className="look-dot" aria-hidden="true" />}
           {help && (
             <aside className="controls-help" aria-label={c.flightControls}>
               <p>{c.guideTitle}</p>
               <div>
                 {[
-                  "CLICK",
-                  "MOUSE",
+                  "DRAG",
                   "W A S D",
                   "SCROLL",
                   "SHIFT / CTRL",
@@ -302,18 +300,14 @@ export default function Vastness() {
             </div>
           </footer>
           <div
-            className={`input-hint${(!guideActive && intro) || state.paused || state.lockFailed ? " visible" : ""}`}
+            className={`input-hint${(!guideActive && intro) || state.paused ? " visible" : ""}`}
             role="status"
           >
             {state.paused ? (
               c.paused
-            ) : state.lockFailed ? (
-              c.dragHint
-            ) : state.locked ? (
-              c.lockedHint
             ) : (
               <>
-                <span className="desktop-help">{c.clickHint}</span>
+                <span className="desktop-help">{c.dragHint}</span>
                 <span className="touch-help">{c.touchHint}</span>
               </>
             )}
@@ -495,7 +489,7 @@ export default function Vastness() {
             onActive={setGuideActive}
             onLessonComplete={finishLesson}
             onWander={() => {
-              engine.current?.input.releasePointer();
+              engine.current?.input.clear();
               action("wander");
             }}
             onExplore={() => action("places")}

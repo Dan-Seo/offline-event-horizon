@@ -188,7 +188,7 @@ export function ArrivalGuide({
             </div>
           ) : (
             <div className="guide-bottom">
-              <small>{touch ? c.takeOver : c.unlockedHint}</small>
+              <small>{touch ? c.takeOver : c.guideHint}</small>
               <button onClick={() => finish()}>{c.skip}</button>
             </div>
           )}

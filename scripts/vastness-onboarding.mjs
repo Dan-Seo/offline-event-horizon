@@ -21,13 +21,17 @@ try {
   await page.getByRole("button", { name: "한국어", exact: true }).click();
   await page.getByRole("button", { name: /움직이는 법 알아보기/ }).click();
   await page.locator('[data-step="look"]').waitFor();
+  await expect(page.locator(".arrival-guide")).toHaveCSS("opacity", "1");
+  await page.screenshot({ path: "artifacts/onboarding-korean-drag.png" });
   check("Instruction does not cover the central canvas", await page.evaluate(() => document.elementFromPoint(800, 400)?.tagName === "CANVAS"));
   await page.mouse.click(850, 390);
   await page.waitForTimeout(150);
-  check("Guide click acquires actual pointer lock", await page.evaluate(() => document.pointerLockElement?.tagName === "CANVAS"));
+  check("Guide click keeps the cursor free", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  await page.mouse.down();
   await page.mouse.move(950, 410, { steps: 8 });
+  await page.mouse.up();
   await page.locator('[data-step="move"]').waitFor();
-  check("Actual mouse look advances the guide", (await read()).learning.look > 0.075);
+  check("Actual left-drag look advances the guide", (await read()).learning.look > 0.075);
   const before = (await read()).position;
   await page.keyboard.down("w"); await page.waitForTimeout(1200); await page.keyboard.up("w");
   await page.locator('[data-step="speed"]').waitFor();
@@ -36,7 +40,7 @@ try {
   await page.locator('[data-step="done"]').waitFor();
   check("Wheel speed change completes the guide", (await read()).speedDial > 1.1);
   await expect.poll(() => page.evaluate(() => Boolean(document.pointerLockElement))).toBe(false);
-  check("Completed guide returns the cursor for its visible choices", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  check("Completed guide keeps its choices directly clickable", !await page.evaluate(() => Boolean(document.pointerLockElement)));
   await page.getByRole("button", { name: "어디로 갈까", exact: false }).click();
   await page.getByRole("button", { name: "다른 행성과 먼 우주", exact: true }).click();
   check("All five distinct distant planets are accessible", await page.locator('[data-destination="giant"], [data-destination="moon"], [data-destination="ember"], [data-destination="serein"], [data-destination="nacre"]').count() === 5);
@@ -57,7 +61,7 @@ try {
   await page.keyboard.up("w"); await page.keyboard.press("r");
   await page.mouse.click(900, 400); await page.waitForTimeout(120); await page.keyboard.press("m");
   await page.getByRole("button", { name: "패널 닫기" }).waitFor();
-  check("M releases pointer lock and opens an operable menu", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  check("M opens an operable menu with the cursor still free", !await page.evaluate(() => Boolean(document.pointerLockElement)));
   await page.getByRole("button", { name: "패널 닫기" }).click();
   await page.getByRole("button", { name: "편안하게 설정", exact: true }).click();
   await page.getByRole("button", { name: "English", exact: true }).click();
@@ -65,6 +69,7 @@ try {
   await page.getByRole("button", { name: "Close panel" }).click();
   await page.keyboard.press("h");
   check("English help remains accessible", await page.getByRole("complementary", { name: "Flight controls" }).isVisible());
+  await expect(page.locator(".controls-help")).toHaveCSS("opacity", "1");
   await page.screenshot({ path: "artifacts/onboarding-english-help.png" });
   check("No horizontal overflow", await page.evaluate(() => document.documentElement.scrollWidth === innerWidth));
   check("No runtime or shader errors", errors.length === 0);

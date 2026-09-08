@@ -51,15 +51,14 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 | Input                | Action                                                           |
 | -------------------- | ---------------------------------------------------------------- |
 | W / A / S / D        | Forward / left / backward / right                                |
-| Click canvas / mouse | Enter pointer lock / look with damped angular motion             |
+| Left drag            | Look with damped angular motion; the cursor stays free           |
 | Wheel                | Smoothly change the travel-speed multiplier                      |
 | Shift / Ctrl         | Boost / precision                                                |
 | Q / E                | Roll                                                             |
 | Space / X            | Rise / descend                                                   |
 | Click / right drag   | Select a visible celestial body / orbit the selection            |
 | Double click / F     | Approach the selected body                                       |
-| R / Esc              | Return to the water / cancel automation and release pointer lock |
-| L                    | Optional pointer lock                                            |
+| R / Esc              | Return to the water / cancel automation                           |
 | P / H                | Pause simulation / controls help                                 |
 | M / O / T            | Explore / slow planetary orbit / nearby black-hole experiment    |
 | B / K                | Wander / quiet                                                   |
@@ -67,7 +66,7 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 | N                    | Plant a star                                                     |
 | Backquote            | Technical observatory                                            |
 
-Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. If pointer lock is unavailable, drag to look.
+Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. The application never requests pointer lock. Hovering the free cursor leaves Wander undisturbed; an intentional drag or movement key takes control immediately.
 
 Wander is optional and stays with a place instead of cycling through a destination list. Manual flight or look input immediately cancels automation. Reduced-motion preferences enable gentler camera response and remove CSS animation. Simulation can be paused independently of navigation. Quiet hides the interface and softens motion; Esc or the small restore control brings it back.
 
@@ -84,7 +83,7 @@ Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio.
 - `stars.ts` combines a distant clustered stellar population with sector stars and local matter for parallax.
 - `anomaly.ts` builds the accretion disk and lensed arcs; `engine.ts` adds bounded screen-space distortion and restrained bloom.
 - `orbit-model.ts` integrates up to 144 interactive test particles on CPU with fixed 1/120-second velocity-Verlet steps and softened inverse-square gravity. `orbit-experiment.ts` renders their measured position histories. Dense ambient matter remains on GPU; the small experiment uses the same force model on both render backends.
-- `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels safely releases pointer lock without an unintended cancellation.
+- `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels clears held input. Drag capture lasts only for the gesture and is also released on blur or cancellation; the cursor remains visible and unrestricted.
 - `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
 - `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
 - `sanctuaries.ts` coordinates local presence, stillness, and unannounced environmental events. It never changes scenes or takes camera control.

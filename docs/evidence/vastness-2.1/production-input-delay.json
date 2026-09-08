@@ -1,0 +1,37 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "name": "serein starts continuous flight",
+      "passed": true
+    },
+    {
+      "name": "serein is rendered without errors",
+      "passed": true
+    },
+    {
+      "name": "Planet orbit actually moves and turns the observer",
+      "passed": true
+    },
+    {
+      "name": "Manual input interrupts planet orbit within 80 ms",
+      "passed": false
+    }
+  ],
+  "samples": [
+    {
+      "id": "serein",
+      "travelMs": 17171,
+      "fps": 133,
+      "frameMs": 7.523333333333327,
+      "backend": "WebGL2",
+      "position": [
+        -159942.34175432075,
+        -34471.448392937775,
+        -246334.32444339205
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -11,6 +11,7 @@ export type InputAction =
   | "places"
   | "experiment"
   | "orbit"
+  | "manual"
   | "cancel";
 type Touch = {
   x: number;
@@ -58,19 +59,15 @@ export class InputManager {
   buttons = new Set<number>();
   wheel = 0;
   manual = false;
-  locked = false;
-  lockFailed = false;
   selected = false;
   active = false;
   learning = { look: 0, move: 0, speed: 0 };
-  private releaseForUI = false;
   private touches = new Map<number, Touch>();
+  private captures = new Set<number>();
   private lastPinch = 0;
   private down = { x: 0, y: 0, moved: 0 };
-  private inside = false;
+  private mouseLast = new Vector2();
   private lastTap = 0;
-  private mousePickAt = -1000;
-  private mousePick = new Vector2();
   private controller = new AbortController();
   constructor(
     public canvas: HTMLCanvasElement,
@@ -82,46 +79,17 @@ export class InputManager {
     window.addEventListener("keyup", this.keyUp, o);
     window.addEventListener("blur", this.clear, o);
     document.addEventListener("visibilitychange", this.clear, o);
-    document.addEventListener(
-      "pointerlockchange",
-      () => {
-        this.locked = document.pointerLockElement === canvas;
-        this.look.set(0, 0);
-        this.orbit.set(0, 0);
-        this.buttons.clear();
-        this.inside = this.locked;
-        if (this.locked) this.lockFailed = false;
-        else if (this.releaseForUI) this.releaseForUI = false;
-        else this.action("cancel");
-      },
-      o,
-    );
-    document.addEventListener(
-      "pointerlockerror",
-      () => {
-        this.lockFailed = true;
-      },
-      o,
-    );
     canvas.addEventListener("pointerdown", this.pointerDown, o);
     canvas.addEventListener("pointermove", this.pointerMove, o);
     canvas.addEventListener("pointerup", this.pointerUp, o);
     canvas.addEventListener("pointercancel", this.pointerCancel, o);
     canvas.addEventListener("lostpointercapture", this.pointerCancel, o);
     canvas.addEventListener(
-      "pointerleave",
-      () => {
-        this.inside = false;
-      },
-      o,
-    );
-    canvas.addEventListener(
       "dblclick",
       (e) => {
         this.manual = false;
-        // Pointer lock can recenter the second click. Retain the first ray of
-        // the double-click gesture so its visible target does not change.
-        this.pick(this.mousePick, true);
+        this.updatePointer(e);
+        this.pick(this.pointer, true);
       },
       o,
     );
@@ -131,7 +99,7 @@ export class InputManager {
       (e) => {
         e.preventDefault();
         this.wheel += -e.deltaY * 0.002;
-        this.manual = true;
+        this.takeControl();
       },
       { ...o, passive: false },
     );
@@ -143,11 +111,15 @@ export class InputManager {
       !!target.closest("input, select, textarea, [contenteditable=true]")
     );
   }
+  private takeControl() {
+    this.manual = true;
+    // Automation yields in the input event, even when rendering is delayed.
+    this.action("manual");
+  }
   private keyDown = (e: KeyboardEvent) => {
     if (this.editable(e.target)) return;
     if (e.code === "Escape") {
       this.clear();
-      if (document.pointerLockElement) void document.exitPointerLock();
       this.action("cancel");
       return;
     }
@@ -160,32 +132,17 @@ export class InputManager {
     if (movementKeys.has(e.code) || ["KeyG", "KeyV"].includes(e.code)) {
       e.preventDefault();
       this.keys.add(e.code);
-      if (movementKeys.has(e.code)) this.manual = true;
+      if (movementKeys.has(e.code)) this.takeControl();
     }
     if (!e.repeat && actions[e.code]) {
       e.preventDefault();
       this.action(actions[e.code]);
     }
-    if (e.code === "KeyL" && !e.repeat) this.lock();
   };
-  private lock() {
-    if (this.locked || !this.canvas.requestPointerLock) return;
-    try {
-      void this.canvas.requestPointerLock()?.catch(() => {
-        this.lockFailed = true;
-      });
-    } catch {
-      this.lockFailed = true;
-    }
-  }
   private keyUp = (e: KeyboardEvent) => {
     this.keys.delete(e.code);
   };
   private updatePointer(e: PointerEvent | MouseEvent) {
-    if (this.locked) {
-      this.pointer.set(0, 0);
-      return;
-    }
     const r = this.canvas.getBoundingClientRect();
     this.pointer.set(
       ((e.clientX - r.left) / r.width) * 2 - 1,
@@ -196,9 +153,12 @@ export class InputManager {
     this.canvas.focus({ preventScroll: true });
     this.updatePointer(e);
     this.buttons.add(e.button);
-    this.manual = true;
+    this.takeControl();
     this.down = { x: e.clientX, y: e.clientY, moved: 0 };
-    if (!this.locked) this.canvas.setPointerCapture(e.pointerId);
+    this.mouseLast.set(e.clientX, e.clientY);
+    // Capture only the active drag: the cursor stays visible and unrestricted.
+    this.canvas.setPointerCapture(e.pointerId);
+    this.captures.add(e.pointerId);
     if (e.pointerType === "touch") {
       this.touches.set(e.pointerId, {
         x: e.clientX,
@@ -228,7 +188,7 @@ export class InputManager {
           Math.max(-1, Math.min(1, (t.y - e.clientY) / 65)),
         );
       else this.look.add(new Vector2(dx, dy).multiplyScalar(1.2));
-      if (t.travelled > 5) this.manual = true;
+      if (t.travelled > 5) this.takeControl();
       if (this.touches.size === 2) {
         const [a, b] = [...this.touches.values()];
         const d = Math.hypot(a.lastX - b.lastX, a.lastY - b.lastY);
@@ -237,22 +197,20 @@ export class InputManager {
       }
       return;
     }
-    if (!this.locked && !this.buttons.size) return;
-    if (!this.inside && !this.locked) {
-      this.inside = true;
-      return;
-    }
-    const dx = e.movementX,
-      dy = e.movementY;
+    if (!this.buttons.size) return;
+    const dx = e.clientX - this.mouseLast.x,
+      dy = e.clientY - this.mouseLast.y;
+    this.mouseLast.set(e.clientX, e.clientY);
     if (this.buttons.has(0)) this.down.moved += Math.abs(dx) + Math.abs(dy);
     if (Math.abs(dx) + Math.abs(dy) > 0) {
       if (this.selected && this.buttons.has(2))
         this.orbit.add(new Vector2(dx, dy));
       else this.look.add(new Vector2(dx, dy));
-      this.manual = true;
+      this.takeControl();
     }
   };
   private pointerUp = (e: PointerEvent) => {
+    if (!this.captures.has(e.pointerId)) return;
     this.updatePointer(e);
     if (e.pointerType === "touch") {
       const t = this.touches.get(e.pointerId);
@@ -266,21 +224,18 @@ export class InputManager {
       this.touches.delete(e.pointerId);
       this.lastPinch = 0;
     } else if (e.button === 0 && this.down.moved < 6) {
-      if (performance.now() - this.mousePickAt > 350)
-        this.mousePick.copy(this.pointer);
-      this.mousePickAt = performance.now();
-      this.pick(this.mousePick, false);
+      this.pick(this.pointer, false);
     }
     this.buttons.delete(e.button);
     if (this.canvas.hasPointerCapture(e.pointerId))
       this.canvas.releasePointerCapture(e.pointerId);
-    if (e.pointerType === "mouse" && e.button === 0 && this.down.moved < 6)
-      this.lock();
+    this.captures.delete(e.pointerId);
   };
   private pointerCancel = (e: PointerEvent) => {
     const t = this.touches.get(e.pointerId);
     if (t?.move) this.touchMove.set(0, 0);
     this.touches.delete(e.pointerId);
+    this.captures.delete(e.pointerId);
     this.buttons.clear();
     this.lastPinch = 0;
   };
@@ -293,15 +248,11 @@ export class InputManager {
     this.orbit.set(0, 0);
     this.wheel = 0;
     this.manual = false;
-    this.inside = false;
-  };
-  releasePointer() {
-    this.clear();
-    if (document.pointerLockElement === this.canvas) {
-      this.releaseForUI = true;
-      void document.exitPointerLock();
+    for (const id of this.captures) {
+      if (this.canvas.hasPointerCapture(id)) this.canvas.releasePointerCapture(id);
     }
-  }
+    this.captures.clear();
+  };
   consume() {
     this.look.set(0, 0);
     this.orbit.set(0, 0);
@@ -311,6 +262,5 @@ export class InputManager {
   dispose() {
     this.clear();
     this.controller.abort();
-    if (this.locked) void document.exitPointerLock();
   }
 }

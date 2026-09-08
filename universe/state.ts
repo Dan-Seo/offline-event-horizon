@@ -1,8 +1,6 @@
 import type { Quality } from "./config";
 export type UniverseSnapshot = {
   ready: boolean;
-  locked: boolean;
-  lockFailed: boolean;
   sanctuary: string;
   backend: string;
   paused: boolean;
@@ -41,8 +39,6 @@ export type UniverseSnapshot = {
 };
 export const initialSnapshot: UniverseSnapshot = {
   ready: false,
-  locked: false,
-  lockFailed: false,
   sanctuary: "last-light",
   backend: "Initializing",
   paused: false,

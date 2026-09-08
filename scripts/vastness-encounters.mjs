@@ -39,7 +39,15 @@ try {
       await page.waitForTimeout(2200);
       const after = await read();
       check("Planet orbit actually moves and turns the observer", after.mode === "ORBIT" && Math.hypot(...after.position.map((p, i) => p - before.position[i])) > 50 && Math.abs(after.quaternion[1] - before.quaternion[1]) > 0.001);
-      await page.keyboard.down("w"); await page.waitForTimeout(80);
+      await page.evaluate(() => {
+        window.__manualModeAtInput = null;
+        window.addEventListener("keydown", () => {
+          window.__manualModeAtInput = window.__vastness.inspect().mode;
+        }, { once: true });
+      });
+      await page.keyboard.down("w");
+      check("Orbit yields within the actual key event, before another render", await page.evaluate(() => window.__manualModeAtInput === "FREE"));
+      await page.waitForTimeout(80);
       check("Manual input interrupts planet orbit within 80 ms", (await read()).mode === "FREE");
       await page.keyboard.up("w");
     }
@@ -82,7 +90,7 @@ try {
   await page.getByRole("button", { name: "패널 닫기" }).click();
   await page.mouse.click(800, 400); await page.waitForTimeout(120); await page.keyboard.press("t");
   await page.getByRole("region", { name: "블랙홀 중력 실험" }).waitFor();
-  check("T opens the experiment and releases pointer lock", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  check("T opens the experiment with a free cursor", !await page.evaluate(() => Boolean(document.pointerLockElement)));
   check("No runtime or shader errors", errors.length === 0);
 } catch (error) {
   console.log("FAILED STATE", JSON.stringify(await read()));
