@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "OFFLINE // EVENT HORIZON",
-  description: "A five-minute escape. Let the day become a universe.",
+  title: "OFFLINE // VASTNESS",
+  description:
+    "Go anywhere. A quiet, freely explorable universe for a little distance from everything.",
   icons: { icon: "/icon.svg" },
 };
 export const viewport: Viewport = {

@@ -1,0 +1,27 @@
+{
+  "authoring": "Original procedural Blender geometry; normalized radius 1; glTF y-up",
+  "lods": [
+    {
+      "lod": "high",
+      "bytes": 863452,
+      "primitives": 4,
+      "materials": 4,
+      "vertices": 20974,
+      "triangles": 31308,
+      "normals": true,
+      "uvs": true,
+      "textures": 0
+    },
+    {
+      "lod": "low",
+      "bytes": 288196,
+      "primitives": 4,
+      "materials": 4,
+      "vertices": 7345,
+      "triangles": 8125,
+      "normals": true,
+      "uvs": true,
+      "textures": 0
+    }
+  ]
+}

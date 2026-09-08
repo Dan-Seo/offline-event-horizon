@@ -1,54 +1,46 @@
-# Verification record
+# VASTNESS verification record
 
-Date: 2026-09-08. Windows workstation, NVIDIA Ampere adapter. Actual installed Chrome in headless mode through Playwright; no unsafe WebGPU flags. This is browser rendering evidence, not a claim of physical mobile-device testing.
+2026-09-08. Windows workstation, NVIDIA Ampere adapter. Installed Chrome through Playwright in headless mode, with the real GPU renderer and no unsafe WebGPU flags. Viewport emulation is not physical mobile-device testing.
 
-## Build and assets
+## Build and asset checks
 
-- Production Next.js static build passed; strict TypeScript passed.
-- Three timeline/continuity/allocation tests passed.
-- `npm audit`: 0 reported vulnerabilities in the application dependency tree.
-- Original Blender CLI export: 196,552 bytes, 25 objects, 6,276 triangles. Source `.blend` and rebuild script included.
-- Files and self-hosted fonts resolved during the full local journey. No runtime external media dependency.
+- Next.js static production build and strict TypeScript passed.
+- Three tests passed: continuous monotonic angular-size distance mapping, local precision at large coordinates, and repeatable/distinct seeded sector generation.
+- Dependency audit reported zero vulnerabilities.
+- Blender 5.2.1 exported the original Cathedral hero and its lower-detail variant. Normals and UVs are present; four primitives/materials in each GLB. High: 31,308 triangles / 863,452 bytes. Low: 8,125 triangles / 288,196 bytes.
 
-## Functional and visual coverage
+## Controls and viewports
 
-Local static production preview was rendered at 1440×900, 1280×800, and 390×844. Captures covered office, distortion, collapse, miniature city, receding planet/moon, galaxy, creation, terrain approach, life, and ending. WebGPU and forced WebGL2 both initialized without fatal errors or horizontal overflow. The full normal-speed eight-chapter local journey reached 300 seconds, with no console exceptions or failed requests.
+The local production preview passed 30 desktop control checks. They exercise W, A, S, D, simultaneous W+D, mouse look during flight, wheel speed, Shift boost, settling, Q/E roll, Space, Ctrl precision, actual planet clicking, F approach, manual override, left-drag orbit, double-click travel, H help, P pause/resume, R recovery, Drift interruption, pointer lock/Escape, blur clearing, resize, canvas hit-testing, and horizontal overflow.
 
-Actual screenshots were inspected, and the following issues were corrected: excessive singularity brightness, edge-on galaxy framing, washed-out life lighting, repetitive tree silhouettes, water striping, a separate terrain slab behind the planet, and chapter text remaining over the final message. The planet's near hemisphere now unfolds into terrain, and the final message appears once.
+Another 32 checks covered laptop 1366×768, tablet 1024×768 at DPR 2, mobile 390×844 at DPR 2, and 844×390 landscape. Touch input is delivered with actual browser touch events: simultaneous movement/look, pinch speed, release damping, tap selection, and rotation. The mobile context requests reduced motion. The suite also checks gravity input, visible star creation, persistence after reload, Quiet, sound opt-in/mute, automatic WebGL2 fallback, CPU matter forces, and context-loss recovery.
 
-Control and fault-injection checks passed:
+No unexpected console errors occurred in those runs. The deliberately injected WebGL device-loss error is recorded separately. Sound controls were exercised; this is not a subjective listening evaluation.
 
-- Raycast dragging removed an actual notification; button and R released two more.
-- Space paused and resumed the clock. A paused clock stayed constant.
-- Quality changes, reduced motion, all technical benchmark modes, and restoration of the saved journey worked.
-- Both the Creation button and canvas input seeded the particle field.
-- Sound opt-in and mute state worked. This is a functional audio-control test, not a subjective listening evaluation.
-- Synthetic WebGL context loss produced recovery UI; the motionless ending remained reachable.
-- Touch emulation at 390×844 / DPR 2 and 844×390 passed input, settings, reduced-motion preference, orientation, and overflow checks.
-- A deliberately failed office GLB retained the procedural workspace and usable journey.
-- With the browser WebGPU interface unavailable, Three automatically selected WebGL2.
+Fifteen additional resilience checks passed: all four quality tiers and technical stress scenarios remain live, leaving stress restores the original budget, failed hero downloads retain navigation, and deliberately slowed frame scheduling triggers an automatic High-to-Balanced downgrade without breaking movement. Deliberate resource failures are recorded separately from unexpected console errors.
 
-## Warm rendering measurements
+## Visual inspection and corrections
 
-Dedicated Chrome process, 2560×1440 viewport, DPR 1, 6-second warm-up, then 12 seconds per scenario. No simultaneous browser QA during the measured intervals.
+Actual browser captures cover the opening orbit, ringed giant, black hole, Cathedral approach, nebula interior, newly created star, mobile portrait/landscape, and WebGL2.
 
-| Scenario       |          Particles | Observed cadence | Median / p95 / p99 | Largest sampled interval |
-| -------------- | -----------------: | ---------------- | ------------------ | ------------------------ |
-| Collapse, High |             90,000 | 143–144 fps      | 6.9 / 7.0 / 7.1 ms | 7.1 ms                   |
-| Galaxy, High   |             90,000 | 144 fps          | 6.9 / 7.0 / 7.1 ms | 7.2 ms                   |
-| Galaxy, Ultra  |            180,000 | 144 fps          | 6.9 / 7.0 / 7.1 ms | 7.1 ms                   |
-| Life, High     | 0 cosmic particles | 144 fps          | 6.9 / 7.0 / 7.1 ms | 7.1 ms                   |
+Inspection led to changes in landmark scale and placement, planet orientation, focus stopping distance, atmospheric brightness, material normal derivatives, black-hole distortion boundaries, mobile selection-label bounds, shader prewarming, and created-star visibility. A real touch-input defect dropped brief look gestures under reduced motion; accumulated angular input now preserves them. The nebula texture now tiles at each noise octave's own period, eliminating planar repetition seams visible from inside the volume.
 
-The HUD recorded 17 draw calls / 362,175 triangles for the Ultra galaxy and 27 draw calls / 348,127 triangles for High life. These are browser animation-frame intervals and renderer counters, not GPU timestamp queries. Display cadence limits the measured result. They do not establish equivalent performance on weaker hardware.
+## Local performance sample
 
-The first full journey also captured screenshots while another browser QA process ran. It recorded a 1.35-second maximum interval, so that run is useful for reachability but cannot establish hitch-free cold transitions. Warm-scenario numbers above deliberately exclude initialization and shader compilation. Production traversal evidence is recorded separately after deployment.
+Dedicated Chrome process, 2560×1440, DPR 1, High quality, 80,000 GPU matter particles. First interaction readiness: 2,664 ms in the measured local run.
+
+- Normal landmark travel: approximately 144 FPS, p95 about 7.1 ms.
+- Fast procedural flight across 1.258 billion coordinate units: p95 7.1 ms, p99 13.9 ms, maximum 27.9 ms; 27 sectors remained resident.
+- No sampled interval exceeded 50 ms during that run.
+
+These are animation-frame cadence measurements, capped by the workstation's display cadence. They are not GPU timestamp queries or evidence of equivalent performance on weaker hardware. That local sample preceded the final nebula seam correction and visible-star correction; the deployed build requires its own final sample.
+
+## Production record
+
+Pending the VASTNESS deployment and tests against its actual public URL. The existing Event Horizon deployment is not evidence for this edition.
 
 ## Coverage limits
 
-- Physical phones/tablets, Safari, Firefox, battery drain, thermal throttling, and long-duration GPU memory behavior have not been validated.
-- The inspected forest is stylized procedural geometry. Water reflection, atmosphere, lensing, planet formation, and growth are artistic approximations.
-- Reduced motion preserves the slow guided camera/scale transformation; it does not remove all visual change. Pause and the quiet fallback are available.
-- Ordinary Chrome did not expose `document.modelContext`; the optional WebMCP registry has not been exercised live.
-- No UE5 runtime or cross-engine benchmark was completed.
+Physical phones/tablets, Safari, Firefox, battery drain, thermal throttling, and multi-hour GPU memory behavior have not been tested. Reduced motion preserves damped free flight and live simulation; P pauses the latter. Close orbital inspection is supported, but full ground landing and an ecological surface are not implemented. Lensing, atmosphere, stellar growth, and companion orbits are cinematic approximations. No UE5 edition or cross-engine benchmark was built.
 
-Scripts in `scripts/` reproduce the browser checks. Raw local warm-performance and interaction reports are in `docs/evidence/`.
+Reproduction scripts are in `scripts/`; final production reports will be retained in `docs/evidence/`.

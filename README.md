@@ -1,21 +1,21 @@
-# OFFLINE // EVENT HORIZON
+# OFFLINE // VASTNESS
 
-A five-minute interactive exhale for exhausted developers. A late-night desk unravels into a singularity, its pixels become a galaxy, and that matter becomes a quiet living world.
+A quiet, freely explorable universe. Start above Orpheus IV, follow a distant ring, enter a nebula, or stop moving entirely.
 
-**WORK → DISTORTION → COLLAPSE → ESCAPE → COSMOS → CREATION → LIFE → SILENCE**
+No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. Created stars are saved on this device.
 
-No score, puzzle, account, analytics, or external media requests. Sound starts muted. The ending stays open.
+[Public edition](https://offline-event-horizon.vercel.app) · [Source](https://github.com/Dan-Seo/offline-event-horizon)
 
 ## Run
 
-Node 24 and npm are recommended. No environment variables or service credentials are needed to run the artwork.
+Node 24. No environment variables or service credentials are needed to run the artwork.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Development: `http://localhost:3000`. For the actual static production build:
+Development runs at `http://localhost:3000`. To inspect the static production build:
 
 ```sh
 npm run typecheck
@@ -24,81 +24,97 @@ npm run build
 npm start
 ```
 
-Production preview: `http://localhost:4173`. Deploy `out/` using the included Vercel configuration. The renderer must run on HTTPS or localhost for WebGPU.
+The production preview runs at `http://localhost:4173`. Vercel builds this Next.js static export directly; leave its output-directory override unset.
 
-## Experience
+## Fly
 
-Move gently to influence the view and dust. Drag a floating notification away, or use **Release a thought**. In Creation, touch the dust or choose **Plant a possibility**. Everything also progresses without interaction.
+| Input             | Action                                                                    |
+| ----------------- | ------------------------------------------------------------------------- |
+| W / A / S / D     | Forward / left / backward / right                                         |
+| Mouse movement    | Look, with damped angular motion                                          |
+| Wheel             | Smoothly change the travel-speed multiplier                               |
+| Shift / Ctrl      | Boost / precision                                                         |
+| Q / E             | Roll                                                                      |
+| Space / X         | Rise / descend                                                            |
+| Click / left drag | Select a body / orbit the selection                                       |
+| Double click / F  | Approach the selected body                                                |
+| R / Esc           | Recover to the opening orbit / cancel automation and release pointer lock |
+| L                 | Optional pointer lock                                                     |
+| P / H             | Pause simulation / controls help                                          |
+| B / K             | Drift / quiet                                                             |
+| G / V             | Hold to attract / repel matter                                            |
+| N                 | Plant a star                                                              |
+| Backquote         | Technical observatory                                                     |
 
-| Control                    | Action                                |
-| -------------------------- | ------------------------------------- |
-| Space                      | Pause / continue the guided journey   |
-| Right arrow                | Drift to the next chapter             |
-| R                          | Release a thought / plant a seed      |
-| F                          | Hidden technical observatory          |
-| Settings                   | Quality, gentler motion, journey pace |
-| Eight small progress marks | Revisit a chapter                     |
+Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. The visible Places, Create, Drift, Quiet, sound, and settings controls also support keyboard focus. All decorative overlays pass pointer events through to the canvas.
 
-For deterministic inspection, `?t=165&quality=HIGH` pauses in the galaxy; `&play=1` resumes. `?backend=webgl` forces the fallback. The observatory includes 180k-particle storm, three attractors, galaxy, ecosystem, and repeated transformation scenarios. Returning to Journey restores the previous position and quality.
+Drift is optional. Manual flight or look input immediately cancels automation. Reduced-motion preferences enable gentler camera response and remove CSS animation. Simulation can be paused independently of navigation. Quiet hides the interface and softens motion; Esc or the small restore control brings it back.
 
-## Rendering
+## Rendering and scale
 
-Next.js 16, TypeScript, React 19, and Three.js r183. React owns the small accessible interface; raw Three.js owns the render loop, scene, camera, and simulation. React Three Fiber is intentionally omitted to keep direct control over compute dispatch, resources, and postprocessing.
+Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio. React owns the small interface; the renderer, input state, camera, and simulation run outside React's render loop. Raw Three.js gives direct control over GPU buffers, compilation, render passes, and streaming without another scene reconciler.
 
-- `engine.ts`: lifecycle, renderer selection, timing, pointer raycasts, quality adaptation, camera, recovery.
-- `office.ts`: original Blender workspace, procedural screens, rain, floating keycaps, notifications, physical fragmentation.
-- `cosmos.ts`: TSL particle morphology, WebGPU storage-buffer simulation, singularity, galaxy, atmosphere, and growing planet.
-- `debris.ts`: samples notification glyphs into transient shader-animated fragments.
-- `journey.ts`: continuously choreographed camera and miniature city / planet / moon / orbital layers.
-- `life.ts`: spherical-cap-to-terrain vertex morph, procedural water, instanced plants, wind, fireflies, sky, aurora.
-- `audio.ts`: opt-in Web Audio noise and harmonic ambience. No recorded music or commercial samples.
+- `universe/input.ts` centralizes keys, pointer capture/lock, touch, wheel, blur, and cancellation.
+- `flight.ts` handles damped velocity and angular input, distance-aware speed, focus, orbit, collision clearance, and optional drift.
+- `coordinates.ts` retains double-precision global positions on CPU, subtracts the observer, then compresses the far field logarithmically while preserving angular size.
+- `world.ts` maintains 27 neighboring seeded sectors. New sectors arrive as the observer travels; distant sector resources are released. Landmark bodies coexist in the same spatial system.
+- `planets.ts` shares procedural terrain, ocean, cloud, atmosphere, aurora, night-light, and ring materials across mesh LODs.
+- `nebula.ts` raymarches spatial volumes through a seamless procedural 96³ density texture, with extinction and locally varying color. The camera can enter the volume.
+- `stars.ts` combines a distant clustered stellar population with sector stars and local matter for parallax.
+- `anomaly.ts` builds the accretion disk and lensed arcs; `engine.ts` adds bounded screen-space distortion and restrained bloom.
+- `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
+- `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
 
-The same scene stays alive throughout the journey. Monitor and desk particle origins morph through orbital matter into the galaxy. Office geometry separates and shrinks as the camera recedes. Nested visual scales avoid astronomical floating-point coordinates. The planet's near surface unfolds into a local landscape; light, fog, water, vegetation, and the camera continue the transformation.
-
-TSL implements procedural materials, gravitational screen warp, restrained bloom, glyph breakup, atmosphere shells, terrain morphing, water ripples, vegetation wind, and aurora curtains. These compile for both WebGPU and WebGL2. See the [Three.js WebGPU guide](https://threejs.org/manual/en/webgpurenderer) and [TSL reference](https://threejs.org/docs/TSL.html).
-
-## Simulation and scientific honesty
-
-WebGPU integrates particle positions and velocities in persistent GPU storage buffers. Forces combine softened attractors, a spring toward the authored galaxy distribution, tangential drift, drag, and bounded reset. Pointer movement, seeds, and the three-field benchmark affect that integration. There is no per-frame particle readback. The HUD's compute number measures **CPU submission time**, not GPU execution time.
-
-This is a physics-inspired artwork. The black hole uses screen-space lensing and an emissive disk; it does not trace general-relativistic light paths. Particle destinations, object collapse, cosmic scales, planet formation, and ecological growth are authored procedural transformations. This is not an N-body astrophysics, fluid, or biological simulation. A seed changes the dust field; it does not determine a scientifically emergent planet. Water and atmospheric reflections are shader approximations. The local terrain is not a geographically exact patch of the globe.
+High-frequency procedural detail is evaluated on the GPU. Planets have three geometry LODs; the Cathedral has two authored LODs. Material and light topology is shared to reduce shader compilation during streaming. The actual opening is shown as a static poster while the first shader set warms. The hero model loads progressively after flight becomes available.
 
 ## Blender
 
-`assets/source/office.blend` is the original source. `scripts/build_assets.py` rebuilds the beveled walnut desk, monitor housings and stands, laptop, keyboard base, mouse, mat, hollow mug, brass lamp, and source rock through Blender's Python API.
+Original hero geometry is authored by `scripts/build_vastness_assets.py`; editable source is `assets/source/cathedral.blend`.
 
 ```sh
-blender --background --python scripts/build_assets.py
+blender --background --python scripts/build_vastness_assets.py
 ```
 
-Export: **25 objects, 3,232 vertices, 6,276 triangles, 8 materials, 196,552-byte GLB**. Applied bevels and weighted normals, meter units, glTF Y-up. No image textures or animation clips in the GLB. Runtime textures provide wood grain, screens, rain/city detail, and typography. Blender CLI was available; Blender MCP was not.
+The Cathedral is a broken orbital gate assembled from arcs, ribs, buttresses, suspended observatory geometry, fins, and faint circuit detail. Blender 5.2.1 CLI was available; Blender MCP was not. The export is normalized, uses glTF Y-up, and has normals and UVs on every primitive. Four materials, four primitives, no image textures.
 
-Reusable geometry stays in Blender; thousands of changing stars, blades, branches, and terrain vertices are generated at runtime. The small export does not need Draco or a large decoder download. Self-hosted DM Sans and Manrope fonts include OFL licenses in `public/fonts`.
+| LOD  | Vertices | Triangles | GLB bytes |
+| ---- | -------: | --------: | --------: |
+| High |   20,974 |    31,308 |   863,452 |
+| Low  |    7,345 |     8,125 |   288,196 |
+
+See `public/assets/cathedral-report.json`. Reusable hero geometry belongs in Blender; stars, volumes, planets, asteroids, and changing matter are generated at runtime. DM Sans and Manrope are self-hosted with their OFL licenses.
 
 ## Quality and fallback
 
-| Tier     | Cosmic particles | DPR cap |  Grass | Trees | Bloom |
-| -------- | ---------------: | ------: | -----: | ----: | ----- |
-| ULTRA    |          180,000 |    1.75 | 14,000 |   145 | Yes   |
-| HIGH     |           90,000 |    1.50 |  8,000 |   145 | Yes   |
-| BALANCED |           42,000 |    1.25 |  4,500 |   110 | Yes   |
-| BATTERY  |           14,000 |    0.85 |  1,600 |    65 | No    |
+| Tier     | GPU matter particles | Asteroids | Volume steps | DPR cap |
+| -------- | -------------------: | --------: | -----------: | ------: |
+| ULTRA    |              160,000 |     7,000 |           72 |    1.75 |
+| HIGH     |               80,000 |     4,000 |           52 |    1.50 |
+| BALANCED |               36,000 |     1,800 |           32 |    1.15 |
+| BATTERY  |               12,000 |       650 |           18 |    0.85 |
 
-Narrow viewports start in Battery. Sustained slow frames lower the quality tier; benchmarks disable automatic downgrades. The first usable office frame precedes initialization of later scene systems. The 192 KiB office GLB is the only model download.
+Mobile starts in Battery. Sustained slow frame cadence lowers detail automatically. Battery removes the bloom contribution; the post-processing pass graph remains warm. The hidden technical observatory offers particle, nebula, asteroid, and gravity stress scenarios, with automatic downgrading suspended during intentional stress.
 
-Three automatically selects WebGL2 when WebGPU is unavailable. WebGL2 preserves the journey and shader morphs with analytic particle drift; it does not run the compute integrator. Missing Blender assets retain a simplified procedural workspace. Context/device loss offers a lightweight retry at the saved time and a static quiet ending. Reduced motion removes pointer parallax and animated environmental oscillations and disables the compute drift; the slow guided scale journey remains. Keyboard pause and chapter navigation remain available.
+When WebGPU is unavailable, Three.js automatically uses WebGL2. Procedural shaders and navigation remain available; 5,000 particles use a reduced CPU force integrator. Missing hero downloads retain a procedural gate. Context/device loss shows a static view and an explicit lighter-graphics retry. Audio is synthesized locally and requires an opt-in gesture.
 
-## Verification
+## Scientific and practical limits
+
+This is physics-inspired interactive art. Dust trajectories respond to actual force integration. Gravitational lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. This is not general relativity, an N-body simulation, or a planet-formation model.
+
+Planets support close orbital inspection with procedural detail and collision clearance; full terrain landing and a ground-level ecosystem are not implemented. The distant galactic star field is an angular background population; nearby stars and nebulae occupy navigable space. Persistence is local to the browser and retains up to 24 created stars. Reduced motion softens navigation rather than eliminating all motion; P pauses the simulation. No UE5 edition was built.
+
+## Verification and deployment
 
 ```sh
-npm run qa                 # Chapter screenshots + WebGPU / forced WebGL2
-npm run qa:controls        # Drag, keys, touch, benchmark, sound state, fault injection
-npm run qa:performance     # Warm 2560×1440 render-loop measurements
-npm run qa:journey         # Entire normal-speed 300-second journey
+npm run qa:controls
+npm run qa:devices
+npm run qa:resilience
+npm run qa:performance
+npm run qa
 ```
 
-These scripts use an installed Chrome through Playwright. Set `QA_URL` to test a deployed URL. Control tests also accept `QA_BROWSER=msedge`. They write actual screenshots and JSON to the ignored `artifacts/` directory. They do not mock the renderer or substitute screenshots for rendering.
+These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, and visual scripts accept `QA_BROWSER=msedge`. `QA_TOUR=1` adds visits to the major landmarks. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions.
 
-See [QA evidence](docs/QA.md) for measured results and coverage limits. An optional feature-detected WebMCP registry is included; ordinary Chrome used for QA did not expose it, so live WebMCP execution remains unvalidated.
+See [the verification record](docs/QA.md) for measured results, corrected visual issues, and coverage limits. Performance numbers are browser frame intervals and renderer counters, not GPU timestamp queries. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
-No Unreal Cinematic Edition was built. The web artwork is the primary edition.
+The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

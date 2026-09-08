@@ -2,10 +2,15 @@
 export class Ambience {
   private context?: AudioContext;
   private master?: GainNode;
-  private rain?: GainNode;
+  private air?: GainNode;
   private tone?: GainNode;
   private filter?: BiquadFilterNode;
+  private lastQuiet?: boolean;
   enabled = false;
+  async toggle() {
+    await this.setEnabled(!this.enabled);
+    return this.enabled;
+  }
   async setEnabled(enabled: boolean) {
     this.enabled = enabled;
     if (enabled && !this.context) this.create();
@@ -39,10 +44,10 @@ export class Ambience {
     filter.type = "lowpass";
     filter.frequency.value = 2200;
     this.filter = filter;
-    const rain = ctx.createGain();
-    rain.gain.value = 0.55;
-    this.rain = rain;
-    source.connect(filter).connect(rain).connect(master);
+    const air = ctx.createGain();
+    air.gain.value = 0.12;
+    this.air = air;
+    source.connect(filter).connect(air).connect(master);
     source.start();
     const tone = ctx.createGain();
     tone.gain.value = 0.08;
@@ -58,27 +63,20 @@ export class Ambience {
       o.start();
     });
   }
-  update(t: number) {
-    if (!this.context || !this.rain || !this.tone || !this.filter) return;
+  update(quiet: boolean) {
+    if (
+      !this.context ||
+      !this.air ||
+      !this.tone ||
+      !this.filter ||
+      quiet === this.lastQuiet
+    )
+      return;
+    this.lastQuiet = quiet;
     const now = this.context.currentTime;
-    const space = Math.min(1, Math.max(0, (t - 75) / 70));
-    const life = Math.min(1, Math.max(0, (t - 225) / 35));
-    const quiet = Math.min(1, Math.max(0, (t - 268) / 28));
-    this.rain.gain.setTargetAtTime(
-      (0.55 * (1 - space) + life * 0.16) * (1 - quiet * 0.65),
-      now,
-      2,
-    );
-    this.filter.frequency.setTargetAtTime(
-      1800 * (1 - space) + 350 + life * 600,
-      now,
-      2,
-    );
-    this.tone.gain.setTargetAtTime(
-      (0.07 + Math.sin(space * Math.PI) * 0.13) * (1 - quiet * 0.86),
-      now,
-      2,
-    );
+    this.air.gain.setTargetAtTime(quiet ? 0.045 : 0.12, now, 2);
+    this.filter.frequency.setTargetAtTime(quiet ? 550 : 950, now, 2);
+    this.tone.gain.setTargetAtTime(quiet ? 0.012 : 0.042, now, 2);
   }
   suspend() {
     void this.context?.suspend();

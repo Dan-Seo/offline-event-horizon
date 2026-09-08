@@ -1,4 +1,4 @@
-import Experience from "@/components/Experience";
+import Vastness from "@/components/Vastness";
 export default function Page() {
-  return <Experience />;
+  return <Vastness />;
 }
