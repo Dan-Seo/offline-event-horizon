@@ -1,0 +1,11 @@
+{
+  "release": "3.0.0",
+  "runtimeCommit": "fc0ed649a463982494bd806bc4592e0458cab22b",
+  "deploymentId": "dpl_EFCX77Ycnm7HxVgBcaThAhcXqwfb",
+  "url": "https://offline-event-horizon-rlme79yf6-sf-i455.vercel.app",
+  "alias": "https://offline-vastness.vercel.app",
+  "readyState": "READY",
+  "readyObservedAt": "2026-09-08T23:51:10.677Z",
+  "ci": "https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34292168234",
+  "ciConclusion": "success"
+}

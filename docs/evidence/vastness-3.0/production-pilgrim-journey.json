@@ -1,0 +1,7330 @@
+{
+  "url": "https://offline-vastness.vercel.app",
+  "browser": "152.0.7977.83",
+  "channel": "chrome",
+  "at": "2026-09-09T00:03:08.340Z",
+  "checks": [
+    {
+      "name": "Ordinary arrival does not run research sensors",
+      "passed": true
+    },
+    {
+      "name": "Arrival can hand over without a tutorial",
+      "passed": true
+    },
+    {
+      "name": "Quiet hides the interface while Carry stays active",
+      "passed": true
+    },
+    {
+      "name": "A sustained quiet ride alternates motion and rests",
+      "passed": true,
+      "detail": {
+        "seconds": 480,
+        "distance": 741.2674689065263,
+        "stops": 5
+      }
+    },
+    {
+      "name": "Live state remains bounded throughout the ride",
+      "passed": true
+    },
+    {
+      "name": "W interrupts Carry directly even in Quiet",
+      "passed": true
+    },
+    {
+      "name": "Manual rest stops disabled research work",
+      "passed": true
+    },
+    {
+      "name": "Ctrl+C does not start a ride",
+      "passed": true
+    },
+    {
+      "name": "Flight remains available",
+      "passed": true
+    },
+    {
+      "name": "The same craft boards the planetary coastal frame",
+      "passed": true
+    },
+    {
+      "name": "Planetary surface traversal moves and settles",
+      "passed": true,
+      "detail": {
+        "distance": 244.99422467794605,
+        "water": true,
+        "gliding": false
+      }
+    },
+    {
+      "name": "Scenic sensing also works in a planetary frame",
+      "passed": true
+    },
+    {
+      "name": "Portrait craft controls fit the viewport",
+      "passed": true
+    },
+    {
+      "name": "Two-thumb input interrupts Carry and drives the craft",
+      "passed": true
+    },
+    {
+      "name": "Recovery returns to the original sea without trapping input",
+      "passed": true
+    },
+    {
+      "name": "No browser or shader errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "performance": {
+    "frames": 69633,
+    "p50": 6.900000000023283,
+    "p95": 7,
+    "p99": 7.100000000005821,
+    "max": 69.40000000002328,
+    "over50": 3,
+    "quality": "HIGH",
+    "dpr": 1,
+    "viewport": {
+      "width": 1600,
+      "height": 1000
+    }
+  },
+  "samples": [
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": false,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 107,
+      "frameMs": 9.375833333333336,
+      "drawCalls": 166,
+      "triangles": 3610327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 22.057479777024128,
+      "velocity": 4.358947646970292,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 2.0379333333333323,
+      "learning": {
+        "look": 0,
+        "move": 0,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 2.4733333333333385,
+        "water": true,
+        "gliding": true,
+        "distance": 0,
+        "stops": 0,
+        "position": [
+          0,
+          14.89730555555556,
+          460
+        ],
+        "local": [
+          0,
+          14.89730555555556,
+          460
+        ],
+        "yaw": 0,
+        "bank": 0,
+        "recoveries": 0,
+        "contactCache": 51,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": true,
+          "captures": 7,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 18,
+          "status": "TRACKING",
+          "features": 112,
+          "inliers": 102,
+          "ratio": 1,
+          "mapCells": 1600,
+          "points": 10656,
+          "route": null,
+          "segment": 0,
+          "pose": {
+            "p": [
+              0.0006077898102306045,
+              0.7725695556271865,
+              0.07189326920476238
+            ],
+            "q": [
+              0.00037953133782809656,
+              -0.000011589862854874763,
+              0.0000600443336384576,
+              0.9999999261081557
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 96,
+        "released": 2,
+        "absorbed": 0,
+        "time": 1.9166666666666623
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 27,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.10000000894069672,
+      "gpuRenderMs": 0.393216,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          1.003789618297962,
+          6.506804861195081,
+          0.20628885979679026,
+          0.5546556843710838
+        ],
+        [
+          -2.5900437865028922,
+          6.493519163726794,
+          0.20747054849528107,
+          0.5610855507757283
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.02496289674312717,
+      "beautyEvent": "none",
+      "beautyEventTime": 0,
+      "eventsSeen": 0,
+      "livingParticles": 8192,
+      "waterWakes": 2,
+      "position": [
+        0,
+        19.501785933369263,
+        472.56652031115834
+      ],
+      "quaternion": [
+        0.04748214003577962,
+        0,
+        0,
+        0.9988720870950508
+      ],
+      "velocityVector": [
+        0,
+        -2.071394462908497,
+        2.7201559270453126
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000012,
+      "drawCalls": 174,
+      "triangles": 3670919,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.052147277216136,
+      "velocity": 5.79977722237774,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 22.23513333333399,
+      "learning": {
+        "look": 0,
+        "move": 101.04979331747806,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.761245403140607,
+        "water": true,
+        "gliding": false,
+        "distance": 101.38578167594086,
+        "stops": 0,
+        "position": [
+          -4.699411899435721,
+          1.7051756533650224,
+          358.9064945589584
+        ],
+        "local": [
+          -4.699411899435721,
+          1.7051756533650224,
+          358.9064945589584
+        ],
+        "yaw": 0.16693671877013572,
+        "bank": -0.004198922467796207,
+        "recoveries": 0,
+        "contactCache": 1613,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 166,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 15.600000008940697,
+          "status": "TRACKING",
+          "features": 63,
+          "inliers": 53,
+          "ratio": 0.9464285714285714,
+          "mapCells": 646,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 9.626265007511362,
+            "score": 3.1759659397453395,
+            "length": 27.919678589312767,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -4.031731957552936,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -4.023843297186366,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -4.015590600168489,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -4.005378672390012,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -3.9982146986113927,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -3.9893287574257417,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -3.975851158413631,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -3.956771672016334,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -3.9723972202804667,
+                19.97071599690942
+              ],
+              [
+                -1.1333700386216115,
+                -3.957087097372078,
+                21.961026588802888
+              ],
+              [
+                -1.348576772416763,
+                -3.9607122999336806,
+                23.949407026480763
+              ],
+              [
+                -1.5824148424959361,
+                -3.952450908704051,
+                25.935682551223614
+              ],
+              [
+                -1.8348636968355456,
+                -3.962449434377964,
+                27.919678589312767
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              -2.3554493500223534,
+              -5.163999574615713,
+              96.81617869127912
+            ],
+            "q": [
+              0.014264848536368259,
+              0.06222785568362926,
+              -0.09206148578564793,
+              -0.9937046296099211
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 2,
+        "absorbed": 96,
+        "time": 22.16666666666605
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.09999999403953552,
+      "gpuRenderMs": 0.32767999999999997,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 2.399213919460178e-9,
+      "beautyEvent": "none",
+      "beautyEventTime": 0,
+      "eventsSeen": 0,
+      "livingParticles": 8192,
+      "waterWakes": 47,
+      "position": [
+        -2.2415415111092902,
+        5.593053061794862,
+        374.8621579983547
+      ],
+      "quaternion": [
+        0.04732184976378813,
+        0.08200616128909181,
+        -0.0038982248922877945,
+        0.9955000933642599
+      ],
+      "velocityVector": [
+        -0.47707799931631906,
+        0.11746627536411497,
+        -5.727751301240466
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000012,
+      "drawCalls": 163,
+      "triangles": 3656599,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.010881243018957,
+      "velocity": 0.04436448682808093,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 42.404533333333916,
+      "learning": {
+        "look": 0,
+        "move": 142.35497146542534,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.0686700639703747,
+        "water": true,
+        "gliding": false,
+        "distance": 142.35497146542534,
+        "stops": 1,
+        "position": [
+          -1.6298736860441796,
+          1.9496826740806024,
+          318.7293997535641
+        ],
+        "local": [
+          -1.6298736860441796,
+          1.9496826740806024,
+          318.7293997535641
+        ],
+        "yaw": -0.27214999999999906,
+        "bank": -4.0562077811566523e-20,
+        "recoveries": 0,
+        "contactCache": 2003,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 324,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.600000008940697,
+          "status": "TRACKING",
+          "features": 72,
+          "inliers": 67,
+          "ratio": 1,
+          "mapCells": 414,
+          "points": 11232,
+          "route": {
+            "turn": 0.48,
+            "curvature": 0.015,
+            "speed": 6.174565786517508,
+            "score": 2.575211005525709,
+            "length": 19.70134711075597,
+            "safe": true,
+            "points": [
+              [
+                0.1199640043197207,
+                -3.911933682825466,
+                3.997600431962973
+              ],
+              [
+                0.2698177992003818,
+                -3.9119933438166,
+                5.991903279867403
+              ],
+              [
+                0.47942427640891666,
+                -3.9120734919928517,
+                7.980813819261291
+              ],
+              [
+                0.7485948042638506,
+                -3.9121141221880746,
+                9.962542164906615
+              ],
+              [
+                1.0770871474585701,
+                -3.9121659644703652,
+                11.935304895054946
+              ],
+              [
+                1.4646056850567821,
+                -3.912156140881808,
+                13.897326656406637
+              ],
+              [
+                1.910801676531356,
+                -3.912141607469851,
+                15.846841761808973
+              ],
+              [
+                2.4152735756072983,
+                -3.9159975126339215,
+                17.78209577925541
+              ],
+              [
+                2.977567391626268,
+                -3.9160149278211724,
+                19.70134711075597
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              4.229319762481859,
+              -11.256363723129096,
+              133.7767958972774
+            ],
+            "q": [
+              0.032690343011356024,
+              -0.1522171437594146,
+              -0.11454048061036431,
+              -0.9811430889126579
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 3,
+        "absorbed": 144,
+        "time": 42.29999999999824
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.524288,
+      "gpuComputeMs": 0.065536,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.4227327799464752,
+      "beautyEvent": "none",
+      "beautyEventTime": 0,
+      "eventsSeen": 0,
+      "livingParticles": 8192,
+      "waterWakes": 66,
+      "position": [
+        -5.241143927968536,
+        5.869752200462909,
+        331.6695793948585
+      ],
+      "quaternion": [
+        0.04704321865138125,
+        -0.13550244443037224,
+        0.0064412111668319515,
+        0.9896385875313355
+      ],
+      "velocityVector": [
+        3.2989484160290365e-12,
+        0.049375863223082614,
+        -8.12048840868686e-12
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "drawCalls": 181,
+      "triangles": 3723239,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.991120104088623,
+      "velocity": 0.011313390387614149,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 62.61553333333198,
+      "learning": {
+        "look": 0,
+        "move": 142.35497146542534,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.03842921339374258,
+        "water": true,
+        "gliding": false,
+        "distance": 142.35497146542534,
+        "stops": 1,
+        "position": [
+          -1.6298736860441796,
+          1.9095124933177108,
+          318.7293997535641
+        ],
+        "local": [
+          -1.6298736860441796,
+          1.9095124933177108,
+          318.7293997535641
+        ],
+        "yaw": -0.27214999999999906,
+        "bank": -1.901153697141904e-46,
+        "recoveries": 0,
+        "contactCache": 2003,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 479,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.5,
+          "status": "TRACKING",
+          "features": 73,
+          "inliers": 65,
+          "ratio": 1,
+          "mapCells": 392,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 6.287700718701956,
+            "score": 2.5291534002708547,
+            "length": 19.97071599690942,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -3.8691697361541766,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -3.8691223240845574,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -3.869073978944356,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -3.8690948549602773,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -3.86911480770457,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -3.8691417484664616,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -3.869157130897487,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -3.869171840288714,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -3.8691903216917973,
+                19.97071599690942
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              4.097267523687924,
+              -11.257391229123167,
+              133.83180113107278
+            ],
+            "q": [
+              0.032799336987982805,
+              -0.1522029382979076,
+              -0.11471175277902092,
+              -0.9811216452820716
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 4,
+        "absorbed": 192,
+        "time": 62.54999999999709
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.458752,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.7675185867134501,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 17.01619999999835,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 66,
+      "position": [
+        -5.241143927967021,
+        5.845936219074828,
+        331.6695793948553
+      ],
+      "quaternion": [
+        0.04704321865138125,
+        -0.13550244443037224,
+        0.006441211166831951,
+        0.9896385875313355
+      ],
+      "velocityVector": [
+        0,
+        0.014776820594851487,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "drawCalls": 183,
+      "triangles": 3723239,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.995096138423833,
+      "velocity": 0.023274754031505602,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 82.80583333332841,
+      "learning": {
+        "look": 0,
+        "move": 142.35497146542534,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.00005942510527030934,
+        "water": true,
+        "gliding": false,
+        "distance": 142.35497146542534,
+        "stops": 1,
+        "position": [
+          -1.6298736860441796,
+          1.8946695272855256,
+          318.7293997535641
+        ],
+        "local": [
+          -1.6298736860441796,
+          1.8946695272855256,
+          318.7293997535641
+        ],
+        "yaw": -0.27214999999999906,
+        "bank": -9.367614003834141e-73,
+        "recoveries": 0,
+        "contactCache": 2003,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 634,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 8.5,
+          "status": "TRACKING",
+          "features": 75,
+          "inliers": 68,
+          "ratio": 1,
+          "mapCells": 388,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 6.287700718701956,
+            "score": 2.5133408281059255,
+            "length": 19.97071599690942,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -3.858603930797948,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -3.858574205543216,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -3.8585842553991503,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -3.858633745017854,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -3.8586797814706038,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -3.858743635869811,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -3.8587513507239337,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -3.858715775125555,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -3.8586711253982635,
+                19.97071599690942
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              3.9795518822181366,
+              -11.28990551450629,
+              133.9193349167454
+            ],
+            "q": [
+              -0.03290713951575267,
+              0.1521872576946259,
+              0.11486527100236615,
+              0.9811025065108308
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 2,
+        "released": 5,
+        "absorbed": 238,
+        "time": 82.80000000001196
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.589824,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.9062860761074728,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 37.206499999994776,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 66,
+      "position": [
+        -5.24114392796702,
+        5.849080931510247,
+        331.66957939485525
+      ],
+      "quaternion": [
+        0.04704321865138125,
+        -0.1355024444303722,
+        0.006441211166831951,
+        0.9896385875313354
+      ],
+      "velocityVector": [
+        0,
+        -0.023274754031505602,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 183,
+      "triangles": 3723239,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.0291890213266015,
+      "velocity": 0.058865947134937154,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 102.99613333332456,
+      "learning": {
+        "look": 0,
+        "move": 142.35497146542534,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.03853616076591478,
+        "water": true,
+        "gliding": false,
+        "distance": 142.35497146542534,
+        "stops": 1,
+        "position": [
+          -1.6298736860441796,
+          1.9092782080412045,
+          318.7293997535641
+        ],
+        "local": [
+          -1.6298736860441796,
+          1.9092782080412045,
+          318.7293997535641
+        ],
+        "yaw": -0.27214999999999906,
+        "bank": -4.615733712468999e-99,
+        "recoveries": 0,
+        "contactCache": 2003,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 789,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 5.699999988079071,
+          "status": "TRACKING",
+          "features": 73,
+          "inliers": 66,
+          "ratio": 1,
+          "mapCells": 398,
+          "points": 11232,
+          "route": {
+            "turn": 0.3,
+            "curvature": 0.009375,
+            "speed": 6.250867694949691,
+            "score": 2.5155345628496417,
+            "length": 19.88301832130879,
+            "safe": true,
+            "points": [
+              [
+                0.07499121134947255,
+                -3.8801363647851814,
+                3.9990625659157617
+              ],
+              [
+                0.1687055100636196,
+                -3.880220095415794,
+                5.996836438026866
+              ],
+              [
+                0.2998594013645336,
+                -3.880279137447223,
+                7.992502109092516
+              ],
+              [
+                0.46840677781315065,
+                -3.880370432260806,
+                9.98535799845471
+              ],
+              [
+                0.6742883862083815,
+                -3.8804862476213318,
+                11.974703513240382
+              ],
+              [
+                0.9174318484177728,
+                -3.880680443624108,
+                13.959839294656383
+              ],
+              [
+                1.197751686822161,
+                -3.880395009221903,
+                15.940067463850584
+              ],
+              [
+                1.5151493543655312,
+                -3.8809658819075166,
+                17.91469186725274
+              ],
+              [
+                1.8695132691994352,
+                -3.880642871376528,
+                19.88301832130879
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              3.8585037467043017,
+              -11.348212036454306,
+              133.9878433464909
+            ],
+            "q": [
+              -0.03302835495895511,
+              0.1521728371834545,
+              0.11502441260683775,
+              0.9810820250604424
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 6,
+        "absorbed": 240,
+        "time": 102.93333333336132
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.589824,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.9622236487331163,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 57.39679999999093,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 66,
+      "position": [
+        -5.241143927967019,
+        5.8795688158500665,
+        331.6695793948552
+      ],
+      "quaternion": [
+        0.04704321865138125,
+        -0.1355024444303722,
+        0.006441211166831951,
+        0.9896385875313354
+      ],
+      "velocityVector": [
+        0,
+        -0.05686738246016684,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "drawCalls": 181,
+      "triangles": 3722183,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.077299850585405,
+      "velocity": 0.07803545536676028,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 123.18633333332087,
+      "learning": {
+        "look": 0,
+        "move": 142.35497146542534,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.06956626192990718,
+        "water": true,
+        "gliding": false,
+        "distance": 142.35497146542534,
+        "stops": 1,
+        "position": [
+          -1.6298736860441796,
+          1.950989870281618,
+          318.7293997535641
+        ],
+        "local": [
+          -1.6298736860441796,
+          1.950989870281618,
+          318.7293997535641
+        ],
+        "yaw": -0.27214999999999906,
+        "bank": -2.3318997004084694e-125,
+        "recoveries": 0,
+        "contactCache": 2003,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 944,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 5.9000000059604645,
+          "status": "TRACKING",
+          "features": 72,
+          "inliers": 65,
+          "ratio": 0.9848484848484849,
+          "mapCells": 414,
+          "points": 11232,
+          "route": {
+            "turn": 0.48,
+            "curvature": 0.015,
+            "speed": 6.174565786517508,
+            "score": 2.471848519592256,
+            "length": 19.70134711075597,
+            "safe": true,
+            "points": [
+              [
+                0.1199640043197207,
+                -3.9242181255978554,
+                3.997600431962973
+              ],
+              [
+                0.2698177992003818,
+                -3.924285428380559,
+                5.991903279867403
+              ],
+              [
+                0.47942427640891666,
+                -3.924376395921643,
+                7.980813819261291
+              ],
+              [
+                0.7485948042638506,
+                -3.9244226251237366,
+                9.962542164906615
+              ],
+              [
+                1.0770871474585701,
+                -3.9244782020327733,
+                11.935304895054946
+              ],
+              [
+                1.4646056850567821,
+                -3.92449542776524,
+                13.897326656406637
+              ],
+              [
+                1.910801676531356,
+                -3.924630346627129,
+                15.846841761808973
+              ],
+              [
+                2.4152735756072983,
+                -3.9288043386895657,
+                17.78209577925541
+              ],
+              [
+                2.977567391626268,
+                -3.9289517672464185,
+                19.70134711075597
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              3.7323421777526398,
+              -11.432871892119136,
+              134.05397682251257
+            ],
+            "q": [
+              0.033156609070663465,
+              -0.1521597526717256,
+              -0.11517944885197104,
+              -0.981061539101384
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 7,
+        "absorbed": 288,
+        "time": 123.18333333337743
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.10000000894069672,
+      "gpuRenderMs": 0.32767999999999997,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.9847721760276825,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 77.58699999998724,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 66,
+      "position": [
+        -5.241143927967019,
+        5.931286606068315,
+        331.6695793948552
+      ],
+      "quaternion": [
+        0.04704321865138125,
+        -0.1355024444303722,
+        0.006441211166831951,
+        0.9896385875313354
+      ],
+      "velocityVector": [
+        0,
+        -0.07803545536676028,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 167,
+      "triangles": 3657111,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.129497329886362,
+      "velocity": 5.40191503608695,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 143.34883333333406,
+      "learning": {
+        "look": 0,
+        "move": 150.0858478586699,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.7324387804241566,
+        "water": true,
+        "gliding": false,
+        "distance": 150.2768840159956,
+        "stops": 1,
+        "position": [
+          0.5942902618515908,
+          2.0450245603513046,
+          311.12994568526835
+        ],
+        "local": [
+          0.5942902618515908,
+          2.0450245603513046,
+          311.12994568526835
+        ],
+        "yaw": -0.2173451013103409,
+        "bank": -0.009587617871487503,
+        "recoveries": 0,
+        "contactCache": 2198,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1104,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 11.5,
+          "status": "TRACKING",
+          "features": 60,
+          "inliers": 54,
+          "ratio": 0.9642857142857143,
+          "mapCells": 680,
+          "points": 11286,
+          "route": {
+            "turn": 0.15,
+            "curvature": 0.0046875,
+            "speed": 9.626265007511362,
+            "score": 3.165630892152155,
+            "length": 27.919678589312767,
+            "safe": true,
+            "points": [
+              [
+                0.03749890138005678,
+                -3.9930158961190294,
+                3.999765629119839
+              ],
+              [
+                0.0843694383180349,
+                -3.990993637026527,
+                5.999209015659696
+              ],
+              [
+                0.1499824226989451,
+                -3.989121879780191,
+                7.998125131831523
+              ],
+              [
+                0.2343320877988475,
+                -3.9874135841704,
+                9.996338292935306
+              ],
+              [
+                0.3374110201272392,
+                -3.984813073177283,
+                11.993672876053733
+              ],
+              [
+                0.4592101600786928,
+                -3.9836151638678814,
+                13.989953335487709
+              ],
+              [
+                0.5997188027290672,
+                -3.9809319426401033,
+                15.985004218185033
+              ],
+              [
+                0.7589245987764315,
+                -3.985896452571188,
+                17.978650179160994
+              ],
+              [
+                0.9368135556263013,
+                -3.9964823050915013,
+                19.97071599690942
+              ],
+              [
+                1.1333700386216115,
+                -4.010346957379533,
+                21.961026588802888
+              ],
+              [
+                1.348576772416763,
+                -3.9622137307800678,
+                23.949407026480763
+              ],
+              [
+                1.5824148424959361,
+                -3.9808576002124836,
+                25.935682551223614
+              ],
+              [
+                1.8348636968355456,
+                -4.0292936240670585,
+                27.919678589312767
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              6.889192316527247,
+              -12.512779145698836,
+              141.54073767465184
+            ],
+            "q": [
+              0.03627436790083719,
+              -0.12036313279603876,
+              -0.12261421732940142,
+              -0.9844605833681838
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 8,
+        "absorbed": 336,
+        "time": 143.30833333336733
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 54,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.524288,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.33247317709289576,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 70,
+      "position": [
+        -3.3288917907211584,
+        6.0153381653053675,
+        326.5887935176798
+      ],
+      "quaternion": [
+        0.047192472133721165,
+        -0.11016573771243168,
+        0.00523681165265046,
+        0.9927784025712376
+      ],
+      "velocityVector": [
+        2.17086132702279,
+        -0.056916033171689716,
+        -4.950888932804836
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "drawCalls": 168,
+      "triangles": 3668167,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.167612142518919,
+      "velocity": 5.77489616816486,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 163.5251333333523,
+      "learning": {
+        "look": 0,
+        "move": 265.98373286332753,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.7601249542046284,
+        "water": true,
+        "gliding": false,
+        "distance": 266.46371623228526,
+        "stops": 1,
+        "position": [
+          18.28692206284762,
+          2.7177289813185572,
+          197.18543813449705
+        ],
+        "local": [
+          18.28692206284762,
+          2.7177289813185572,
+          197.18543813449705
+        ],
+        "yaw": 0.011580707728438855,
+        "bank": -0.004198927828723312,
+        "recoveries": 0,
+        "contactCache": 3323,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1263,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7.799999997019768,
+          "status": "TRACKING",
+          "features": 67,
+          "inliers": 56,
+          "ratio": 0.9824561403508771,
+          "mapCells": 585,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 7.95875095112192,
+            "score": 2.932467903497065,
+            "length": 23.949407026480763,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -4.057843347005506,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -4.056814954080746,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -4.055850227478335,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -4.054630755696682,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -4.053728202096165,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -4.0524814343573246,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -4.0518111246273625,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -4.051225581246615,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -4.051387347223456,
+                19.97071599690942
+              ],
+              [
+                -1.1333700386216115,
+                -4.052097378828126,
+                21.961026588802888
+              ],
+              [
+                -1.348576772416763,
+                -4.051527070647577,
+                23.949407026480763
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              30.301515708776883,
+              -29.263998854197688,
+              247.3854902367547
+            ],
+            "q": [
+              0.006899296427588894,
+              -0.018099272976350635,
+              -0.05704732379079619,
+              -0.9981835597097579
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 9,
+        "absorbed": 384,
+        "time": 163.44166666668235
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.45875199999999994,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          -0.16509629541763793,
+          6.5233586135492985,
+          0.20587690560492242,
+          0.5461107255405008
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 3.2493164508334844e-8,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 114,
+      "position": [
+        18.24548217539179,
+        6.684027514684696,
+        213.3412896693435
+      ],
+      "quaternion": [
+        0.047481661403394805,
+        0.004484971404361765,
+        -0.0002131965073703256,
+        0.9988620182032775
+      ],
+      "velocityVector": [
+        0.4167520529221805,
+        -0.04841700900150576,
+        -5.758054753325342
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 170,
+      "triangles": 3664327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.218793353888032,
+      "velocity": 0.040073854567929904,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 183.68763333337057,
+      "learning": {
+        "look": 0,
+        "move": 285.9869913748141,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.06563942744099655,
+        "water": true,
+        "gliding": false,
+        "distance": 285.9869913748141,
+        "stops": 2,
+        "position": [
+          18.223166861902612,
+          2.8656759749751326,
+          177.66805037018796
+        ],
+        "local": [
+          18.223166861902612,
+          2.8656759749751326,
+          177.66805037018796
+        ],
+        "yaw": -0.07088101103540544,
+        "bank": 6.045324757979197e-25,
+        "recoveries": 0,
+        "contactCache": 3387,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1424,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 5.4000000059604645,
+          "status": "TRACKING",
+          "features": 73,
+          "inliers": 67,
+          "ratio": 1,
+          "mapCells": 424,
+          "points": 11232,
+          "route": {
+            "turn": 0.48,
+            "curvature": 0.015,
+            "speed": 5.3684802272872725,
+            "score": 2.447536910538736,
+            "length": 17.78209577925541,
+            "safe": true,
+            "points": [
+              [
+                0.1199640043197207,
+                -4.101781475140403,
+                3.997600431962973
+              ],
+              [
+                0.2698177992003818,
+                -4.102130570025878,
+                5.991903279867403
+              ],
+              [
+                0.47942427640891666,
+                -4.102546142567903,
+                7.980813819261291
+              ],
+              [
+                0.7485948042638506,
+                -4.102934599096161,
+                9.962542164906615
+              ],
+              [
+                1.0770871474585701,
+                -4.103357017526454,
+                11.935304895054946
+              ],
+              [
+                1.4646056850567821,
+                -4.10371170711426,
+                13.897326656406637
+              ],
+              [
+                1.910801676531356,
+                -4.104344970016371,
+                15.846841761808973
+              ],
+              [
+                2.4152735756072983,
+                -4.106115806734861,
+                17.78209577925541
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              31.087504317882296,
+              -32.95639993036318,
+              265.50842801014113
+            ],
+            "q": [
+              0.01566678774859654,
+              -0.057706858155921,
+              -0.07769038103174053,
+              -0.9951827344656666
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 10,
+        "absorbed": 432,
+        "time": 183.57499999999737
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.45875199999999994,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          -0.06326664809824618,
+          6.781525074517781,
+          0.22172622901572603,
+          0.04694288010985179
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.5114680967776131,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 125,
+      "position": [
+        17.271703253101037,
+        6.830687823466912,
+        191.0689547766146
+      ],
+      "quaternion": [
+        0.04745232367415372,
+        -0.0353931214946063,
+        0.0016824387955395345,
+        0.9982448463821342
+      ],
+      "velocityVector": [
+        0,
+        -0.04569529960142592,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999951,
+      "drawCalls": 168,
+      "triangles": 3664327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.235360576029052,
+      "velocity": 0.006452194023515049,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 203.8987333333888,
+      "learning": {
+        "look": 0,
+        "move": 285.9869913748141,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.034168191915638954,
+        "water": true,
+        "gliding": false,
+        "distance": 285.9869913748141,
+        "stops": 2,
+        "position": [
+          18.223166861902612,
+          2.9031249479300487,
+          177.66805037018796
+        ],
+        "local": [
+          18.223166861902612,
+          2.9031249479300487,
+          177.66805037018796
+        ],
+        "yaw": -0.07088101103540544,
+        "bank": 2.8334572916721535e-51,
+        "recoveries": 0,
+        "contactCache": 3387,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1584,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7,
+          "status": "TRACKING",
+          "features": 69,
+          "inliers": 67,
+          "ratio": 1,
+          "mapCells": 414,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 7.585455103962609,
+            "score": 2.8386316308068325,
+            "length": 23.060607390387165,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -4.141107756735055,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -4.141475781867143,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -4.141905354067622,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -4.14233541558175,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -4.142753401329644,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -4.143099671265148,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -4.145080605901846,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -4.145426623648879,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -4.14697122284736,
+                19.454391642630608
+              ],
+              [
+                4.83436451822092,
+                -4.147782884858974,
+                21.275053176264272
+              ],
+              [
+                5.735056501355597,
+                -4.148310572183808,
+                23.060607390387165
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              30.963239279468688,
+              -33.0022311655253,
+              265.4504557089939
+            ],
+            "q": [
+              -0.015688343122866242,
+              0.057687857408742146,
+              0.07765821619815057,
+              0.995186006962805
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 10,
+        "absorbed": 480,
+        "time": 203.82499999997896
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.09999999403953552,
+      "gpuRenderMs": 0.39321599999999995,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.8032556288202567,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 125,
+      "position": [
+        17.27170325310103,
+        6.851425670497419,
+        191.06895477661453
+      ],
+      "quaternion": [
+        0.04745232367415374,
+        -0.03539312149460631,
+        0.0016824387955395345,
+        0.9982448463821343
+      ],
+      "velocityVector": [
+        0,
+        -0.010347540316273702,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 164,
+      "triangles": 3652039,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.200252523536619,
+      "velocity": 6.009799650464234,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 224.07513333340705,
+      "learning": {
+        "look": 0,
+        "move": 342.9219247839597,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.75677860996475,
+        "water": true,
+        "gliding": false,
+        "distance": 343.59355271905315,
+        "stops": 2,
+        "position": [
+          34.78581774521684,
+          3.070693197975576,
+          122.63089024704315
+        ],
+        "local": [
+          34.78581774521684,
+          3.070693197975576,
+          122.63089024704315
+        ],
+        "yaw": -0.1635529641794182,
+        "bank": -0.017727898150201697,
+        "recoveries": 0,
+        "contactCache": 4151,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1744,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7.700000002980232,
+          "status": "TRACKING",
+          "features": 73,
+          "inliers": 53,
+          "ratio": 0.9137931034482759,
+          "mapCells": 624,
+          "points": 11294,
+          "route": {
+            "turn": -0.65,
+            "curvature": -0.0203125,
+            "speed": 10,
+            "score": 3.3506077990644423,
+            "length": 29.79379228238964,
+            "safe": true,
+            "points": [
+              [
+                -0.16241062351063817,
+                -4.171956292674974,
+                3.9956004107926018
+              ],
+              [
+                -0.3651726559606006,
+                -4.172709505569214,
+                5.985157511820834
+              ],
+              [
+                -0.6485709198607463,
+                -4.172436261245907,
+                7.964838123453297
+              ],
+              [
+                -1.0121377616960814,
+                -4.172198270059908,
+                9.931375448696064
+              ],
+              [
+                -1.455273236678029,
+                -4.174611450147088,
+                11.881524379128718
+              ],
+              [
+                -1.9772460987515106,
+                -4.1763067781848076,
+                13.812066849864316
+              ],
+              [
+                -2.57719500727061,
+                -4.205029976374009,
+                15.719817149883124
+              ],
+              [
+                -3.254129948351602,
+                -4.214796220088151,
+                17.60162717897713
+              ],
+              [
+                -4.0069338685578675,
+                -4.247166833216363,
+                19.454391642630608
+              ],
+              [
+                -4.83436451822092,
+                -4.237966393728095,
+                21.275053176264272
+              ],
+              [
+                -5.735056501355597,
+                -4.255436987166346,
+                23.060607390387165
+              ],
+              [
+                -6.707523528786936,
+                -4.276684996549902,
+                24.80810782833102
+              ],
+              [
+                -7.750160870770535,
+                -4.280654148252489,
+                26.514670828385942
+              ],
+              [
+                -8.861248005059247,
+                -4.322901804074139,
+                28.1774802823142
+              ],
+              [
+                -10.03895145604648,
+                -4.351540410525322,
+                29.79379228238964
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              50.99350701198733,
+              -41.913743982027626,
+              318.00252277430644
+            ],
+            "q": [
+              0.04628026523948473,
+              -0.09805361963393133,
+              -0.10912708643557255,
+              -0.9880966064773903
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 11,
+        "absorbed": 528,
+        "time": 223.94999999996065
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.458752,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.00029011013895345595,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 148,
+      "position": [
+        31.25120275309596,
+        6.994317640189273,
+        138.38079893253894
+      ],
+      "quaternion": [
+        0.04730074159712768,
+        -0.08722908543559219,
+        0.004146500541316702,
+        0.9950560451711717
+      ],
+      "velocityVector": [
+        2.8498532225833224,
+        0.04185539999669784,
+        -5.2772583992910835
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 123,
+      "triangles": 1579311,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.154371825250564,
+      "velocity": 0.06225822238671426,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 244.2723333334253,
+      "learning": {
+        "look": 0,
+        "move": 427.43509639641076,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.0430718632021007,
+        "water": true,
+        "gliding": false,
+        "distance": 427.43509639826914,
+        "stops": 3,
+        "position": [
+          22.2303891850436,
+          3.205874164322632,
+          40.91290112078951
+        ],
+        "local": [
+          22.2303891850436,
+          3.205874164322632,
+          40.91290112078951
+        ],
+        "yaw": 0.4539089889645956,
+        "bank": 1.8561333093929777e-10,
+        "recoveries": 0,
+        "contactCache": 4906,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 1905,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 9,
+          "status": "TRACKING",
+          "features": 71,
+          "inliers": 67,
+          "ratio": 1,
+          "mapCells": 432,
+          "points": 11232,
+          "route": {
+            "turn": 0.3,
+            "curvature": 0.009375,
+            "speed": 5.42417058424615,
+            "score": 2.533950871028592,
+            "length": 17.91469186725274,
+            "safe": true,
+            "points": [
+              [
+                0.07499121134947255,
+                -4.126873572658682,
+                3.9990625659157617
+              ],
+              [
+                0.1687055100636196,
+                -4.127126049721095,
+                5.996836438026866
+              ],
+              [
+                0.2998594013645336,
+                -4.127466428647569,
+                7.992502109092516
+              ],
+              [
+                0.46840677781315065,
+                -4.127730082225138,
+                9.98535799845471
+              ],
+              [
+                0.6742883862083815,
+                -4.128111271180462,
+                11.974703513240382
+              ],
+              [
+                0.9174318484177728,
+                -4.128319097214246,
+                13.959839294656383
+              ],
+              [
+                1.197751686822161,
+                -4.129167798653613,
+                15.940067463850584
+              ],
+              [
+                1.5151493543655312,
+                -4.130008775349835,
+                17.91469186725274
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              41.09876568880045,
+              -55.46267839162846,
+              398.0328007165678
+            ],
+            "q": [
+              -0.012404099778070643,
+              -0.21701746613415931,
+              0.05773252418912284,
+              0.9743800661713881
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 12,
+        "absorbed": 576,
+        "time": 244.20833333327556
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.262144,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.19398546350897708,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 183,
+      "position": [
+        28.1212505494067,
+        7.1207218309123546,
+        52.98717410394595
+      ],
+      "quaternion": [
+        0.04626451683575707,
+        0.22475737148775146,
+        -0.01068401162163983,
+        0.973257196397509
+      ],
+      "velocityVector": [
+        -0.000028567111343136276,
+        0.06042276458614485,
+        -0.00005560068672139096
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 123,
+      "triangles": 1579311,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.104330278758425,
+      "velocity": 0.0799283152089212,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 264.50976666677354,
+      "learning": {
+        "look": 0,
+        "move": 427.4350964059678,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.07105806823988817,
+        "water": true,
+        "gliding": false,
+        "distance": 427.4350964059678,
+        "stops": 3,
+        "position": [
+          22.230389182117115,
+          3.164813782089893,
+          40.91290111366877
+        ],
+        "local": [
+          22.230389182117115,
+          3.164813782089893,
+          40.91290111366877
+        ],
+        "yaw": 0.45390898896459503,
+        "bank": 8.07112573475482e-37,
+        "recoveries": 0,
+        "contactCache": 4906,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2065,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 8.099999994039536,
+          "status": "TRACKING",
+          "features": 72,
+          "inliers": 69,
+          "ratio": 1,
+          "mapCells": 417,
+          "points": 11232,
+          "route": {
+            "turn": 0.3,
+            "curvature": 0.009375,
+            "speed": 5.42417058424615,
+            "score": 2.460755729698542,
+            "length": 17.91469186725274,
+            "safe": true,
+            "points": [
+              [
+                0.07499121134947255,
+                -4.084169780800945,
+                3.9990625659157617
+              ],
+              [
+                0.1687055100636196,
+                -4.084412160336948,
+                5.996836438026866
+              ],
+              [
+                0.2998594013645336,
+                -4.084619604225557,
+                7.992502109092516
+              ],
+              [
+                0.46840677781315065,
+                -4.085021537830329,
+                9.98535799845471
+              ],
+              [
+                0.6742883862083815,
+                -4.085295651367764,
+                11.974703513240382
+              ],
+              [
+                0.9174318484177728,
+                -4.085451455915468,
+                13.959839294656383
+              ],
+              [
+                1.197751686822161,
+                -4.086383970163002,
+                15.940067463850584
+              ],
+              [
+                1.5151493543655312,
+                -4.087242034165499,
+                17.91469186725274
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              41.11717099882793,
+              -55.44329041595802,
+              398.2519588846297
+            ],
+            "q": [
+              -0.012144404718921304,
+              -0.2172523657712149,
+              0.05724969691861325,
+              0.974359479454867
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 13,
+        "absorbed": 624,
+        "time": 264.45833333325714
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.39321599999999995,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.6757816275872622,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 183,
+      "position": [
+        28.121237042833833,
+        7.070736228889675,
+        52.987147814433634
+      ],
+      "quaternion": [
+        0.046264516835757094,
+        0.2247573714877507,
+        -0.010684011621639797,
+        0.9732571963975092
+      ],
+      "velocityVector": [
+        0,
+        0.07930416442825106,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 128,
+      "triangles": 1665027,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.027271439888864,
+      "velocity": 5.814803260294468,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 284.6790666667918,
+      "learning": {
+        "look": 0,
+        "move": 456.64630934529015,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.760493779162015,
+        "water": true,
+        "gliding": false,
+        "distance": 457.1262927047456,
+        "stops": 3,
+        "position": [
+          8.349746263036835,
+          3.1208087354846894,
+          14.688690866363046
+        ],
+        "local": [
+          8.349746263036835,
+          3.1208087354846894,
+          14.688690866363046
+        ],
+        "yaw": 0.5561707077374084,
+        "bank": -0.004198884915956512,
+        "recoveries": 0,
+        "contactCache": 5307,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2225,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.5999999940395355,
+          "status": "TRACKING",
+          "features": 70,
+          "inliers": 52,
+          "ratio": 0.9629629629629629,
+          "mapCells": 631,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 9.626265007511362,
+            "score": 3.1879102458635447,
+            "length": 27.919678589312767,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -4.10364887980774,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -4.102531056018819,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -4.101089529004736,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -4.0996629640010775,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -4.104541137723613,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -4.097252371438937,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -4.104299277572155,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -4.0417790570105545,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -4.104737242331572,
+                19.97071599690942
+              ],
+              [
+                -1.1333700386216115,
+                -4.093372919337648,
+                21.961026588802888
+              ],
+              [
+                -1.348576772416763,
+                -4.043541732416562,
+                23.949407026480763
+              ],
+              [
+                -1.5824148424959361,
+                -4.106093681863181,
+                25.935682551223614
+              ],
+              [
+                -1.8348636968355456,
+                -4.051571697429324,
+                27.919678589312767
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              29.871440998664482,
+              -61.593892926318574,
+              423.65098218000657
+            ],
+            "q": [
+              0.021719706520960714,
+              0.26943967347822845,
+              -0.11635698591978656,
+              -0.9557152130903088
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 26,
+        "released": 14,
+        "absorbed": 646,
+        "time": 284.58333333323884
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 63,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.10000000894069672,
+      "gpuRenderMs": 0.45875199999999994,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.013527976485147822,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 195,
+      "position": [
+        16.675021129501022,
+        7.023375131143686,
+        28.510917376976007
+      ],
+      "quaternion": [
+        0.04567435526659976,
+        0.27299803739121214,
+        -0.012977168156335765,
+        0.9608420879406608
+      ],
+      "velocityVector": [
+        -2.6073455624206074,
+        0.08639483322972737,
+        -5.102956527169466
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 174,
+      "triangles": 2761287,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.937895613722503,
+      "velocity": 2.8183411728504217,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 304.8331000001434,
+      "learning": {
+        "look": 0,
+        "move": 570.2284154371199,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.484355073232211,
+        "water": true,
+        "gliding": false,
+        "distance": 570.2952666057256,
+        "stops": 4,
+        "position": [
+          -9.796515295106957,
+          2.963495635278282,
+          -94.86437986023554
+        ],
+        "local": [
+          -9.796515295106957,
+          2.963495635278282,
+          -94.86437986023554
+        ],
+        "yaw": 0.24587134376971356,
+        "bank": 0.0005290910643922657,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2386,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7.0999999940395355,
+          "status": "TRACKING",
+          "features": 77,
+          "inliers": 69,
+          "ratio": 1,
+          "mapCells": 395,
+          "points": 11232,
+          "route": {
+            "turn": -0.15,
+            "curvature": -0.0046875,
+            "speed": 6.287700718701956,
+            "score": 2.568861259280658,
+            "length": 19.97071599690942,
+            "safe": true,
+            "points": [
+              [
+                -0.03749890138005678,
+                -3.956739223455089,
+                3.999765629119839
+              ],
+              [
+                -0.0843694383180349,
+                -3.957431631200798,
+                5.999209015659696
+              ],
+              [
+                -0.1499824226989451,
+                -3.9581240045333073,
+                7.998125131831523
+              ],
+              [
+                -0.2343320877988475,
+                -3.9587696493669897,
+                9.996338292935306
+              ],
+              [
+                -0.3374110201272392,
+                -3.959372862764993,
+                11.993672876053733
+              ],
+              [
+                -0.4592101600786928,
+                -3.9603459918373884,
+                13.989953335487709
+              ],
+              [
+                -0.5997188027290672,
+                -3.96099222126768,
+                15.985004218185033
+              ],
+              [
+                -0.7589245987764315,
+                -3.9617910644611873,
+                17.978650179160994
+              ],
+              [
+                -0.9368135556263013,
+                -3.9628046759601068,
+                19.97071599690942
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.28548663282466,
+              -75.52904843455627,
+              527.9670690951584
+            ],
+            "q": [
+              -0.0480397519927814,
+              -0.12716155996379971,
+              0.15757194492096097,
+              0.9781069481758524
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 15,
+        "absorbed": 672,
+        "time": 304.70833333322054
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.39321599999999995,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 1.3458741998618504e-9,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00429999998647,
+      "eventsSeen": 1,
+      "livingParticles": 8192,
+      "waterWakes": 240,
+      "position": [
+        -6.230084776876666,
+        6.8771967501328035,
+        -80.77650680791778
+      ],
+      "quaternion": [
+        0.04712358489251024,
+        0.12252262135707043,
+        -0.0058242054613281274,
+        0.9913292357402835
+      ],
+      "velocityVector": [
+        -0.6270105999846992,
+        0.06284169251485847,
+        -2.236436696448617
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 192,
+      "triangles": 2827927,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.895232690680132,
+      "velocity": 0.041002675076025015,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 325.0234000001617,
+      "learning": {
+        "look": 0,
+        "move": 570.4406113890383,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.064266311751338,
+        "water": true,
+        "gliding": false,
+        "distance": 570.4406113890383,
+        "stops": 4,
+        "position": [
+          -9.824273206089895,
+          2.9044640039799896,
+          -95.00704942396275
+        ],
+        "local": [
+          -9.824273206089895,
+          2.9044640039799896,
+          -95.00704942396275
+        ],
+        "yaw": 0.24579898896459615,
+        "bank": 2.6199890200380498e-30,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2546,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7,
+          "status": "TRACKING",
+          "features": 76,
+          "inliers": 70,
+          "ratio": 1,
+          "mapCells": 388,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 6.070844489904855,
+            "score": 2.5588502371055077,
+            "length": 19.454391642630608,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -3.8953844987999005,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -3.8960205011584264,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -3.8967119407103574,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -3.89729515166648,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -3.897874589143669,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -3.8986754469213745,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -3.899891035084454,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -3.9005448366503996,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -3.9020282412470553,
+                19.454391642630608
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.178603943371188,
+              -75.49007361391965,
+              528.0390321621448
+            ],
+            "q": [
+              0.04761851014797217,
+              0.12737514939209124,
+              -0.15726724085954658,
+              -0.9781487942849294
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 16,
+        "absorbed": 720,
+        "time": 324.96666666653545
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.458752,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.5901624842999785,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 4.417300000003991,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 241,
+      "position": [
+        -6.555204036652012,
+        6.82715799925349,
+        -81.97621258688746
+      ],
+      "quaternion": [
+        0.047123999259392244,
+        0.1224520719729486,
+        -0.005820851843002429,
+        0.9913379526917925
+      ],
+      "velocityVector": [
+        0,
+        0.043819158203767174,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 190,
+      "triangles": 2827927,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.877442206503474,
+      "velocity": 0.0020336695485042933,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 345.1984333335133,
+      "learning": {
+        "look": 0,
+        "move": 570.4406113890383,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.03064003796757006,
+        "water": true,
+        "gliding": false,
+        "distance": 570.4406113890383,
+        "stops": 4,
+        "position": [
+          -9.824273206089895,
+          2.867173457650162,
+          -95.00704942396275
+        ],
+        "local": [
+          -9.824273206089895,
+          2.867173457650162,
+          -95.00704942396275
+        ],
+        "yaw": 0.24579898896459615,
+        "bank": 1.3571440721023639e-56,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2707,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 5.299999997019768,
+          "status": "TRACKING",
+          "features": 72,
+          "inliers": 68,
+          "ratio": 1,
+          "mapCells": 393,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 6.070844489904855,
+            "score": 2.519315580872128,
+            "length": 19.454391642630608,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -3.862232747073136,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -3.862889620841441,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -3.8634745131231716,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -3.864109565703483,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -3.864661574584871,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -3.865436405355221,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -3.8667732297646134,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -3.8674032667253346,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -3.868961298345173,
+                19.454391642630608
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.13819194285116,
+              -75.44424804992107,
+              527.9956601107504
+            ],
+            "q": [
+              -0.04711384129805984,
+              -0.1276368581913705,
+              0.15675017906211344,
+              0.9782221116664557
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 16,
+        "absorbed": 768,
+        "time": 345.09999999985047
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.39321599999999995,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.8346797870124135,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 24.592333333355583,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 241,
+      "position": [
+        -6.555204036652017,
+        6.8074081533999795,
+        -81.97621258688754
+      ],
+      "quaternion": [
+        0.047123999259392244,
+        0.12245207197294858,
+        -0.005820851843002428,
+        0.9913379526917925
+      ],
+      "velocityVector": [
+        0,
+        0.006716227418784066,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 190,
+      "triangles": 2827927,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.887966275251529,
+      "velocity": 0.032300016469985086,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 365.3817333335316,
+      "learning": {
+        "look": 0,
+        "move": 570.4406113890383,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.008954764294439248,
+        "water": true,
+        "gliding": false,
+        "distance": 570.4406113890383,
+        "stops": 4,
+        "position": [
+          -9.824273206089895,
+          2.8586152118599406,
+          -95.00704942396275
+        ],
+        "local": [
+          -9.824273206089895,
+          2.8586152118599406,
+          -95.00704942396275
+        ],
+        "yaw": 0.24579898896459615,
+        "bank": 6.856383085093084e-83,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 2867,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 5.199999988079071,
+          "status": "TRACKING",
+          "features": 72,
+          "inliers": 68,
+          "ratio": 1,
+          "mapCells": 390,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 6.070844489904855,
+            "score": 2.479074689034532,
+            "length": 19.454391642630608,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -3.855129429656244,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -3.855780156243078,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -3.8563714256488444,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -3.856994837381067,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -3.857512878461813,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -3.8582688117779096,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -3.859509937490117,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -3.8601396126337835,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -3.861652055359048,
+                19.454391642630608
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.085001946746827,
+              -75.43144230106421,
+              527.9486019351411
+            ],
+            "q": [
+              0.04661662914463934,
+              0.12788428617494868,
+              -0.15625024198124993,
+              -0.9782935965841365
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 17,
+        "absorbed": 816,
+        "time": 365.3583333331654
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.32767999999999997,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.933337953166777,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 44.77563333337386,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 241,
+      "position": [
+        -6.555204036652017,
+        6.816865197385007,
+        -81.97621258688754
+      ],
+      "quaternion": [
+        0.047123999259392244,
+        0.12245207197294858,
+        -0.005820851843002428,
+        0.9913379526917925
+      ],
+      "velocityVector": [
+        0,
+        -0.03139531465239693,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.944999999999709,
+      "drawCalls": 198,
+      "triangles": 3272431,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.928562489905744,
+      "velocity": 0.06577981798499317,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 385.5928333335499,
+      "learning": {
+        "look": 0,
+        "move": 570.4406113890383,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.04558887563978697,
+        "water": true,
+        "gliding": false,
+        "distance": 570.4406113890383,
+        "stops": 4,
+        "position": [
+          -9.824273206089895,
+          2.878856313155958,
+          -95.00704942396275
+        ],
+        "local": [
+          -9.824273206089895,
+          2.878856313155958,
+          -95.00704942396275
+        ],
+        "yaw": 0.24579898896459615,
+        "bank": 3.213602151201672e-109,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "watching",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 3027,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.4000000059604645,
+          "status": "TRACKING",
+          "features": 75,
+          "inliers": 69,
+          "ratio": 1,
+          "mapCells": 388,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 6.070844489904855,
+            "score": 2.4446094751272343,
+            "length": 19.454391642630608,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -3.879680029210731,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -3.880345266232232,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -3.8809380930052964,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -3.881581144584576,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -3.8821519490837626,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -3.8829397774322363,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -3.8841875180872583,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -3.8848088468531,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -3.8861691642565854,
+                19.454391642630608
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.064240434566933,
+              -75.43726334138195,
+              527.8755107303587
+            ],
+            "q": [
+              -0.04612008017625297,
+              -0.12818739216177358,
+              0.1557266020273902,
+              0.9783609539000996
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 18,
+        "absorbed": 816,
+        "time": 385.4833333331471
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.10000000894069672,
+      "gpuRenderMs": 0.32767999999999997,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0.4681790309102503,
+          4.97394059752853,
+          0.15228698210065297,
+          0.7887695749692636
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.9731534780036962,
+      "beautyEvent": "sea-visitor",
+      "beautyEventTime": 64.98673333339215,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 241,
+      "position": [
+        -6.555204036652021,
+        6.851504124526758,
+        -81.9762125868876
+      ],
+      "quaternion": [
+        0.047123999259392244,
+        0.12245207197294858,
+        -0.005820851843002428,
+        0.9913379526917925
+      ],
+      "velocityVector": [
+        0,
+        -0.061854072313088135,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 172,
+      "triangles": 2761287,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 6.980080929432006,
+      "velocity": 0.0817406331726812,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 405.7830333335682,
+      "learning": {
+        "look": 0,
+        "move": 570.4406113890383,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.07396964720336738,
+        "water": true,
+        "gliding": false,
+        "distance": 570.4406113890383,
+        "stops": 4,
+        "position": [
+          -9.824273206089895,
+          2.9244883664177928,
+          -95.00704942396275
+        ],
+        "local": [
+          -9.824273206089895,
+          2.9244883664177928,
+          -95.00704942396275
+        ],
+        "yaw": 0.24579898896459615,
+        "bank": 1.5834482272319634e-135,
+        "recoveries": 0,
+        "contactCache": 6433,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": true,
+          "captures": 3188,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.4000000059604645,
+          "status": "TRACKING",
+          "features": 75,
+          "inliers": 69,
+          "ratio": 1,
+          "mapCells": 399,
+          "points": 11232,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 6.070844489904855,
+            "score": 2.4195855810416353,
+            "length": 19.454391642630608,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -3.930663215437442,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -3.9312758722926713,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -3.931962225317303,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -3.932488871050052,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -3.9330224562996188,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -3.93381051275514,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -3.9352993207237508,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -3.935940914780123,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -3.937274799406975,
+                19.454391642630608
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              15.034792987590444,
+              -75.4854492013251,
+              527.8496770499328
+            ],
+            "q": [
+              -0.04574565155921142,
+              -0.12838701889223755,
+              0.1553550901320639,
+              0.9784114189406506
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 18,
+        "absorbed": 864,
+        "time": 405.73333333312866
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.65536,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.9891780413534358,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 241,
+      "position": [
+        -6.555204036652023,
+        6.906252829196902,
+        -81.97621258688763
+      ],
+      "quaternion": [
+        0.047123999259392244,
+        0.12245207197294858,
+        -0.005820851843002428,
+        0.9913379526917925
+      ],
+      "velocityVector": [
+        0,
+        -0.08114044783244115,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 139,
+      "frameMs": 7.176666666666764,
+      "drawCalls": 176,
+      "triangles": 3652039,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.044891670702782,
+      "velocity": 6.026367158715201,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 425.9413333335864,
+      "learning": {
+        "look": 0,
+        "move": 621.5782011604864,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": false,
+        "preparing": false,
+        "speed": 5.75727951715554,
+        "water": true,
+        "gliding": false,
+        "distance": 622.0099265503541,
+        "stops": 4,
+        "position": [
+          -18.22129408399324,
+          2.868816820088591,
+          -145.4264248579217
+        ],
+        "local": [
+          -18.22129408399324,
+          2.868816820088591,
+          -145.4264248579217
+        ],
+        "yaw": -0.20348606563222874,
+        "bank": 0.01813142749439268,
+        "recoveries": 0,
+        "contactCache": 6823,
+        "reason": "following observed ground",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": true,
+          "captures": 3348,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 8.200000002980232,
+          "status": "TRACKING",
+          "features": 66,
+          "inliers": 50,
+          "ratio": 0.8928571428571429,
+          "mapCells": 627,
+          "points": 11299,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 7.585455103962609,
+            "score": 2.9320803726977087,
+            "length": 23.060607390387165,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -4.063933166370405,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -4.063939117738902,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -4.065014514229348,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -4.065016821154279,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -4.06506244042567,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -4.068147601891421,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -4.099230934201502,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -4.099603897295472,
+                17.60162717897713
+              ],
+              [
+                4.0069338685578675,
+                -4.126752741900065,
+                19.454391642630608
+              ],
+              [
+                4.83436451822092,
+                -4.111029873100571,
+                21.275053176264272
+              ],
+              [
+                5.735056501355597,
+                -4.131584651397784,
+                23.060607390387165
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              8.8385858166948,
+              -82.73018743005417,
+              576.080092086996
+            ],
+            "q": [
+              -0.07955294398299902,
+              0.08112859069471583,
+              0.1829000557216153,
+              0.9765434196657977
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 19,
+        "absorbed": 912,
+        "time": 425.85833333311035
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.524288,
+      "gpuComputeMs": 0.065536,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.0007575934866272618,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 262,
+      "position": [
+        -20.517979851962206,
+        6.859579937555482,
+        -129.4593065252848
+      ],
+      "quaternion": [
+        0.04726312354544527,
+        -0.09582895548627486,
+        0.0045553018676442476,
+        0.9942646818971458
+      ],
+      "velocityVector": [
+        -0.8848105505450121,
+        -0.10017720000224781,
+        -5.94387114697627
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 183,
+      "triangles": 3664327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.062772107681667,
+      "velocity": 0.0683642525162057,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 446.11763333360466,
+      "learning": {
+        "look": 0,
+        "move": 713.4730570820337,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.08267995000199746,
+        "water": true,
+        "gliding": false,
+        "distance": 713.4730570820337,
+        "stops": 5,
+        "position": [
+          -2.8533018752688437,
+          2.5772533125029837,
+          -234.6586158906914
+        ],
+        "local": [
+          -2.8533018752688437,
+          2.5772533125029837,
+          -234.6586158906914
+        ],
+        "yaw": 0.011483988965147632,
+        "bank": 4.38064552701522e-9,
+        "recoveries": 0,
+        "contactCache": 7577,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 3508,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 10.700000002980232,
+          "status": "TRACKING",
+          "features": 83,
+          "inliers": 76,
+          "ratio": 1,
+          "mapCells": 417,
+          "points": 11301,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 5.292683415170394,
+            "score": 2.5282633445535954,
+            "length": 17.60162717897713,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -4.0597284123269555,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -4.0598518779938235,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -4.059978260909023,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -4.060141858730601,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -4.060263205206738,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -4.060340011253448,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -4.0604937840139,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -4.060623509552518,
+                17.60162717897713
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              23.965364396059726,
+              -84.55169217329778,
+              661.4445966539838
+            ],
+            "q": [
+              0.0720775914997254,
+              0.02897568585233553,
+              -0.1584193324152405,
+              -0.9843112036089553
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 48,
+        "released": 20,
+        "absorbed": 912,
+        "time": 446.11666666642526
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.458752,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.1436023798454614,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 299,
+      "position": [
+        -2.6990040980588295,
+        6.552974590680973,
+        -221.2243618647913
+      ],
+      "quaternion": [
+        0.047481357282966034,
+        0.005735486496062698,
+        -0.0002726406879297022,
+        0.9988556204838996
+      ],
+      "velocityVector": [
+        -0.00003791779347648929,
+        -0.06835602487610869,
+        -0.001059928052882242
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 181,
+      "triangles": 3664327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.106727063488506,
+      "velocity": 0.03641293503307067,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 466.28703333362296,
+      "learning": {
+        "look": 0,
+        "move": 713.4730577077661,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.060010869719672594,
+        "water": true,
+        "gliding": false,
+        "distance": 713.4730577077661,
+        "stops": 5,
+        "position": [
+          -2.853301885186491,
+          2.6338307573136053,
+          -234.65861651634248
+        ],
+        "local": [
+          -2.853301885186491,
+          2.6338307573136053,
+          -234.65861651634248
+        ],
+        "yaw": 0.011483988964596742,
+        "bank": 2.3266012507577488e-35,
+        "recoveries": 0,
+        "contactCache": 7577,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 3668,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 7.299999997019768,
+          "status": "TRACKING",
+          "features": 80,
+          "inliers": 73,
+          "ratio": 1,
+          "mapCells": 431,
+          "points": 11301,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 5.292683415170394,
+            "score": 2.4983872763137627,
+            "length": 17.60162717897713,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -4.114550363043041,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -4.114700277197933,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -4.1148502217737875,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -4.114986182127885,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -4.115187917271809,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -4.115278391199613,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -4.115531993353936,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -4.11571856638023,
+                17.60162717897713
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              23.895802910064752,
+              -84.66848087012336,
+              661.66154529572
+            ],
+            "q": [
+              -0.07117157190944257,
+              -0.02884128431270153,
+              0.15706600271683857,
+              0.9845979171528352
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 20,
+        "absorbed": 960,
+        "time": 466.24166666640696
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0.09999999403953552,
+      "gpuRenderMs": 0.39321599999999995,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.6544588365408684,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 299,
+      "position": [
+        -2.699022031688851,
+        6.5953451827154295,
+        -221.2248635174272
+      ],
+      "quaternion": [
+        0.04748135728296618,
+        0.005735486495523551,
+        -0.00027264068790407343,
+        0.9988556204839028
+      ],
+      "velocityVector": [
+        0,
+        -0.03830127282762013,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "last-light",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": true,
+      "selected": null,
+      "selectedId": "",
+      "selectedKind": "",
+      "selectionX": 0,
+      "selectionY": 0,
+      "selectionVisible": false,
+      "nearest": "THE LAST LIGHT",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 181,
+      "triangles": 3664327,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 7.120779493037844,
+      "velocity": 0.003711198826884897,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 486.43300000030786,
+      "learning": {
+        "look": 0,
+        "move": 713.4730577077661,
+        "speed": 0
+      },
+      "encounter": "",
+      "approach": "",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.023675616688726198,
+        "water": true,
+        "gliding": false,
+        "distance": 713.4730577077661,
+        "stops": 5,
+        "position": [
+          -2.853301885186491,
+          2.667846404281035,
+          -234.65861651634248
+        ],
+        "local": [
+          -2.853301885186491,
+          2.667846404281035,
+          -234.65861651634248
+        ],
+        "yaw": 0.011483988964596742,
+        "bank": 1.299034024044976e-61,
+        "recoveries": 0,
+        "contactCache": 7577,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 3827,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.9000000059604645,
+          "status": "TRACKING",
+          "features": 83,
+          "inliers": 76,
+          "ratio": 1,
+          "mapCells": 413,
+          "points": 11301,
+          "route": {
+            "turn": 0.65,
+            "curvature": 0.0203125,
+            "speed": 5.292683415170394,
+            "score": 2.4659763366970475,
+            "length": 17.60162717897713,
+            "safe": true,
+            "points": [
+              [
+                0.16241062351063817,
+                -4.148157667141329,
+                3.9956004107926018
+              ],
+              [
+                0.3651726559606006,
+                -4.148350820421485,
+                5.985157511820834
+              ],
+              [
+                0.6485709198607463,
+                -4.148527495248248,
+                7.964838123453297
+              ],
+              [
+                1.0121377616960814,
+                -4.148688630450935,
+                9.931375448696064
+              ],
+              [
+                1.455273236678029,
+                -4.148927578684491,
+                11.881524379128718
+              ],
+              [
+                1.9772460987515106,
+                -4.14903455475212,
+                13.812066849864316
+              ],
+              [
+                2.57719500727061,
+                -4.149305229353723,
+                15.719817149883124
+              ],
+              [
+                3.254129948351602,
+                -4.149466955567019,
+                17.60162717897713
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              23.728940108198344,
+              -84.79715004970471,
+              661.8484426542537
+            ],
+            "q": [
+              -0.07040304255089723,
+              -0.028826588448982973,
+              0.15592827392423486,
+              0.9848344088165235
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 21,
+        "absorbed": 1008,
+        "time": 486.36666666638865
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 99,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 0.589824,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0,
+        "blades": 0,
+        "footprints": 0,
+        "lifeVisible": false,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.860433208636292,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 299,
+      "position": [
+        -2.6990220316888562,
+        6.611093346771684,
+        -221.22486351742754
+      ],
+      "quaternion": [
+        0.04748135728296618,
+        0.005735486495523551,
+        -0.00027264068790407343,
+        0.9988556204839028
+      ],
+      "velocityVector": [
+        0,
+        0.00034375039059881125,
+        0
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "space",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": false,
+      "selected": "NACRE",
+      "selectedId": "nacre",
+      "selectedKind": "Living world",
+      "selectionX": 45.85675682534391,
+      "selectionY": 73,
+      "selectionVisible": false,
+      "nearest": "NACRE",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945000000000194,
+      "drawCalls": 133,
+      "triangles": 3312743,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 530.0474965214162,
+      "velocity": 8.135203537541717,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 572.935066666574,
+      "learning": {
+        "look": 0,
+        "move": 779.6311994861807,
+        "speed": 0
+      },
+      "encounter": "nacre",
+      "approach": "nacre",
+      "walking": false,
+      "walkAvailable": true,
+      "pilgrim": {
+        "active": true,
+        "carry": false,
+        "resting": false,
+        "preparing": false,
+        "speed": 9.935097774160143,
+        "water": false,
+        "gliding": true,
+        "distance": 34.105278881554106,
+        "stops": 5,
+        "position": [
+          163053.9097731748,
+          50138.6178133236,
+          -362851.7354000616
+        ],
+        "local": [
+          1.1813253495399767,
+          362.4136441669212,
+          2612.4175447924717
+        ],
+        "yaw": -0.03495478850059703,
+        "bank": 0,
+        "recoveries": 0,
+        "contactCache": 0,
+        "reason": "manual",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": false,
+          "busy": false,
+          "captures": 3885,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 8.700000002980232,
+          "status": "TRACKING",
+          "features": 86,
+          "inliers": 65,
+          "ratio": 0.8783783783783784,
+          "mapCells": 646,
+          "points": 11234,
+          "route": {
+            "turn": 0.15,
+            "curvature": 0.0046875,
+            "speed": 9.626265007511362,
+            "score": 3.108897914996163,
+            "length": 27.919678589312767,
+            "safe": true,
+            "points": [
+              [
+                0.03749890138005678,
+                -4.0031270195130775,
+                3.999765629119839
+              ],
+              [
+                0.0843694383180349,
+                -4.003697512225111,
+                5.999209015659696
+              ],
+              [
+                0.1499824226989451,
+                -4.0047645836241355,
+                7.998125131831523
+              ],
+              [
+                0.2343320877988475,
+                -4.005980921007245,
+                9.996338292935306
+              ],
+              [
+                0.3374110201272392,
+                -4.007145324906746,
+                11.993672876053733
+              ],
+              [
+                0.4592101600786928,
+                -4.007894413713608,
+                13.989953335487709
+              ],
+              [
+                0.5997188027290672,
+                -4.00880124228129,
+                15.985004218185033
+              ],
+              [
+                0.7589245987764315,
+                -4.009922781904434,
+                17.978650179160994
+              ],
+              [
+                0.9368135556263013,
+                -4.0113662274806865,
+                19.97071599690942
+              ],
+              [
+                1.1333700386216115,
+                -3.9992169228491115,
+                21.961026588802888
+              ],
+              [
+                1.348576772416763,
+                -4.013321810717441,
+                23.949407026480763
+              ],
+              [
+                1.5824148424959361,
+                -3.9995223003696045,
+                25.935682551223614
+              ],
+              [
+                1.8348636968355456,
+                -4.0159234300530935,
+                27.919678589312767
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              20.859929367568594,
+              -87.17740540340914,
+              688.0992083720832
+            ],
+            "q": [
+              0.05291255987096951,
+              0.13692148342430416,
+              -0.13903904529013641,
+              -0.9793471867880197
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": false,
+      "resting": false,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 13,
+        "released": 24,
+        "absorbed": 1139,
+        "time": 572.8499999996434
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 108,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 1.3762560000000001,
+      "gpuComputeMs": 0.065536,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0.0011249603372227555,
+        "blades": 5850,
+        "footprints": 0,
+        "lifeVisible": true,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.0006755466822426158,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 315,
+      "position": [
+        163054.8746505545,
+        50129.12539734189,
+        -362838.2186781425
+      ],
+      "quaternion": [
+        0.47888867567894033,
+        -0.002984683175118486,
+        0.35999139321901796,
+        0.8006640523846724
+      ],
+      "velocityVector": [
+        1.3874689719349946,
+        3.0158098619936875,
+        -7.843382933245069
+      ],
+      "speed": 12,
+      "keys": [
+        "KeyW"
+      ]
+    },
+    {
+      "ready": true,
+      "sanctuary": "space",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": false,
+      "selected": "NACRE",
+      "selectedId": "nacre",
+      "selectedKind": "Living world",
+      "selectionX": 45.05811459835133,
+      "selectionY": 73,
+      "selectionVisible": false,
+      "nearest": "NACRE",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 133,
+      "triangles": 3366743,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 446.61283757967976,
+      "velocity": 0.21003175519837147,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 592.6029999997645,
+      "learning": {
+        "look": 0,
+        "move": 991.1944080406406,
+        "speed": 0
+      },
+      "encounter": "nacre",
+      "approach": "nacre",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": false,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.0653547866450383,
+        "water": true,
+        "gliding": false,
+        "distance": 244.99422467794605,
+        "stops": 5,
+        "position": [
+          163023.77011343202,
+          50278.019983381164,
+          -363017.0504070286
+        ],
+        "local": [
+          8.396666389267157,
+          305.8710664864051,
+          2401.6539535401143
+        ],
+        "yaw": -0.03495478850059703,
+        "bank": 0,
+        "recoveries": 0,
+        "contactCache": 0,
+        "reason": "manual",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": false,
+          "busy": false,
+          "captures": 3885,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 8.700000002980232,
+          "status": "TRACKING",
+          "features": 86,
+          "inliers": 65,
+          "ratio": 0.8783783783783784,
+          "mapCells": 646,
+          "points": 11234,
+          "route": {
+            "turn": 0.15,
+            "curvature": 0.0046875,
+            "speed": 9.626265007511362,
+            "score": 3.108897914996163,
+            "length": 27.919678589312767,
+            "safe": true,
+            "points": [
+              [
+                0.03749890138005678,
+                -4.0031270195130775,
+                3.999765629119839
+              ],
+              [
+                0.0843694383180349,
+                -4.003697512225111,
+                5.999209015659696
+              ],
+              [
+                0.1499824226989451,
+                -4.0047645836241355,
+                7.998125131831523
+              ],
+              [
+                0.2343320877988475,
+                -4.005980921007245,
+                9.996338292935306
+              ],
+              [
+                0.3374110201272392,
+                -4.007145324906746,
+                11.993672876053733
+              ],
+              [
+                0.4592101600786928,
+                -4.007894413713608,
+                13.989953335487709
+              ],
+              [
+                0.5997188027290672,
+                -4.00880124228129,
+                15.985004218185033
+              ],
+              [
+                0.7589245987764315,
+                -4.009922781904434,
+                17.978650179160994
+              ],
+              [
+                0.9368135556263013,
+                -4.0113662274806865,
+                19.97071599690942
+              ],
+              [
+                1.1333700386216115,
+                -3.9992169228491115,
+                21.961026588802888
+              ],
+              [
+                1.348576772416763,
+                -4.013321810717441,
+                23.949407026480763
+              ],
+              [
+                1.5824148424959361,
+                -3.9995223003696045,
+                25.935682551223614
+              ],
+              [
+                1.8348636968355456,
+                -4.0159234300530935,
+                27.919678589312767
+              ]
+            ]
+          },
+          "segment": 0,
+          "pose": {
+            "p": [
+              20.859929367568594,
+              -87.17740540340914,
+              688.0992083720832
+            ],
+            "q": [
+              0.05291255987096951,
+              0.13692148342430416,
+              -0.13903904529013641,
+              -0.9793471867880197
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": false,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 0,
+        "released": 24,
+        "absorbed": 1152,
+        "time": 592.5749999996254
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 108,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 1.7694720000000002,
+      "gpuComputeMs": 0,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0.068396515150227,
+        "blades": 5850,
+        "footprints": 0,
+        "lifeVisible": true,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.033495669923104945,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 315,
+      "position": [
+        163025.2167255414,
+        50269.44035419235,
+        -363006.033859079
+      ],
+      "quaternion": [
+        0.47888867567894033,
+        -0.002984683175118486,
+        0.35999139321901796,
+        0.8006640523846724
+      ],
+      "velocityVector": [
+        -0.12201383443815368,
+        0.15571510136526612,
+        -0.009358868867691075
+      ],
+      "speed": 12,
+      "keys": []
+    },
+    {
+      "ready": true,
+      "sanctuary": "space",
+      "backend": "WebGPU",
+      "paused": false,
+      "mode": "FREE",
+      "quiet": false,
+      "selected": "NACRE",
+      "selectedId": "nacre",
+      "selectedKind": "Living world",
+      "selectionX": 14.907158860334397,
+      "selectionY": 73,
+      "selectionVisible": false,
+      "nearest": "NACRE",
+      "quality": "HIGH",
+      "fps": 144,
+      "frameMs": 6.945833333333334,
+      "drawCalls": 139,
+      "triangles": 3472111,
+      "particles": 80000,
+      "dpr": 1,
+      "sectors": 27,
+      "distance": 446.59859100358517,
+      "velocity": 0.0014001021559173436,
+      "speedDial": 1,
+      "seeds": 0,
+      "field": false,
+      "time": 602.7488333330243,
+      "learning": {
+        "look": 0,
+        "move": 991.201447429547,
+        "speed": 0
+      },
+      "encounter": "nacre",
+      "approach": "nacre",
+      "walking": false,
+      "walkAvailable": false,
+      "pilgrim": {
+        "active": true,
+        "carry": true,
+        "resting": true,
+        "preparing": false,
+        "speed": 0.017731004115524557,
+        "water": true,
+        "gliding": false,
+        "distance": 245.0005427030384,
+        "stops": 6,
+        "position": [
+          163023.76802997306,
+          50278.0246291584,
+          -363017.0541481659
+        ],
+        "local": [
+          8.396700843017706,
+          305.8711185911388,
+          2401.6476356089647
+        ],
+        "yaw": -0.2528347884993432,
+        "bank": 8.637299011580911e-18,
+        "recoveries": 0,
+        "contactCache": 0,
+        "reason": "resting",
+        "perception": {
+          "recording": false,
+          "recordedFrames": 0,
+          "calibration": {
+            "samples": 12,
+            "maxDepthError": 0.0028217562845327393,
+            "meanDepthError": 0.0009216088095603444,
+            "labelMismatches": 0
+          },
+          "frequency": 8,
+          "ready": true,
+          "enabled": true,
+          "busy": false,
+          "captures": 3963,
+          "dropped": 0,
+          "error": "",
+          "condition": "CLEAR",
+          "analysisMs": 6.200000002980232,
+          "status": "TRACKING",
+          "features": 21,
+          "inliers": 18,
+          "ratio": 1,
+          "mapCells": 459,
+          "points": 14000,
+          "route": null,
+          "segment": 1,
+          "pose": {
+            "p": [
+              -0.12429660709293251,
+              -0.05718781814254518,
+              0.09586699024799447
+            ],
+            "q": [
+              -0.00007652223661929954,
+              0.1024294004520512,
+              0.04616901531523221,
+              0.9936682716541787
+            ]
+          },
+          "readbackMs": null
+        }
+      },
+      "carrying": true,
+      "resting": true,
+      "pilgrimAvailable": true,
+      "gas": {
+        "active": 47,
+        "released": 25,
+        "absorbed": 1153,
+        "time": 602.6999999996162
+      },
+      "relativity": {
+        "active": false,
+        "ended": false,
+        "radius": 6,
+        "properTime": 0,
+        "rate": 1,
+        "radialTide": 0,
+        "outwardLight": 0
+      },
+      "relativityLoading": false,
+      "relativityError": false,
+      "experiment": {
+        "active": 0,
+        "absorbed": 0,
+        "escaped": 0,
+        "launched": 0,
+        "gravity": 1
+      },
+      "assetFallback": false,
+      "generatedSectors": 108,
+      "createdVisible": 0,
+      "benchmark": "NONE",
+      "computeSubmitMs": 0,
+      "gpuRenderMs": 1.8350080000000002,
+      "gpuComputeMs": 0.065536,
+      "walkedDistance": 0,
+      "walkEyeHeight": 1.8,
+      "garden": {
+        "stillness": 0.45806141017767155,
+        "blades": 5850,
+        "footprints": 0,
+        "lifeVisible": true,
+        "lifeCount": 72
+      },
+      "gasSample": [
+        [
+          1.9761645033831978,
+          3.8978143802587475,
+          0.19968082255737313,
+          0.9538501691126375
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ],
+        [
+          0,
+          7,
+          0.12,
+          0
+        ]
+      ],
+      "orbitSample": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "stillness": 0.38776066348271554,
+      "beautyEvent": "none",
+      "beautyEventTime": 82.00283333340761,
+      "eventsSeen": 2,
+      "livingParticles": 8192,
+      "waterWakes": 315,
+      "position": [
+        163022.95091595408,
+        50268.08128327832,
+        -363007.2307625582
+      ],
+      "quaternion": [
+        0.5150927339516037,
+        -0.09310590656039254,
+        0.31133868484136074,
+        0.7931449986699037
+      ],
+      "velocityVector": [
+        -0.0007076490926869846,
+        0.00038805107275513995,
+        0.0008590269725794761
+      ],
+      "speed": 12,
+      "keys": []
+    }
+  ],
+  "traceSummary": {
+    "sourceSamples": 531,
+    "retainedEvery": 20,
+    "note": "All checks and maxima use the full per-second trace. Every twentieth sample and the final sample are retained here.",
+    "maxContactCache": 7967,
+    "maxMapPoints": 14000,
+    "sectors": [
+      27
+    ]
+  }
+}

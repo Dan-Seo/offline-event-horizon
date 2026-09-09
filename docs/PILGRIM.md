@@ -8,6 +8,23 @@ The craft's dynamics may query the rendered terrain for contact and emergency co
 
 The sensor camera shares the craft pose, terrain triangles and object instance transforms with the artwork. A bounded opaque sensor pass excludes bloom, atmospheric compositing and decorative translucent particles. Sensor RGB is a calibrated, explicitly simplified appearance model, rather than a screenshot of the artistic post-processing pipeline. Depth is axial camera depth. Transparent water is modeled as a visible surface in the clear configuration; reflective-water failure conditions invalidate its depth. This is an ideal synthetic RGB-D camera, not a faithful Kinect simulator.
 
+```mermaid
+flowchart LR
+  W[Shared world geometry] --> C[Physical contact and recovery]
+  C --> P[PILGRIM dynamics]
+  P --> S[Synchronized sensor rig]
+  W --> S
+  S -->|RGB and depth only| V[Worker: visual odometry]
+  V --> M[Observed local map]
+  M --> D[Scenic Director]
+  D -->|Throttle and steering| P
+  S -->|Truth outputs| E[Lab evaluation and export]
+  V -->|Estimated poses| E
+  P --> H[Healing camera and environmental response]
+```
+
+The manual controls interrupt the director before its commands reach the dynamics. The evaluation branch has no return path into estimation or route choice. Sensor rendering runs during Carry and deliberate lab use; ordinary manual riding and flight do not keep it active.
+
 ## Baseline, not novel SLAM
 
 The baseline detects Shi–Tomasi corners, tracks 7×7 image patches with three-level pyramidal Lucas–Kanade, checks forward/backward consistency and normalized patch error, associates interpolated inverse depth and estimates a rigid 3D transform with RANSAC and Horn's quaternion absolute-orientation solution. It composes relative estimates in its own initial frame. There is no pose copying, loop closure, global bundle adjustment or global relocalization. Tracking failure starts a new segment; no invented bridge is drawn across a missing interval.

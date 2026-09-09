@@ -164,6 +164,31 @@ try {
     bundle.lastCapture.id === bundle.records.at(-1).truth.id &&
       bundle.lastCapture.timestamp === bundle.records.at(-1).truth.timestamp,
   );
+  await page
+    .getByRole("button", { name: "ESTIMATE + TRUTH", exact: true })
+    .click();
+  await wait(700);
+  const plotted = await page
+    .locator(".trajectory-view canvas")
+    .evaluate((canvas) => {
+      const data = canvas
+        .getContext("2d")
+        .getImageData(0, 0, canvas.width, canvas.height).data;
+      let truth = 0,
+        estimate = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i + 3] < 40) continue;
+        if (data[i] < 175 && data[i + 1] > 150 && data[i + 2] > 150) truth++;
+        if (data[i] > 175 && data[i + 1] > 140 && data[i + 2] < 170) estimate++;
+      }
+      return { truth, estimate };
+    });
+  check(
+    "The moving trajectory plot renders truth and estimate",
+    plotted.truth > 5 && plotted.estimate > 5,
+    plotted,
+  );
+  await shot("trajectory");
   await page.keyboard.down("KeyW");
   await page.waitForTimeout(100);
   let s = await read();
@@ -282,6 +307,16 @@ try {
       ),
     );
     await shot(label);
+    await page.keyboard.press("KeyH");
+    const help = await page.locator(".controls-help").boundingBox();
+    check(
+      `${label} help remains inside the visible world`,
+      help &&
+        help.width > 150 &&
+        help.x >= 0 &&
+        help.x + help.width <= bounds.x + bounds.width + 1,
+    );
+    await page.keyboard.press("KeyH");
   }
   await page
     .getByRole("button", { name: "SENSORS + PLANNER", exact: true })

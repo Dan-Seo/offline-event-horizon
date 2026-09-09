@@ -47,11 +47,27 @@ Both short lab runs observed a 7.0 ms rAF frame-interval p95 on this desktop. We
 - Scenic steering initially turned more tightly than the candidate arcs. It now follows the proposed curvature through the physical yaw response, and discourages views crowded by very close geometry.
 - The old planetary description card covered the mobile driving view, and the expanded footer overflowed. Planet information now yields while aboard; touch controls and secondary buttons have separate room. Touch instructions replace keyboard copy on coarse-pointer devices.
 
-## Release status
+## Local release regressions
 
 Installed Edge 152.0.4191.66 passed all sixteen final PILGRIM journey checks, including ordinary arrival without sensor overhead, direct Carry entry, quiet-mode handover, native Ctrl+C, disabling sensors during manual rest, planetary coastal boarding, movement onto water, portrait layout and two-thumb takeover. A longer earlier water observation ran for two minutes; the corrected final route used one minute before the coast. The retained final walking regression also passed all 23 checks, including visible terrain, ground-level movement, mobile input, light placement, graceful takeoff and recovery.
 
-Local release checks and public verification are recorded with their source URLs in `evidence/vastness-3.0/`. Production verification is recorded after deployment; a successful local build is not treated as public verification.
+## Public release verification
+
+Runtime commit `fc0ed649a463982494bd806bc4592e0458cab22b` was pushed to GitHub and deployed to Vercel on September 9, 2026 (KST). [GitHub CI](https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34292168234) passed type checking, all 34 numerical tests, the retained RGB-D replay and the production build. Vercel reported READY and assigned [the public domain](https://offline-vastness.vercel.app) to deployment `dpl_EFCX77Ycnm7HxVgBcaThAhcXqwfb`. The exact immutable address and observed deployment state are retained in `evidence/vastness-3.0/deployment.json`.
+
+The actual public `/lab` passed all 38 WebGPU checks. The expanded suite also tests capture/analysis synchronization, actual increased vehicle speed in FAST_MOTION, and visible help bounds at laptop, tablet and portrait sizes. Public sensor calibration, tracking degradation/recovery, pause, manual takeover and two-thumb input passed without browser or shader errors. Captured production screenshots were opened and inspected, including the forest-edge composition, route rest, sensor/evaluation views and portrait layout.
+
+The public clear WebGPU run retained 601 samples, including one startup frame, with no LOST frames (99.83% coverage). Over 171.70 truth units, ATE was 1.599 units, one-second translation RPE was 0.155 units, rotation RPE was 0.00832 radians (0.48°), and endpoint drift was 2.62%. At High/DPR1 on the desktop above, frame-interval p95 was 7.0 ms and worker-analysis p95 was 15.0 ms. The actual 32-frame public recording replayed all 31 relative estimates exactly in Node. These are observed results for this run and simplified sensor model, not real-world localization accuracy.
+
+The public forced-WebGL2 lab passed **39 checks**, including the same 38 cases plus a pixel-level check that both moving truth and estimated trajectories actually appear in the plot. Its clear run had 604 samples, no LOST frames, 99.83% coverage, 1.371-unit ATE, 0.133-unit translation RPE, 0.00812-radian rotation RPE and 3.12% endpoint drift over 173.99 truth units. Sensor depth differed from the twelve independent ray intersections by at most 0.00295 units, with no label mismatch. At Battery/DPR0.85, frame-interval p95 was 7.0 ms and worker p95 was 13.9 ms. GPU timestamps were deliberately unavailable on this fallback. All 31 relative estimates from its public 32-frame archive also replayed exactly. The moving-trajectory and portrait screenshots were inspected; the earlier nearly stationary evaluation image intentionally has no meaningful fitted ATE.
+
+The normal public journey passed all sixteen checks, including an uninterrupted **eight-minute quiet Carry observation**, planetary coastal boarding, movement onto water, manual rest, native Ctrl+C, flight, portrait controls and two-thumb takeover. During the eight-minute segment the craft traveled 741.27 units and made five intentional stops. No browser or shader errors were reported. Across all 531 state samples, the contact cache peaked at 7,967 entries, the local point map stayed at or below 14,000 points and the streamed-sector count remained 27. These check bounded application structures, not a full heap or GPU-memory leak analysis.
+
+The eight-minute frame trace contained 69,633 intervals at High/DPR1 and 1600×1000. p95 was 7.0 ms, p99 was 7.1 ms, the maximum was 69.4 ms, and three intervals exceeded 50 ms. Screenshots at four and eight minutes and at the aurora coast were opened and inspected: water/sky reflections, restrained craft scale, open sightlines, portrait composition and clear control hit areas remained intact. The repository retains every twentieth state sample plus the last one, while all checks and maxima use the full trace. This is a sustained desktop observation, not evidence of multi-hour or thermally constrained mobile stability.
+
+The public Korean/English onboarding suite passed all nineteen checks: browser-language arrival, immediate language switching, persistent preference, optional lessons driven by real drag/W/wheel input, direct welcome-to-Carry entry, immediate manual override, accessible help/menu controls and an unrestricted cursor. No runtime or shader errors occurred.
+
+Local and public reports retain their source URL in `evidence/vastness-3.0/`. Additional public journey and fallback results are recorded with the same runtime commit; later documentation-only commits do not imply a different deployed runtime.
 
 ## Boundaries
 

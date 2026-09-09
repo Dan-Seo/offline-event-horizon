@@ -170,6 +170,7 @@ npm run qa:encounters
 npm run qa:approaches
 npm run qa:walk
 npm run qa:pilgrim
+npm run qa:journey
 npm run qa:lab
 npm run qa:devices
 npm run qa:resilience

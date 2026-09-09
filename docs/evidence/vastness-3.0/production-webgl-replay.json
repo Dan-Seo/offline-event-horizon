@@ -1,0 +1,30 @@
+{
+  "file": "artifacts/lab-sequence-webgl.tar",
+  "frames": 32,
+  "compared": 31,
+  "maxTranslationDifference": 0,
+  "maxRotationDifference": 0,
+  "analysisMs": 263.69870000000003,
+  "evaluation": {
+    "samples": 32,
+    "tracked": 31,
+    "lost": 0,
+    "trackingFraction": 0.96875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "distance": 12.827236203480293,
+        "alignment": "stationary / near-collinear — ATE unavailable",
+        "ate": null,
+        "rotation": null,
+        "rpeTranslation": 0.1750018721365052,
+        "rpeRotation": 0.007374993371887482,
+        "rpePairs": 23,
+        "rpeInterval": 1,
+        "endpointDrift": 0.6661302691200104,
+        "driftFraction": 0.05193092717348383
+      }
+    ]
+  }
+}
