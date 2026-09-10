@@ -7,6 +7,7 @@ import {
   localPresence,
 } from "./sanctuary-layout";
 import type { InputManager } from "./input";
+import { oceanRadialFloor, renderedSeaFloor } from "./ocean-depth";
 export type Destination = {
   id: string;
   name: string;
@@ -419,6 +420,10 @@ export class FlightController {
         : b.surface
           ? b.radius + 2
           : b.radius * 1.006 + 3;
+      if (b.id === "orpheus" && this.offset.y > 0 && Math.hypot(this.position.x, this.position.z) < 30000) {
+        const n = this.offset.clone().normalize();
+        floor = oceanRadialFloor(n.x, n.y, n.z, renderedSeaFloor, b.radius, 3);
+      }
       if (this.departure?.id === b.id) {
         const t = this.departure.time / 3,
           blend = t * t * (3 - 2 * t);

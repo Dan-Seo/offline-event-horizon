@@ -33,6 +33,7 @@ import { type Quality } from "./config";
 
 export class SanctuaryAtmosphere {
   time = uniform(0);
+  underwater = uniform(0);
   presence = uniform(1);
   stillness = uniform(0);
   veilOpen = uniform(0);
@@ -72,8 +73,8 @@ export class SanctuaryAtmosphere {
       depthWrite: false,
       fog: false,
     });
-    material.colorNode = this.radiance(positionLocal.normalize());
-    material.opacityNode = this.presence.mul(0.97);
+    material.colorNode = mix(this.radiance(positionLocal.normalize()), vec3(0.012, 0.105, 0.14).add(vec3(0.025, 0.075, 0.07).mul(max(0, positionLocal.normalize().y))), this.underwater);
+    material.opacityNode = this.presence.mul(mix(float(0.97), float(1), this.underwater));
     this.sky = new T.Mesh(new T.SphereGeometry(1600000, 32, 20), material);
     this.sky.renderOrder = -100;
     this.sky.frustumCulled = false;
@@ -109,7 +110,8 @@ export class SanctuaryAtmosphere {
   haze(c: T.Node<"vec3">, density = 0.00026) {
     const distance = length(positionWorld);
     const air = float(1).sub(distance.mul(-density).exp()).mul(this.presence);
-    return mix(c, vec3(0.034, 0.066, 0.075), air.mul(0.85));
+    const above = mix(c, vec3(0.034, 0.066, 0.075), air.mul(0.85));
+    return mix(above, c, this.underwater);
   }
   volume(size: T.Vector3, tint: T.Vector3, opacity = 1, opening = false) {
     // Copy already-rendered opaque depth; no extra geometry pass. Stop the

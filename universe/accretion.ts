@@ -61,7 +61,7 @@ export class AccretionWeather {
               const k = (j + end) * 2;
               // Exterior is an art-directed scale: GR disk 3–9 maps to 1.2–4.8.
               const r = Math.hypot(p.trail[k], p.trail[k + 1]),
-                scale = (1.2 + (r - 3) * 0.6) / r;
+                scale = (1.2 + (r - 3) * 0.6) / Math.max(1e-6, r);
               this.positions[cursor] = p.trail[k] * scale;
               this.positions[cursor + 1] = p.trail[k + 1] * scale;
               this.positions[cursor + 2] =

@@ -22,6 +22,8 @@ import {
   dFdx,
   dFdy,
 } from "three/tsl";
+import { OCEAN_CAP, satellitePosition } from "./cosmic-motion";
+import type { Quality } from "./config";
 const sunDirection = vec3(-0.82, 0.38, 0.43).normalize();
 // UV bumpMap() cannot differentiate position-based noise. Use actual screen derivatives.
 export function reliefNormal(height: T.Node<"float">) {
@@ -41,6 +43,29 @@ export function reliefNormal(height: T.Node<"float">) {
 }
 export class PlanetLibrary {
   time = uniform(0);
+  private cloudRate = uniform(0.012);
+  private bandRate = uniform(0.018);
+  private moonCount = 2;
+  private moonGeometry = new T.IcosahedronGeometry(1, 2);
+  private moonMaterial = new T.MeshStandardMaterial({ color: 0xa9aca4, roughness: 1 });
+  setQuality(quality: Quality) {
+    this.moonCount = quality === "BATTERY" ? 1 : quality === "BALANCED" ? 2 : 3;
+  }
+  inspect(group: T.Group, kind: number) {
+    const moons = group.userData.cosmicMoons as T.Group | undefined;
+    return { time: this.time.value,
+      cloudEquatorPhase: kind === 0 || kind === 10 ? this.time.value * this.cloudRate.value : null,
+      bandEquatorPhase: kind === 1 ? this.time.value * this.bandRate.value : null,
+      satellitesVisible: moons?.visible ?? false,
+      satellites: moons?.children.filter((m) => m.visible).map((m) => ({
+        position: m.position.toArray(), spin: m.rotation.y,
+      })) ?? [],
+    };
+  }
+  private advect(p: T.Node<"vec3">, rate: T.Node<"float">) {
+    const a = this.time.mul(rate), c = a.cos(), s = a.sin();
+    return vec3(p.x.mul(c).sub(p.z.mul(s)), p.y, p.x.mul(s).add(p.z.mul(c)));
+  }
   private surfaces = new Map<number, T.Material>();
   private clouds = new Map<number, T.Material>();
   private atmospheres = new Map<number, T.Material>();
@@ -95,18 +120,19 @@ export class PlanetLibrary {
         ),
       );
     if (kind === 1) {
+      const moving = this.advect(p, p.y.mul(5).sin().mul(0.006).add(this.bandRate));
       const wind = vec3(
         this.time.mul(0.007).mul(p.y.sin()),
         0,
         this.time.mul(0.002),
       );
-      const warp = mx_noise_float(p.mul(7).add(wind))
+      const warp = mx_noise_float(moving.mul(7).add(wind))
         .mul(0.1)
-        .add(mx_noise_float(p.mul(24)).mul(0.018));
+        .add(mx_noise_float(moving.mul(24)).mul(0.018));
       const bands = sin(p.y.add(warp.mul(0.4)).mul(46))
         .mul(0.5)
         .add(0.5);
-      const storm = mx_noise_float(p.mul(vec3(18, 4, 18)))
+      const storm = mx_noise_float(moving.mul(vec3(18, 4, 18)))
         .mul(0.5)
         .add(0.5);
       albedo = mix(
@@ -207,7 +233,11 @@ export class PlanetLibrary {
       // The sanctuary ocean is the north cap of this same sphere. Its local
       // reflection mesh recedes gradually into this continuous far surface.
       albedo = mix(color(0x061e28), color(0x123d49), variation.mul(0.45));
-      relief = float(0);
+      // World north transformed through the existing X=0.5 body rotation.
+      // Original .9996 scale adds 19.2 m: total recess is 89.172 m,
+      // below the water owner's deepest (77 m) seabed throughout its 30 km cap.
+      relief = smoothstep(OCEAN_CAP.outerNorthCosine, OCEAN_CAP.fullNorthCosine,
+        p.dot(vec3(...OCEAN_CAP.localNorth))).mul(-OCEAN_CAP.extraRecess / OCEAN_CAP.radius);
     }
     const surfaceDetail = mx_noise_float(p.mul(160))
       .mul(0.1)
@@ -299,7 +329,7 @@ export class PlanetLibrary {
           roughness: 1,
         });
         const p = positionLocal.normalize(),
-          q = p.mul(6.5);
+          q = this.advect(p, p.y.mul(4).sin().mul(0.004).add(this.cloudRate)).mul(6.5);
         const warp = mx_noise_float(q.add(vec3(this.time.mul(0.003), 0, 0)));
         const cloud = mx_noise_float(q.add(warp.mul(0.65)))
           .add(mx_noise_float(q.mul(3).add(warp)).mul(0.38))
@@ -376,9 +406,30 @@ export class PlanetLibrary {
       rings.rotation.set(-1.02, 0.14, -0.21);
       group.add(rings);
     }
+    // Decorative children never enter destination/contact selection. Shared resources
+    // survive sector eviction and are released by the engine scene disposal.
+    if ([0, 1, 8, 10].includes(kind)) {
+      const moons = new T.Group();
+      for (let i = 0; i < 3; i++) {
+        const moon = new T.Mesh(this.moonGeometry, this.moonMaterial);
+        moon.scale.setScalar(0.065 + i * 0.018);
+        moons.add(moon);
+      }
+      group.add(moons);
+      group.userData.cosmicMoons = moons;
+    }
     return group;
   }
   update(group: T.Group, distanceInRadii: number) {
+    const moons = group.userData.cosmicMoons as T.Group | undefined;
+    if (moons) {
+      moons.visible = distanceInRadii > 1.15 && distanceInRadii < 65;
+      moons.children.forEach((moon, i) => {
+        moon.visible = i < this.moonCount;
+        satellitePosition(this.time.value, i, moon.position);
+        moon.rotation.y = this.time.value * 0.025 + i;
+      });
+    }
     const lod = group.userData.lod as T.LOD | undefined;
     if (lod)
       lod.levels.forEach((level, i) => {

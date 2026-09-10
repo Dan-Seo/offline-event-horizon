@@ -9,7 +9,8 @@ import { QUALITY, type Quality } from "./config";
 import { Ambience } from "./audio";
 import { MatterField } from "./matter";
 import { CreationSystem } from "./creation";
-import { pass, uniform, uv, float, smoothstep } from "three/tsl";
+import { pass, uniform, uv, float, smoothstep, Fn, If, vec3, vec4, logarithmicDepthToViewZ } from "three/tsl";
+import { oceanComposite } from "./ocean-optics";
 import { bloom } from "three/addons/tsl/display/BloomNode.js";
 import { initialSnapshot, type UniverseSnapshot } from "./state";
 import type { ReleaseKind } from "./orbit-model";
@@ -42,6 +43,9 @@ export class UniverseEngine {
   private lensRadius = uniform(0.01);
   private lensStrength = uniform(0);
   private glowStrength = uniform(0.16);
+  private oceanDepth = uniform(0);
+  private oceanImmersion = uniform(0);
+  private oceanRayScale = uniform(new T.Vector2());
   benchmarkMode = "NONE";
   private beforeBenchmark: Quality = "HIGH";
   private relativity?: RelativityObservation;
@@ -591,7 +595,17 @@ export class UniverseEngine {
     const lensed = sceneColor.sample(warped),
       glow = bloom(sceneColor, 1, 0.48, 1.2);
     this.pipeline = new T.RenderPipeline(this.renderer);
-    this.pipeline.outputNode = lensed.add(glow.mul(this.glowStrength));
+    const beauty = lensed.add(glow.mul(this.glowStrength));
+    this.pipeline.outputNode = Fn(() => {
+      const result = beauty.toVar();
+      If(this.oceanImmersion.greaterThan(0), () => {
+        // PassNode.getViewZNode assumes ordinary depth in r183; this renderer uses log depth.
+        const axial = logarithmicDepthToViewZ(this.scenePass!.getTextureNode("depth").r, float(this.camera.near), float(this.camera.far)).negate();
+        const ray = vec3(uv().mul(2).sub(1).mul(this.oceanRayScale), 1).length();
+        result.assign(vec4(oceanComposite(beauty.rgb, axial.mul(ray), this.oceanDepth, this.oceanImmersion), beauty.a));
+      });
+      return result;
+    })();
     this.glowStrength.value = this.state.quality === "BATTERY" ? 0 : 0.15;
   }
   private resize = () => {
@@ -664,6 +678,13 @@ export class UniverseEngine {
         this.camera,
         this.flight.velocity.length(),
       );
+      const regionalOcean = this.world.approaches.inspectOcean();
+      const sanctuaryOcean = this.world.sanctuaries.sea.inspect();
+      const ocean = regionalOcean ?? sanctuaryOcean;
+      this.oceanDepth.value = Math.max(0, ocean.signedDepth);
+      this.oceanImmersion.value = ocean.submersion * (regionalOcean ? 1 : this.world.sanctuaries.presence);
+      const tanHalfFov = Math.tan(this.camera.fov * Math.PI / 360);
+      this.oceanRayScale.value.set(tanHalfFov * this.camera.aspect, tanHalfFov);
       this.world.anomaly.simulate(this.state.paused ? 0 : dt);
       this.world.sanctuaries.life.update(
         this.renderer,
@@ -886,8 +907,10 @@ export class UniverseEngine {
       walkedDistance: this.walker.distance,
       walkEyeHeight: this.walker.eyeHeight,
       garden: this.world.approaches.inspectGarden(),
+      ocean: { sanctuary: this.world.sanctuaries.sea.inspect(), regional: this.world.approaches.inspectOcean() },
+      cosmic: this.world.inspectCosmic(),
       gasSample: this.world.anomaly.weather.model.streams
-        .slice(0, 3)
+        .slice(0, 8)
         .map((s) => [s.angle, s.radius, s.spread, s.heat]),
       orbitSample: Array.from(
         this.world.anomaly.experiment.model.positions.slice(0, 9),

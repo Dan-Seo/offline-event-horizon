@@ -378,7 +378,7 @@ export class UniverseWorld {
   }
   update(observer: T.Vector3, time: number, camera?: T.Camera, speed = 0) {
     this.stream(observer);
-    this.planets.time.value = time;
+    this.planets.time.value = Number.isFinite(time) ? time : 0;
     this.nebulae.time.value = time;
     for (const sector of this.sectorMap.values())
       placeRelative(sector.group, sector.center, observer);
@@ -413,6 +413,8 @@ export class UniverseWorld {
     if (camera) this.anomaly.update(time, camera);
   }
   setQuality(quality: Quality) {
+    this.planets.setQuality(quality);
+    this.anomaly.setQuality(quality);
     this.approaches.setQuality(quality);
     this.nebulae.setQuality(quality);
     this.sanctuaries.setQuality(quality);
@@ -420,6 +422,16 @@ export class UniverseWorld {
   }
   stressAsteroids() {
     this.asteroids.count = 7000;
+  }
+  inspectCosmic() {
+    return {
+      time: this.planets.time.value,
+      anomaly: this.anomaly.inspect(),
+      planets: this.bodies.filter((b) => ![3, 4, 5, 7].includes(b.archetype)).map((b) => ({
+        id: b.id, anchor: b.position.toArray(), rotation: b.object.rotation.toArray(),
+        ...this.planets.inspect(b.object.children[0] as T.Group, b.id === "orpheus" ? 8 : b.archetype),
+      })),
+    };
   }
   dispose() {
     this.disposed = true;

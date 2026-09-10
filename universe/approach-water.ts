@@ -13,13 +13,25 @@ import {
   sin,
   vec2,
   vec3,
+  uniform,
+  attribute,
 } from "three/tsl";
 import type { Quality } from "./config";
 import { markSurface } from "./perception/surfaces";
+import { OceanLife } from "./ocean-life";
+import { groundHeight, lagoonHeight } from "./walk-ground";
+import { submersion, oceanRadialFloor, regionalDomain } from "./ocean-depth";
+import { preserveReflectorFramebuffer, waterSurfaceOptics } from "./ocean-optics";
 
 /** A local spherical lagoon, with a tangent reflection plane following the observer. */
 export class RegionalLagoon {
   mesh: T.Mesh;
+  private ecosystem: OceanLife;
+  private submerged = uniform(0);
+  private depth = 0;
+  private floor = 0;
+  private floorClearance = 0;
+  private valid = false;
   private mirror = reflector({
     resolutionScale: 0.4,
     bounces: false,
@@ -32,16 +44,22 @@ export class RegionalLagoon {
     time: T.Node<"float">,
     viewer: T.Node<"vec3">,
     motion: T.Node<"float">,
+    private radius: number,
   ) {
+    preserveReflectorFramebuffer(this.mirror);
+    this.ecosystem = new OceanLife(root, time, (x, z) => groundHeight(10, x, z), lagoonHeight, 0.145, 1 / radius, false);
     const geometry = new T.RingGeometry(0.00001, 0.152, 160, 28);
     const p = geometry.getAttribute("position");
+    const columns = new Float32Array(p.count);
     for (let i = 0; i < p.count; i++) {
       const x = p.getX(i),
         z = p.getY(i);
       p.setXYZ(i, x, Math.sqrt(1 - x * x - z * z) - 1 + 0.021, z);
+      columns[i] = Math.max(0, p.getY(i) - groundHeight(10, x, z)) * radius;
     }
     geometry.computeVertexNormals();
-    const material = new T.MeshBasicNodeMaterial({ side: T.DoubleSide });
+    geometry.setAttribute("waterColumn", new T.BufferAttribute(columns, 1));
+    const material = new T.MeshBasicNodeMaterial({ side: T.DoubleSide, transparent: true, depthWrite: true });
     const a = positionLocal.x
       .mul(740)
       .add(positionLocal.z.mul(410))
@@ -53,6 +71,7 @@ export class RegionalLagoon {
     const noise = mx_noise_float(
       positionLocal.mul(2300).add(vec3(time.mul(0.008), 0, 0)),
     );
+    material.positionNode = positionLocal.add(vec3(0, a.sin().mul(0.08 / radius).add(b.sin().mul(0.035 / radius)), 0));
     this.mirror.target.rotation.x = -Math.PI / 2;
     root.add(this.mirror.target);
     this.mirror.uvNode = this.mirror.uvNode!.add(
@@ -65,8 +84,11 @@ export class RegionalLagoon {
     const fresnel = float(1)
       .sub(max(0, view.dot(normalWorld).abs()))
       .pow(5)
-      .mul(0.65)
-      .add(0.28);
+      .mul(0.98)
+      .add(0.02);
+    const optics = waterSurfaceOptics(float(attribute("waterColumn", "float")), view.dot(normalWorld), fresnel,
+      this.mirror.rgb.mul(vec3(0.68, 0.89, 0.91)));
+    material.opacityNode = mix(optics.opacity, float(0.6), this.submerged);
     const r = positionLocal.xz.sub(viewer.xz).length();
     const response = r
       .mul(-170)
@@ -77,15 +99,24 @@ export class RegionalLagoon {
           .mul(0.5)
           .add(0.5),
       );
-    material.colorNode = mix(
-      color(0x041b20),
-      this.mirror.rgb.mul(vec3(0.68, 0.89, 0.91)),
-      fresnel,
-    ).add(color(0x70d4ad).mul(response.mul(0.4)));
+    const above = optics.color.add(color(0x70d4ad).mul(response.mul(0.4)));
+    material.colorNode = mix(above, vec3(0.08, 0.28, 0.31), this.submerged);
     this.mesh = markSurface(new T.Mesh(geometry, material), "water");
     root.add(this.mesh);
   }
-  update(local: T.Vector3) {
+  update(local: T.Vector3, time: number, active = true) {
+    this.valid = active && regionalDomain(local, 0.152);
+    this.ecosystem.update(local, time, active && regionalDomain(local));
+    if (!this.valid) {
+      this.depth = 0; this.floor = 0; this.floorClearance = 0; this.submerged.value = 0;
+      return;
+    }
+    this.depth = (lagoonHeight(local.x, local.z) - local.y) * this.radius;
+    this.floor = groundHeight(10, local.x, local.z);
+    const radial = new T.Vector3(local.x, local.y + 1, local.z);
+    const distance = radial.length(); radial.normalize();
+    this.floorClearance = (distance - oceanRadialFloor(radial.x, radial.y, radial.z, (x, z) => groundHeight(10, x, z), 1, 2 / this.radius)) * this.radius;
+    this.submerged.value = submersion(this.depth);
     const x = T.MathUtils.clamp(local.x, -0.15, 0.15),
       z = T.MathUtils.clamp(local.z, -0.15, 0.15);
     const y = Math.sqrt(1 - x * x - z * z);
@@ -94,6 +125,7 @@ export class RegionalLagoon {
     this.mirror.target.quaternion.setFromUnitVectors(this.axis, this.normal);
   }
   setQuality(quality: Quality) {
+    this.ecosystem.setQuality(quality);
     this.mirror.reflector.resolutionScale = {
       ULTRA: 1,
       HIGH: 0.65,
@@ -102,6 +134,8 @@ export class RegionalLagoon {
     }[quality];
   }
   dispose() {
+    this.ecosystem.dispose();
     this.mirror.dispose();
   }
+  inspect() { return { valid: this.valid, signedDepth: this.depth, seabedHeight: this.floor, floorClearance: this.floorClearance, submersion: this.submerged.value, ecosystem: this.ecosystem.inspect() }; }
 }

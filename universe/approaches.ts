@@ -26,6 +26,7 @@ import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
 import type { WalkSurface } from "./walk";
 import { NacreGarden } from "./nacre-garden";
 import { markSurface } from "./perception/surfaces";
+import { oceanRadialFloor, regionalDomain } from "./ocean-depth";
 
 type Region = {
   body: Body;
@@ -158,7 +159,7 @@ export class PlanetApproaches {
       let lagoon: RegionalLagoon | undefined;
       let garden: NacreGarden | undefined;
       if (kind === 10) {
-        lagoon = new RegionalLagoon(root, this.time, this.viewer, this.motion);
+        lagoon = new RegionalLagoon(root, this.time, this.viewer, this.motion, body.radius);
         garden = new NacreGarden(root, body.radius, material);
         this.reflectiveMeshes.push(lagoon.mesh);
       }
@@ -383,6 +384,8 @@ export class PlanetApproaches {
       body.approachUp = up;
       body.clearance = (direction) => {
         const local = direction.clone().applyQuaternion(inverse);
+        if (kind === 10 && local.y > 0.8 && Math.hypot(local.x, local.z) < 0.15)
+          return body.radius * oceanRadialFloor(local.x, local.y, local.z, (x, z) => groundHeight(10, x, z), 1, 2 / body.radius);
         return (
           body.radius * terrainClearance(kind, local.x, local.y, local.z) + 2
         );
@@ -434,11 +437,12 @@ export class PlanetApproaches {
         .divideScalar(r.body.radius)
         .sub(r.up)
         .applyQuaternion(r.inverse);
-      if (r.root.visible) r.lagoon?.update(local);
+      r.root.visible = r.root.visible && local.y + 1 > 0;
+      r.lagoon?.update(local, time, r.root.visible);
       r.garden?.update(local, time, speed, r.root.visible);
-      const weight =
+      const weight = regionalDomain(local) ?
         clamp((1.42 - distance) / 0.32) *
-        clamp((0.4 - Math.max(Math.abs(local.x), Math.abs(local.z))) / 0.1);
+        clamp((0.4 - Math.max(Math.abs(local.x), Math.abs(local.z))) / 0.1) : 0;
       if (weight > presence) {
         presence = weight;
         region = r;
@@ -461,6 +465,10 @@ export class PlanetApproaches {
       r.lagoon?.setQuality(quality);
       r.garden?.setQuality(quality);
     });
+  }
+  inspectOcean() {
+    const ocean = this.regions.find(r => r.body.id === this.active)?.lagoon?.inspect();
+    return ocean?.valid ? ocean : undefined;
   }
   dispose() {
     this.regions.forEach((r) => r.lagoon?.dispose());
