@@ -90,3 +90,12 @@ export type TruthRecord = {
   condition: Condition;
 };
 export type RecordPair = { truth: TruthRecord; estimate: VOResult };
+
+export type TransactionIdentity = { generation: number; request: number; id: number };
+export type WorkerRequest =
+  | { type: "reset" }
+  | ({ type: "frame"; frame: SensorFrame } & TransactionIdentity);
+export type WorkerReply = TransactionIdentity & (
+  | { type: "analysis"; result: Analysis }
+  | { type: "error"; message: string }
+);

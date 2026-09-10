@@ -2,7 +2,7 @@ import * as T from "three/webgpu";
 import { SensorRig, type Capture } from "./rig";
 import { evaluateTrajectory } from "./metrics";
 import { compose, inverse, rotationAngle, type Pose, type V3 } from "./math";
-import type { Analysis, Condition, RecordPair, TruthRecord } from "./types";
+import type { Analysis, Condition, RecordPair, TruthRecord, WorkerReply } from "./types";
 import type { RecordedCapture } from "./dataset";
 export class PerceptionRuntime {
   readonly rig: SensorRig;
@@ -22,6 +22,10 @@ export class PerceptionRuntime {
   private disposed = false;
   private before?: TruthRecord;
   private generation = 0;
+  private request = 0;
+  // Ownership survives reset until GPU readback or its matching worker reply settles.
+  private transaction?: { generation: number; request: number; id?: number };
+  onReset?: () => void;
   recording = false;
   readonly sequence: RecordedCapture[] = [];
   onAnalysis?: (a: Analysis) => void;
@@ -31,46 +35,74 @@ export class PerceptionRuntime {
     scene: T.Scene,
   ) {
     this.rig = new SensorRig(renderer, scene);
-    this.worker = new Worker(new URL("./worker.ts", import.meta.url), {
+    this.worker = this.createWorker();
+  }
+  private release(transaction: NonNullable<PerceptionRuntime["transaction"]>) {
+    if (this.transaction !== transaction) return;
+    this.transaction = undefined;
+    this.pendingTruth = undefined;
+    this.pendingCapture = undefined;
+    this.busy = false;
+  }
+  private createWorker(): Worker {
+    const worker = new Worker(new URL("./worker.ts", import.meta.url), {
       type: "module",
     });
-    this.worker.onmessage = (event: MessageEvent) => {
-      if (event.data.type === "error") {
-        this.error = event.data.message;
-        this.busy = false;
+    worker.onmessage = (event: MessageEvent<WorkerReply>) => {
+      const reply = event.data, transaction = this.transaction;
+      if (
+        this.disposed || this.worker !== worker || !transaction ||
+        transaction.id === undefined || reply.generation !== transaction.generation ||
+        reply.request !== transaction.request || reply.id !== transaction.id
+      ) return;
+      if (transaction.generation !== this.generation) {
+        this.release(transaction);
         return;
       }
-      const a = event.data.result as Analysis;
-      if (this.disposed || !this.pendingTruth || a.id !== this.pendingTruth.id)
+      if (reply.type === "error") {
+        this.error = reply.message;
+        this.release(transaction);
         return;
+      }
+      const a = reply.result, truth = this.pendingTruth, capture = this.pendingCapture;
+      if (!truth || a.id !== truth.id || a.timestamp !== truth.timestamp) {
+        this.error = "Mismatched analysis capture";
+        this.release(transaction);
+        return;
+      }
       this.analysis = a;
-      this.busy = false;
       if (this.lab) {
-        const pair = { truth: this.pendingTruth, estimate: a.vo };
+        const pair = { truth, estimate: a.vo };
         this.records.push(pair);
         if (this.records.length > 3600) this.records.shift();
-        if (this.pendingCapture?.frame.id === a.id) {
-          this.capture = this.pendingCapture;
+        if (capture?.frame.id === a.id) {
+          this.capture = capture;
           if (this.recording) {
-            this.sequence.push({
-              ...pair,
-              frame: this.capture.frame,
-              normals: this.capture.normals,
-              labels: this.capture.labels,
-            });
+            this.sequence.push({ ...pair, frame: capture.frame,
+              normals: capture.normals, labels: capture.labels });
             if (this.sequence.length >= 32) this.recording = false;
           }
         }
       }
+      this.release(transaction);
       this.onAnalysis?.(a);
-      this.pendingTruth = undefined;
-      this.pendingCapture = undefined;
     };
-    this.worker.onerror = (e) => {
-      this.error = e.message;
-      this.busy = false;
+    // Native errors lack request identity: retire the transport before releasing
+    // its worker-phase owner. Late events from it cannot affect a successor.
+    const failed = (message: string) => {
+      if (this.disposed || this.worker !== worker) return;
+      worker.terminate();
+      this.error = message;
+      this.reset();
+      const transaction = this.transaction;
+      if (transaction?.id !== undefined) this.release(transaction);
+      this.worker = this.createWorker();
     };
+    worker.onerror = (e) => failed(e.message);
+    worker.onmessageerror = () => failed("Unreadable perception worker reply");
+    return worker;
   }
+
   async prepare(
     observer: T.Vector3,
     position: T.Vector3,
@@ -78,7 +110,7 @@ export class PerceptionRuntime {
   ) {
     this.rig.sync(observer, position, quaternion);
     await this.rig.prepare();
-    this.ready = true;
+    if (!this.disposed) this.ready = true;
   }
   setCondition(condition: Condition) {
     if (this.rig.condition === condition) return;
@@ -96,8 +128,8 @@ export class PerceptionRuntime {
     this.records = [];
     this.recording = false;
     this.sequence.length = 0;
-    this.busy = false;
     this.due = 0;
+    this.onReset?.();
   }
   recordSequence() {
     if (!this.lab) return;
@@ -120,81 +152,93 @@ export class PerceptionRuntime {
       return;
     }
     this.busy = true;
-    const generation = this.generation;
-    this.rig.sync(observer, position, quaternion);
-    const camPosition = this.rig.camera.position.clone().add(observer),
-      q = this.rig.camera.quaternion
-        .clone()
-        .multiply(new T.Quaternion(1, 0, 0, 0));
-    const pose: Pose = {
-      p: camPosition.toArray() as V3,
-      q: q.toArray() as Pose["q"],
+    const transaction = {
+      generation: this.generation,
+      request: ++this.request,
+      id: undefined as number | undefined,
     };
-    const dt = this.before ? time - this.before.timestamp : 0.2,
-      previousVelocity = this.before?.velocity ?? (velocity.toArray() as V3);
-    const sensorVelocity = this.before
-      ? camPosition
+    this.transaction = transaction;
+    try {
+      this.rig.sync(observer, position, quaternion);
+      const camPosition = this.rig.camera.position.clone().add(observer),
+        q = this.rig.camera.quaternion
           .clone()
-          .sub(new T.Vector3(...this.before.pose.p))
-          .divideScalar(Math.max(0.001, dt))
-      : velocity.clone();
-    const acceleration = sensorVelocity
-      .clone()
-      .sub(new T.Vector3(...previousVelocity))
-      .divideScalar(Math.max(0.001, dt))
-      .addScaledVector(gravityUp, 9.81)
-      .applyQuaternion(q.clone().invert());
-    let dq = this.before
-      ? compose(inverse(this.before.pose), pose).q
-      : [0, 0, 0, 1];
-    if (dq[3] < 0) dq = dq.map((v) => -v);
-    const angle = rotationAngle(dq as Pose["q"]),
-      length = Math.hypot(dq[0], dq[1], dq[2]);
-    const gyro: V3 =
-      length > 1e-8
-        ? [
-            (dq[0] * angle) / length / dt,
-            (dq[1] * angle) / length / dt,
-            (dq[2] * angle) / length / dt,
-          ]
-        : [0, 0, 0];
-    void this.rig
-      .capture(time)
-      .then((capture) => {
-        if (this.disposed || generation !== this.generation) {
-          return;
-        }
-        const truth: TruthRecord = {
-          id: capture.frame.id,
-          timestamp: time,
-          pose,
-          velocity: sensorVelocity.toArray() as V3,
-          imu: { acceleration: acceleration.toArray() as V3, gyro },
-          condition: capture.frame.condition,
-        };
-        this.pendingTruth = truth;
-        this.before = truth;
-        if (this.lab)
-          this.pendingCapture = {
-            ...capture,
-            frame: {
-              ...capture.frame,
-              rgb: capture.frame.rgb.slice(),
-              depth: capture.frame.depth.slice(),
-            },
+          .multiply(new T.Quaternion(1, 0, 0, 0));
+      const pose: Pose = {
+        p: camPosition.toArray() as V3,
+        q: q.toArray() as Pose["q"],
+      };
+      const dt = this.before ? time - this.before.timestamp : 0.2,
+        previousVelocity = this.before?.velocity ?? (velocity.toArray() as V3);
+      const sensorVelocity = this.before
+        ? camPosition
+            .clone()
+            .sub(new T.Vector3(...this.before.pose.p))
+            .divideScalar(Math.max(0.001, dt))
+        : velocity.clone();
+      const acceleration = sensorVelocity
+        .clone()
+        .sub(new T.Vector3(...previousVelocity))
+        .divideScalar(Math.max(0.001, dt))
+        .addScaledVector(gravityUp, 9.81)
+        .applyQuaternion(q.clone().invert());
+      let dq = this.before
+        ? compose(inverse(this.before.pose), pose).q
+        : [0, 0, 0, 1];
+      if (dq[3] < 0) dq = dq.map((v) => -v);
+      const angle = rotationAngle(dq as Pose["q"]),
+        length = Math.hypot(dq[0], dq[1], dq[2]);
+      const gyro: V3 =
+        length > 1e-8
+          ? [
+              (dq[0] * angle) / length / dt,
+              (dq[1] * angle) / length / dt,
+              (dq[2] * angle) / length / dt,
+            ]
+          : [0, 0, 0];
+      void this.rig
+        .capture(time)
+        .then((capture) => {
+          if (this.disposed || transaction.generation !== this.generation) {
+            this.release(transaction);
+            return;
+          }
+          const truth: TruthRecord = {
+            id: capture.frame.id,
+            timestamp: capture.frame.timestamp,
+            pose,
+            velocity: sensorVelocity.toArray() as V3,
+            imu: { acceleration: acceleration.toArray() as V3, gyro },
+            condition: capture.frame.condition,
           };
-        this.worker.postMessage({ type: "frame", frame: capture.frame }, [
-          capture.frame.rgb.buffer,
-          capture.frame.depth.buffer,
-        ]);
-      })
-      .catch((e) => {
-        if (generation === this.generation) {
-          this.error = e instanceof Error ? e.message : String(e);
-          this.busy = false;
-        }
-      });
+          this.pendingTruth = truth;
+          this.before = truth;
+          if (this.lab)
+            this.pendingCapture = {
+              ...capture,
+              frame: {
+                ...capture.frame,
+                rgb: capture.frame.rgb.slice(),
+                depth: capture.frame.depth.slice(),
+              },
+            };
+          transaction.id = capture.frame.id;
+          this.worker.postMessage({ type: "frame", ...transaction, id: capture.frame.id, frame: capture.frame }, [
+            capture.frame.rgb.buffer,
+            capture.frame.depth.buffer,
+          ]);
+        })
+        .catch((e) => this.captureFailed(transaction, e));
+    } catch (e) {
+      this.captureFailed(transaction, e);
+    }
   }
+  private captureFailed(transaction: NonNullable<PerceptionRuntime["transaction"]>, e: unknown) {
+    if (!this.disposed && transaction.generation === this.generation)
+      this.error = e instanceof Error ? e.message : String(e);
+    this.release(transaction);
+  }
+
   snapshot() {
     return {
       recording: this.recording,
@@ -250,6 +294,7 @@ export class PerceptionRuntime {
   dispose() {
     this.disposed = true;
     this.worker.terminate();
+    if (this.transaction?.id !== undefined) this.release(this.transaction);
     this.rig.dispose();
   }
 }

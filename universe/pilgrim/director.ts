@@ -16,7 +16,7 @@ export class ScenicDirector {
   reason = "rest";
   private until = 0;
   private latest?: Analysis;
-  private received = -Infinity;
+  private started = -Infinity;
   private movingTime = 0;
   private seed = 731;
   private blockedTime = 0;
@@ -25,6 +25,8 @@ export class ScenicDirector {
     return this.seed / 4294967296;
   }
   start(time: number) {
+    this.clearObservation();
+    this.started = time;
     this.active = true;
     this.resting = true;
     this.age = time;
@@ -36,9 +38,14 @@ export class ScenicDirector {
     this.active = false;
     this.reason = "manual";
   }
+  clearObservation() {
+    this.latest = undefined;
+    this.blockedTime = 0;
+  }
   observe(a: Analysis, time: number) {
-    this.latest = a;
-    this.received = time;
+    const age = time - a.timestamp;
+    this.latest = this.active && Number.isFinite(age) && age >= 0 &&
+      age <= 0.85 && a.timestamp >= this.started ? a : undefined;
   }
   update(time: number, dt: number, beauty: boolean): Drive {
     if (!this.active) return rest();
@@ -49,7 +56,8 @@ export class ScenicDirector {
       this.reason = "watching";
       return rest();
     }
-    if (time - this.received > 0.85) {
+    const captureAge = time - (this.latest?.timestamp ?? -Infinity);
+    if (!Number.isFinite(captureAge) || captureAge < 0 || captureAge > 0.85) {
       this.reason = "waiting for a fresh view";
       return rest();
     }

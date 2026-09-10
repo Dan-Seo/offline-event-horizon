@@ -91,6 +91,7 @@ export class PilgrimSystem {
       if (this.disposed) return;
       this.perception = new PerceptionRuntime(this.renderer, this.scene);
       this.perception.lab = this.lab;
+      this.perception.onReset = () => this.director.clearObservation();
       this.perception.onAnalysis = (a) => this.director.observe(a, this.time);
       await this.perception.prepare(
         this.contact.observer,

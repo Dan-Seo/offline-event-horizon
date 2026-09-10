@@ -152,3 +152,32 @@ test("Scenic steering follows the perceived arc and brakes when observations bec
   director.cancel();
   assert.equal(director.active, false);
 });
+test("Scenic observations reject late delivery, future clocks and previous Carry history", () => {
+  const director = new ScenicDirector();
+  const view = (timestamp: number) => ({
+    timestamp, chosen: { speed: 5, curvature: .02 }, green: 0,
+  }) as Analysis;
+  director.start(0);
+  director.observe(view(.2), 10);
+  assert.equal(director.update(10, .016, false).throttle, 0);
+  director.observe(view(11), 10);
+  assert.equal(director.update(11, .016, false).throttle, 0, "future view must not become valid later");
+  for (const timestamp of [NaN, Infinity, -Infinity]) {
+    director.observe(view(timestamp), 11);
+    assert.equal(director.update(11, .016, false).throttle, 0);
+  }
+  director.observe(view(11), 11);
+  assert.ok(director.update(11, .016, false).throttle > 0);
+  assert.equal(director.update(10.9, .016, false).throttle, 0, "clock rollback brakes");
+  director.cancel();
+  director.observe(view(11.1), 11.1);
+  assert.equal(director.update(11.1, .016, false).throttle, 0);
+  director.start(11.2);
+  assert.equal(director.update(13.2, .016, false).throttle, 0);
+  director.observe(view(11.1), 11.2);
+  assert.equal(director.update(13.2, .016, false).throttle, 0);
+  director.observe(view(13.2), 13.2);
+  assert.ok(director.update(13.2, .016, false).throttle > 0);
+  director.clearObservation();
+  assert.equal(director.update(13.21, .016, false).throttle, 0);
+});
