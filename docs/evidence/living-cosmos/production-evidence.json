@@ -1,0 +1,74 @@
+[
+  {
+    "source": "artifacts/living-cosmos/production/webgpu/report.json",
+    "date": "2026-09-10T04:11:07.751Z",
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.83",
+    "backend": "WebGPU",
+    "checks": [
+      ["Requested backend is active", true], ["Opening starts above the sea", true], ["opening-above-sea produces bounded frame samples", true], ["last-light begins actual UI travel or is already at its arrival", true], ["Release diagnostics expose required geometry observables", true], ["last-light arrival is above water", true], ["Keyboard descent enters real underwater volume", true], ["Seabed maintains non-negative metre clearance during descent", true], ["last-light settles underwater at the seabed before profiling", true], ["last-light-underwater produces bounded frame samples", true], ["Underwater life continues moving while unpaused", true], ["Pause freezes underwater geometry and life", true], ["Keyboard ascent returns above sea", true], ["last-light-after-ascent produces bounded frame samples", true], ["nacre-coast begins actual UI travel or is already at its arrival", true], ["Real keyboard flight reaches water beyond the solid coast", true], ["Release diagnostics expose required geometry observables", true], ["coast arrival is above water", true], ["Keyboard descent enters real underwater volume", true], ["Seabed maintains non-negative metre clearance during descent", true], ["coast settles underwater at the seabed before profiling", true], ["coast-underwater produces bounded frame samples", true], ["Underwater life continues moving while unpaused", true], ["Pause freezes underwater geometry and life", true], ["Keyboard ascent returns above sea", true], ["coast-after-ascent produces bounded frame samples", true], ["giant begins actual UI travel or is already at its arrival", true], ["Release diagnostics expose required geometry observables", true], ["Cosmic diagnostics include the giant's surface, bands, and satellites", true], ["Giant approach anchor and orientation stay fixed", true], ["Giant bands and satellites evolve around the fixed anchor", true], ["Manual keyboard input takes over giant orbit", true], ["giant-motion produces bounded frame samples", true], ["wound begins actual UI travel or is already at its arrival", true], ["Release diagnostics expose required geometry observables", true], ["Released gas stream measured geometry evolves", true], ["Wound UI gas release changes full-model activity", true], ["Wound shared model and shader clocks advance", true], ["Pause freezes accretion geometry", true], ["Manual keyboard input remains available at the Wound", true], ["wound-accretion produces bounded frame samples", true], ["Portrait viewport has no horizontal overflow", true], ["No browser, console, or shader errors", true]
+    ],
+    "errors": [],
+    "performance": [
+      {"name": "opening-above-sea", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 0.458752, "p95": 0.524288, "p99": 0.589824}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "last-light-underwater", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 0.196608, "p95": 0.32768, "p99": 0.393216}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "last-light-after-ascent", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 0.458752, "p95": 0.524288, "p99": 0.589824}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "coast-underwater", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 1.441792, "p95": 1.703936, "p99": 1.835008}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "coast-after-ascent", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 1.6384, "p95": 1.96608, "p99": 2.031616}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "giant-motion", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 1.31072, "p95": 1.6384, "p99": 1.769472}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]},
+      {"name": "wound-accretion", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "gpuRenderMs": {"p50": 0.98304, "p95": 1.835008, "p99": 1.900544}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]}
+    ]
+  },
+  {
+    "source": "artifacts/living-cosmos/production/webgl/report.json",
+    "date": "2026-09-10T04:13:35.198Z",
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.83",
+    "backend": "WebGL2",
+    "checks": [
+      ["last-light begins actual UI travel or is already at its arrival", true], ["Release diagnostics expose required geometry observables", true], ["last-light arrival is above water", true], ["Keyboard descent enters real underwater volume", true], ["Seabed maintains non-negative metre clearance during descent", true], ["last-light settles underwater at the seabed before profiling", true], ["last-light-underwater produces bounded frame samples", true], ["Underwater life continues moving while unpaused", true], ["Pause freezes underwater geometry and life", true], ["Keyboard ascent returns above sea", true], ["last-light-after-ascent produces bounded frame samples", true], ["nacre-coast begins actual UI travel or is already at its arrival", true], ["Real keyboard flight reaches water beyond the solid coast", true], ["Release diagnostics expose required geometry observables", true], ["coast arrival is above water", true], ["Keyboard descent enters real underwater volume", true], ["Seabed maintains non-negative metre clearance during descent", true], ["coast settles underwater at the seabed before profiling", true], ["coast-underwater produces bounded frame samples", true], ["Underwater life continues moving while unpaused", true], ["Pause freezes underwater geometry and life", true], ["Keyboard ascent returns above sea", true], ["coast-after-ascent produces bounded frame samples", true], ["Portrait viewport has no horizontal overflow", true], ["No browser, console, or shader errors", true]
+    ],
+    "errors": [],
+    "performance": [
+      {"name": "last-light-underwater", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "quality": "BATTERY", "dpr": 0.85, "viewport": [1600, 1000]},
+      {"name": "last-light-after-ascent", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "quality": "BATTERY", "dpr": 0.85, "viewport": [1600, 1000]},
+      {"name": "coast-underwater", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "quality": "BATTERY", "dpr": 0.85, "viewport": [1600, 1000]},
+      {"name": "coast-after-ascent", "frameMs": {"samples": 180, "p50": 6.9, "p95": 7, "p99": 7.1}, "quality": "BATTERY", "dpr": 0.85, "viewport": [1600, 1000]}
+    ]
+  },
+  {
+    "source": "artifacts/living-cosmos/production/pilgrim-smoke/pilgrim-smoke.json",
+    "date": "2026-09-10T04:15:47.9672019Z",
+    "dateSource": "source file last-write time; smoke report schema has no timestamp",
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.83",
+    "backend": "not reported by smoke schema",
+    "checks": [
+      ["PILGRIM boards through visible Go control", true], ["Physical vehicle accelerates and turns with W+D", true], ["Rest settles physical velocity", true], ["Carry uses live perception frames", true], ["Free-cursor drag immediately overrides Carry", true], ["Research uses the same PILGRIM and actual sensors", true], ["Rendered RGB-D produces estimated motion", true], ["Lab shares the scenic planner", true], ["No runtime or shader errors", true]
+    ],
+    "errors": [],
+    "performance": null
+  },
+  {
+    "source": "artifacts/living-cosmos/production/lab/pilgrim-lab-qa.json",
+    "date": "2026-09-10T04:17:43.926Z",
+    "url": "https://offline-vastness.vercel.app",
+    "browser": "152.0.7977.83",
+    "backend": "WebGPU",
+    "checks": [
+      ["Sensor depth matches independent mesh-ray intersections", true], ["Research route contains live synchronized sensors", true], ["Precision manual motion yields a real visual estimate", true], ["Sensor sequence recording stops at its explicit memory bound", true], ["Scenic travel advances from perceived routes", true], ["Carry rests without ending the live world", true], ["Perception history and contact caches remain bounded", true], ["No stale analysis queue accumulates", true], ["Export synchronizes truth, estimates, intrinsics and sensor planes", true], ["Clear run produces evaluable relative-motion pairs", true], ["Latest exported image and pose pair share the same capture", true], ["The moving trajectory plot renders truth and estimate", true], ["Manual input cancels autonomous control immediately", true], ["Pause freezes physical and sensor simulation time", true], ["LOW_LIGHT applies a new sensor configuration", true], ["Tracking loss is visible under low light", true], ["CLEAR applies a new sensor configuration", true], ["FOG applies a new sensor configuration", true], ["REPETITIVE applies a new sensor configuration", true], ["REFLECTIVE_WATER applies a new sensor configuration", true], ["DYNAMIC applies a new sensor configuration", true], ["Fast-motion condition changes the physical drive", true], ["FAST_MOTION applies a new sensor configuration", true], ["RAIN applies a new sensor configuration", true], ["CLEAR applies a new sensor configuration", true], ["Tracking recovers after clear visibility returns", true], ["laptop layout has no horizontal overflow", true], ["laptop visible canvas receives pointer input", true], ["laptop help remains inside the visible world", true], ["tablet layout has no horizontal overflow", true], ["tablet visible canvas receives pointer input", true], ["tablet help remains inside the visible world", true], ["portrait layout has no horizontal overflow", true], ["portrait visible canvas receives pointer input", true], ["portrait help remains inside the visible world", true], ["Both thumbs steer and look in the portrait research viewport", true], ["Touch release leaves no held input or motion", true], ["Cursor is never locked", true], ["No unexpected console or shader errors", true]
+    ],
+    "errors": [],
+    "performance": {"frameMs": {"samples": 13330, "p50": 6.9, "p95": 7, "max": 236.1}, "gpuRenderMs": {"samples": 105, "p50": 0.589824, "p95": 0.786432, "max": 1.114112}, "workerMs": {"samples": 105, "p50": 11.5, "p95": 20, "max": 22.5}, "quality": "HIGH", "dpr": 1, "viewport": [1600, 1000]}
+  },
+  {
+    "source": "artifacts/living-cosmos/production/lab/lab-sequence-replay.json",
+    "date": "2026-09-10T04:17:43.926Z",
+    "url": "https://offline-vastness.vercel.app",
+    "backend": "WebGPU lab capture",
+    "checks": [["32 frames captured", true], ["31 replay/runtime comparisons", true], ["replay/runtime maximum translation difference", "3.469446951953614e-18"], ["replay/runtime rotation difference", 0], ["analysis milliseconds", 272.5462]],
+    "errors": [],
+    "performance": {"sameClipRpeTranslationM": 0.167641, "sameClipRpeRotationRad": 0.00815664, "oneSecondPairs": 23, "driftFraction": 0.04690145},
+    "limit": "Reproducibility only, not ground-truth accuracy; ATE is unavailable for near-collinear motion."
+  }
+]

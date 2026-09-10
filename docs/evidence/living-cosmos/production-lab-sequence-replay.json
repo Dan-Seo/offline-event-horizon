@@ -1,0 +1,30 @@
+{
+  "file": "artifacts/living-cosmos/production/lab/lab-sequence.tar",
+  "frames": 32,
+  "compared": 31,
+  "maxTranslationDifference": 3.469446951953614e-18,
+  "maxRotationDifference": 0,
+  "analysisMs": 272.5462,
+  "evaluation": {
+    "samples": 32,
+    "tracked": 31,
+    "lost": 0,
+    "trackingFraction": 0.96875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "distance": 13.101034569005975,
+        "alignment": "stationary / near-collinear — ATE unavailable",
+        "ate": null,
+        "rotation": null,
+        "rpeTranslation": 0.16764121297052906,
+        "rpeRotation": 0.008156640378709992,
+        "rpePairs": 23,
+        "rpeInterval": 1,
+        "endpointDrift": 0.6144574942986115,
+        "driftFraction": 0.0469014482071726
+      }
+    ]
+  }
+}
