@@ -1,0 +1,16 @@
+{
+  "runtimeCommit": "24c7e90c7794c6ab0a051fc077cf23cd90727701",
+  "deployment": "dpl_r7QhyNPNoWXv4HUFTZMoohmf3PY9",
+  "testedAlias": "https://offline-vastness.vercel.app",
+  "immutableDeployment": "https://offline-event-horizon-i4i6n3qqq-sf-i455.vercel.app",
+  "ci": "https://github.com/Dan-Seo/offline-event-horizon/actions/runs/34424615272",
+  "environment": "Windows 11; i7-12700K; RTX 3090 Ti; 31.7 GiB; Chrome 152.0.7977.83",
+  "networkDeniedAttempt": "No application evidence; successful retry used unrestricted browser-harness execution.",
+  "gateAcceptance": "Root accepted Gates D/E after 94 production checks and personal inspection of retained rendered evidence; this is not a human study or fresh audio test.",
+  "docsOnlyFollowup": "Subsequent documentation-only commit does not change runtime 24c7e90c7794c6ab0a051fc077cf23cd90727701.",
+  "lab": {
+    "webgpu": {"at":"2026-09-10T01:19:25.013Z","passed":39,"total":39,"errors":0,"viewport":"1600x1000","quality":"HIGH","dpr":1,"frameMs":{"p50":6.9,"p95":7,"p99":null},"workerMs":{"p50":9.1,"p95":15},"calibration":{"samples":12,"maxDepthError":0.0018359113481807299,"meanDepthError":0.0007046165821589234},"trackingFraction":0.9983333333333333,"ate":1.1281531290625315,"rpe":{"translation":0.15298387873578898,"rotationRad":0.009708856213219003},"replay":{"frames":32,"compared":31,"maxTranslationDifference":0,"maxRotationDifference":0}},
+    "webgl2": {"at":"2026-09-10T01:21:56.400Z","passed":39,"total":39,"errors":0,"viewport":"1600x1000","quality":"BATTERY","dpr":0.85,"frameMs":{"p50":6.9,"p95":7,"p99":null},"workerMs":{"p50":8.6,"p95":13.9},"calibration":{"samples":12,"maxDepthError":0.004610330755312475,"meanDepthError":0.001369584556726385},"trackingFraction":0.9983498349834984,"ate":1.6204756332236674,"rpe":{"translation":0.1631639569463038,"rotationRad":0.009631558422249126},"replay":{"frames":32,"compared":31,"maxTranslationDifference":0,"maxRotationDifference":0}}
+  },
+  "journey": {"at":"2026-09-10T01:26:25.056Z","passed":16,"total":16,"errors":0,"durationSeconds":120,"distance":142.7991202411127,"holds":1,"frameMs":{"p50":6.9,"p95":7,"p99":7.100000000000364},"takeover":{"keyboard":true,"twoThumb":true}}
+}

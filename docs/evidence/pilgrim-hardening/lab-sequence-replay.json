@@ -1,0 +1,30 @@
+{
+  "file": "artifacts/lab-sequence.tar",
+  "frames": 32,
+  "compared": 31,
+  "maxTranslationDifference": 0,
+  "maxRotationDifference": 0,
+  "analysisMs": 263.2017,
+  "evaluation": {
+    "samples": 32,
+    "tracked": 31,
+    "lost": 0,
+    "trackingFraction": 0.96875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "distance": 12.930565465447712,
+        "alignment": "stationary / near-collinear — ATE unavailable",
+        "ate": null,
+        "rotation": null,
+        "rpeTranslation": 0.1787852741994269,
+        "rpeRotation": 0.008621581382647958,
+        "rpePairs": 23,
+        "rpeInterval": 1,
+        "endpointDrift": 0.6484265030411416,
+        "driftFraction": 0.05014680176004896
+      }
+    ]
+  }
+}
