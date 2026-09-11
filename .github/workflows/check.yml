@@ -25,6 +25,7 @@ jobs:
     # GitHub runners have no GPU: Chromium takes its SwiftShader WebGPU adapter, so
     # this proves the WGSL compiles and the world boots on real WebGPU, while the
     # real-time checks are recorded, not gated (see scripts/pilgrim-smoke.mjs).
+    # Headed under xvfb: headless Chromium drops the software WebGPU device on Linux.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,11 +39,12 @@ jobs:
       - run: |
           npm start &
           for i in $(seq 1 30); do curl -sf http://localhost:4173/ >/dev/null && break; sleep 1; done
-      - run: npm run qa:pilgrim
+      - run: xvfb-run -a npm run qa:pilgrim
         env:
           QA_URL: http://localhost:4173
           QA_BROWSER: chromium
           QA_SOFTWARE_GPU: "1"
+          QA_HEADED: "1"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
