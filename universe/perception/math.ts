@@ -43,6 +43,9 @@ function eigen4(input: number[][]) {
     v = Array.from({ length: 4 }, (_, i) =>
       Array.from({ length: 4 }, (_, j) => +(i === j)),
     );
+  // The matrix carries the square of the cloud's units, so an absolute threshold stops a
+  // millimetre-scale fit on its first sweep and might never be reached by an astronomical one.
+  const size = Math.hypot(...input.flat()) || 1;
   for (let n = 0; n < 64; n++) {
     let p = 0,
       q = 1;
@@ -52,7 +55,7 @@ function eigen4(input: number[][]) {
           p = i;
           q = j;
         }
-    if (Math.abs(a[p][q]) < 1e-12) break;
+    if (Math.abs(a[p][q]) < 1e-12 * size) break;
     const angle = 0.5 * Math.atan2(2 * a[p][q], a[q][q] - a[p][p]),
       c = Math.cos(angle),
       s = Math.sin(angle);

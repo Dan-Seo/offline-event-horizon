@@ -46,7 +46,10 @@ export function evaluateTrajectory(records: RecordPair[], interval = 1) {
         rotation: number[] = [],
         rpeT: number[] = [],
         rpeR: number[] = [];
-      let distance = 0;
+      let distance = 0,
+        // Timestamps never go back inside a segment, so the partner index only moves forward.
+        // Carrying it across samples turns the pairing from a quadratic scan into one pass.
+        j = 0;
       for (let i = 0; i < pairs.length; i++) {
         const a = pairs[i];
         if (alignment) {
@@ -63,7 +66,7 @@ export function evaluateTrajectory(records: RecordPair[], interval = 1) {
           );
         }
         if (i) distance += norm(sub(a.truth.pose.p, pairs[i - 1].truth.pose.p));
-        let j = i + 1;
+        j = Math.max(j, i + 1);
         while (
           j < pairs.length &&
           pairs[j].truth.timestamp - a.truth.timestamp < interval

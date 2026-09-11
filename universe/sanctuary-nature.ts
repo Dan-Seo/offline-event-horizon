@@ -1,8 +1,5 @@
 import * as T from "three/webgpu";
-import {
-  mergeGeometries,
-  mergeVertices,
-} from "three/addons/utils/BufferGeometryUtils.js";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import {
   attribute,
   float,
@@ -12,39 +9,28 @@ import {
   normalWorld,
   positionLocal,
   positionWorld,
-  pow,
   sin,
   smoothstep,
   texture3D,
   uv,
   vec3,
 } from "three/tsl";
-import { seeded, type Quality } from "./config";
+import { seeded, QUALITY, type Quality } from "./config";
 import type { SanctuaryAtmosphere } from "./sanctuary-atmosphere";
 import { markSurface } from "./perception/surfaces";
 import { grassInfluence } from "./pilgrim/influence";
+import { displacedIcosahedron } from "./place-parts";
 
 type Places = { id: string; object: T.Group; position: T.Vector3 }[];
 function rockGeometry() {
-  const source = new T.IcosahedronGeometry(1, 12);
-  source.deleteAttribute("normal");
-  source.deleteAttribute("uv");
-  const g = mergeVertices(source),
-    p = g.attributes.position;
-  source.dispose();
-  for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i),
-      y = p.getY(i),
-      z = p.getZ(i);
+  return displacedIcosahedron(12, (x, y, z) => {
     const d =
       1 +
       Math.sin(x * 3.9 + y * 1.8 + z * 2.2) * 0.12 +
       Math.sin(z * 9 - x * 3 + y * 7) * 0.048 +
       Math.sin(y * 26 + x * 8 + z * 11) * 0.016;
-    p.setXYZ(i, x * d, y * d, z * d);
-  }
-  g.computeVertexNormals();
-  return g;
+    return [x * d, y * d, z * d];
+  });
 }
 function islandGeometry(
   rx: number,
@@ -577,7 +563,7 @@ export class SanctuaryNature {
     this.grass.push(grass);
   }
   setQuality(q: Quality) {
-    const fraction = { ULTRA: 1, HIGH: 1, BALANCED: 0.68, BATTERY: 0.36 }[q];
+    const fraction = QUALITY[q].foliage;
     this.leaves.forEach(
       (m, i) => (m.count = Math.floor(this.foliageCounts[i] * fraction)),
     );

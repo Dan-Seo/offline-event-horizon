@@ -1,30 +1,26 @@
 ﻿import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import ts from "typescript";
+import { moduleUrl } from "./helpers/load.ts";
 import * as T from "three/webgpu";
 import type { Capture } from "../universe/perception/rig.ts";
-import type { Analysis, SensorFrame, WorkerRequest, WorkerReply } from "../universe/perception/types.ts";
+import type { Analysis, SensorFrame, SensorImage, WorkerRequest, WorkerReply } from "../universe/perception/types.ts";
 import { identity } from "../universe/perception/math.ts";
 import { ScenicDirector } from "../universe/pilgrim/director.ts";
 
 // Compile the actual runtime for Node, replacing only the GPU rig import.
 // No scheduling logic is copied or rewritten; Worker is the mocked transport.
-async function loadModule(file: string, mockRig = false) {
-  const url = new URL(file, import.meta.url);
-  let source = ts.transpileModule(await readFile(url, "utf8"), {
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
-  }).outputText;
-  if (mockRig) source = source.replace(/import \{ SensorRig \} from "\.\/rig";/,
-    "const SensorRig = globalThis.RuntimeTestRig;");
-  source = source.replace(/from "(\.\/[^"]+)"/g,
-    (_, name: string) => 'from "' + new URL(name + ".ts", url).href + '"');
-  source = source.replaceAll('"three/webgpu"', JSON.stringify(import.meta.resolve("three/webgpu")))
-    .replaceAll("import.meta.url", JSON.stringify(url.href));
-  return import("data:text/javascript;base64," + Buffer.from(source).toString("base64"));
-}
+const loadModule = async (file: string, mockRig = false) =>
+  import(
+    await moduleUrl(new URL(file, import.meta.url), (source, url) =>
+      (mockRig
+        ? source.replace(/import \{ SensorRig \} from "\.\/rig";/,
+            "const SensorRig = globalThis.RuntimeTestRig;")
+        : source
+      ).replaceAll("import.meta.url", JSON.stringify(url.href)),
+    )
+  );
 const k = { width: 16, height: 16, fx: 12, fy: 12, cx: 8, cy: 8, near: .2, far: 100 };
-function analysis(frame: SensorFrame): Analysis {
+function analysis(frame: SensorImage): Analysis {
   return { id: frame.id, timestamp: frame.timestamp, vo: {
     pose: identity(), delta: null, status: "TRACKING", segment: 0,
     features: 20, matched: 20, inliers: 20, ratio: 1, residual: 0, tracks: [],
@@ -178,7 +174,7 @@ test("runtime/director integration uses capture clock and immediately invalidate
   rt.reset(); assert.equal(director.update(10.21, .016, false).throttle, 0);
   rt.dispose();
 });
-test("actual worker success and caught exception echo the complete request identity", async () => {
+test("actual worker success, caught exception and frame-less request echo the complete request identity", async () => {
   const replies: WorkerReply[] = [];
   Object.assign(globalThis, { postMessage: (reply: WorkerReply) => replies.push(reply) });
   await loadModule("../universe/perception/worker.ts");
@@ -190,9 +186,51 @@ test("actual worker success and caught exception echo the complete request ident
   assert.equal(replies[0].type, "analysis");
   scope.onmessage({ data: { ...request, request: 10, frame: { ...frame, k: undefined! } } });
   assert.equal(replies[1].type, "error");
+  // A frame-less request must still settle the runtime's single in-flight transaction.
+  scope.onmessage({ data: { ...request, request: 11, frame: undefined! } });
+  assert.match(replies[2].type === "error" ? replies[2].message : "", /no sensor frame/);
   for (const [index, reply] of replies.entries()) {
     assert.equal(reply.generation, 4); assert.equal(reply.id, 7); assert.equal(reply.request, 9 + index);
   }
+});
+test("a resting craft is sensed at a quarter of the moving rate", async () => {
+  // 4 s of frames at 240 Hz, every capture and analysis settled at once, so the only thing
+  // deciding how many frames were taken is the runtime's own schedule.
+  const run = async (resting: boolean) => {
+    const { rt, rig, worker } = setup();
+    for (let i = 0; i <= 960; i++) {
+      rt.tick(i / 240, new T.Vector3(), new T.Vector3(),
+        new T.Quaternion(), new T.Vector3(), new T.Vector3(0, 1, 0), resting);
+      while (rig.pending.length) rig.pending.shift()!.resolve();
+      await flush();
+      const frame = worker.frame();
+      if (frame) worker.reply(frame);
+    }
+    rt.dispose();
+    return rig.frames;
+  };
+  // 8 Hz over 4 s is 32 intervals; at rest it is 8, and both count their opening capture.
+  assert.equal(await run(false), 33);
+  assert.equal(await run(true), 9);
+});
+test("a lost tracker publishes no pose", async () => {
+  const { rt, rig, worker } = setup();
+  const args = [new T.Vector3(), new T.Vector3(), new T.Quaternion(), new T.Vector3(), new T.Vector3(0, 1, 0), false] as const;
+  const reply = async (time: number, status: "TRACKING" | "LOST") => {
+    rt.tick(time, ...args);
+    while (rig.pending.length) rig.pending.shift()!.resolve();
+    await flush();
+    const frame = worker.frame(), result = analysis(frame.frame);
+    worker.onmessage?.({ data: { generation: frame.generation, request: frame.request, id: frame.id,
+      type: "analysis" as const, result: { ...result, vo: { ...result.vo, status } } } });
+  };
+  await reply(0, "TRACKING");
+  assert.equal(rt.snapshot().status, "TRACKING");
+  assert.ok(rt.snapshot().pose);
+  await reply(1, "LOST");
+  assert.equal(rt.snapshot().status, "LOST");
+  assert.equal(rt.snapshot().pose, null, "a lost tracker must not republish its last pose");
+  rt.dispose();
 });
 test("evaluation IMU derives stationary specific force and known camera acceleration", async () => {
   const { rt, rig, worker, tick } = setup();
@@ -201,8 +239,8 @@ test("evaluation IMU derives stationary specific force and known camera accelera
     tick(time); rig.pending.shift()!.resolve(); await flush();
     const request = worker.frame();
     assert.deepEqual(Object.keys(request).sort(), ["frame", "generation", "id", "request", "type"]);
-    assert.equal("imu" in request.frame, false);
-    assert.equal("truth" in request.frame, false);
+    // RGB and depth only: no condition, seed, imu, truth or renderer pose crosses the wire.
+    assert.deepEqual(Object.keys(request.frame).sort(), ["depth", "id", "k", "rgb", "timestamp"]);
     worker.reply(request);
     return rt.records.at(-1)!.truth;
   };

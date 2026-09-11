@@ -214,8 +214,8 @@ export class FlightController {
       this.pendingLook.x -= turnX;
       this.pendingLook.y -= turnY;
       input.learning.look += Math.abs(turnX) + Math.abs(turnY);
-      this.angular.x = turnX / dt;
-      this.angular.y = turnY / dt;
+      this.angular.x = turnX / Math.max(0.001, dt);
+      this.angular.y = turnY / Math.max(0.001, dt);
       this.angular.z +=
         ((Number(keys.has("KeyQ")) - Number(keys.has("KeyE"))) * 0.7 -
           this.angular.z) *

@@ -15,7 +15,7 @@ import {
   vec3,
   vec4,
 } from "three/tsl";
-import { seeded, damp, type Quality } from "./config";
+import { seeded, damp, QUALITY, type Quality } from "./config";
 import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { grassInfluence, pilgrimObserver } from "./pilgrim/influence";
@@ -331,9 +331,7 @@ export class NacreGarden {
     this.lights.instanceMatrix.needsUpdate = true;
   }
   setQuality(quality: Quality) {
-    this.grassCount = { ULTRA: 900, HIGH: 650, BALANCED: 420, BATTERY: 230 }[
-      quality
-    ];
+    this.grassCount = QUALITY[quality].nacreGrass;
   }
   inspect() {
     return {

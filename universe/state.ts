@@ -107,3 +107,43 @@ export const initialSnapshot: UniverseSnapshot = {
   relativityError: false,
   experiment: { active: 0, absorbed: 0, escaped: 0, launched: 0, gravity: 1 },
 };
+/** The keys the engine rewrites with a new value on every frame. A snapshot that differs only
+ *  in these is no news to anything but the readouts. `learning` and `gas` belong here as well:
+ *  both are rebuilt each snapshot, learning moves whenever the camera does, and the weather
+ *  clock inside gas advances on every unpaused frame. */
+export const LIVE_KEYS = [
+  "fps",
+  "frameMs",
+  "drawCalls",
+  "triangles",
+  "particles",
+  "velocity",
+  "distance",
+  "sectors",
+  "selectionX",
+  "selectionY",
+  "selectionVisible",
+  "time",
+  "learning",
+  "gas",
+] as const satisfies readonly (keyof UniverseSnapshot)[];
+const live = new Set<string>(LIVE_KEYS);
+// `experiment` and `relativity` are rebuilt by their models on every snapshot, so identity
+// says nothing about them; both are flat records of numbers and booleans.
+const unchanged = (a: unknown, b: unknown) =>
+  a === b ||
+  (typeof a === "object" &&
+    typeof b === "object" &&
+    a !== null &&
+    b !== null &&
+    Object.entries(a).every(
+      ([key, value]) => value === (b as Record<string, unknown>)[key],
+    ));
+/** Whether two snapshots differ anywhere outside LIVE_KEYS. */
+export const changedOutsideLive = (
+  previous: UniverseSnapshot,
+  next: UniverseSnapshot,
+) =>
+  (Object.keys(next) as (keyof UniverseSnapshot)[]).some(
+    (key) => !live.has(key) && !unchanged(previous[key], next[key]),
+  );

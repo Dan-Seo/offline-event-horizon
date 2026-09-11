@@ -29,7 +29,7 @@ import {
   varying,
   Loop,
 } from "three/tsl";
-import { type Quality } from "./config";
+import { QUALITY, type Quality } from "./config";
 
 export class SanctuaryAtmosphere {
   time = uniform(0);
@@ -204,7 +204,7 @@ export class SanctuaryAtmosphere {
     return mesh;
   }
   setQuality(q: Quality) {
-    this.steps.value = { ULTRA: 40, HIGH: 28, BALANCED: 20, BATTERY: 12 }[q];
+    this.steps.value = QUALITY[q].atmosphereSteps;
   }
   dispose() {
     this.depthReady = false;

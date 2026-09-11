@@ -1,9 +1,21 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { initialSnapshot } from "@/universe/state";
+import {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  changedOutsideLive,
+  initialSnapshot,
+  type UniverseSnapshot,
+} from "@/universe/state";
 import type { UniverseEngine } from "@/universe/engine";
 import type { Quality } from "@/universe/config";
 import type { InputAction } from "@/universe/input";
+import type { ReleaseKind } from "@/universe/orbit-model";
 import {
   copy,
   LANGUAGE_KEY,
@@ -19,6 +31,29 @@ import RelativityPanel from "./RelativityPanel";
 import { approachText } from "@/universe/approach-text";
 import dynamic from "next/dynamic";
 const ResearchLens = dynamic(() => import("./ResearchLens"), { ssr: false });
+// Start fetching the engine while the module evaluates rather than after hydration. Module
+// scope also runs during the prerender, where there is no window and nothing to render into.
+const enginePromise =
+  typeof window === "undefined" ? null : import("@/universe/engine");
+// The lens reads live perception state; a draw failure must not take the world with it.
+class LensBoundary extends Component<
+  { message: string; children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? (
+      <p className="lab-error" role="alert">
+        {this.props.message}
+      </p>
+    ) : (
+      this.props.children
+    );
+  }
+}
 function Mark({
   kind,
 }: {
@@ -64,7 +99,10 @@ function Mark({
 export default function Vastness({ research = false }: { research?: boolean }) {
   const host = useRef<HTMLDivElement>(null),
     engine = useRef<UniverseEngine | null>(null);
+  // `live` is every report; `state` is the newest report that changed something outside the
+  // keys the engine rewrites each frame, so it holds still while only the readouts move.
   const [state, setState] = useState(initialSnapshot),
+    [live, setLive] = useState(initialSnapshot),
     [panel, setPanel] = useState<string | null>(null),
     [help, setHelp] = useState(false),
     [sound, setSound] = useState(false),
@@ -75,11 +113,39 @@ export default function Vastness({ research = false }: { research?: boolean }) {
     [further, setFurther] = useState(false);
   const [language, setLanguage] = useState<Language>("en"),
     [guideRun, setGuideRun] = useState(0),
-    [guideActive, setGuideActive] = useState(!research);
+    [guideActive, setGuideActive] = useState(!research),
+    [world, setWorld] = useState({ life: 0, generated: 0 });
+  const panelRef = useRef<HTMLElement>(null),
+    helpRef = useRef<HTMLElement>(null),
+    restore = useRef<HTMLElement | null>(null);
   const c = copy[language];
   const finishLesson = useCallback(() => {
     engine.current?.input.clear();
   }, []);
+  // The two memoized panels need handlers that outlive a render, or the memo would be undone
+  // by a fresh closure on every report.
+  const releaseMatter = useCallback(
+    (kind: ReleaseKind) => engine.current?.releaseMatter(kind),
+    [],
+  );
+  const setGravity = useCallback(
+    (value: number) => engine.current?.setGravity(value),
+    [],
+  );
+  const clearExperiment = useCallback(
+    () => engine.current?.clearExperiment(),
+    [],
+  );
+  const endObservation = useCallback(
+    () => engine.current?.endObservation(),
+    [],
+  );
+  const setObservationRate = useCallback(
+    (rate: number) => engine.current?.setObservationRate(rate),
+    [],
+  );
+  const pause = useCallback(() => engine.current?.action("pause"), []);
+  const releaseGas = useCallback(() => engine.current?.releaseGas(), []);
   const changeLanguage = (value: Language) => {
     setLanguage(value);
     try {
@@ -128,12 +194,18 @@ export default function Vastness({ research = false }: { research?: boolean }) {
         setHelp(false);
       }
     };
-    void import("@/universe/engine")
+    const report = (next: UniverseSnapshot) => {
+      setLive(next);
+      setState((previous) =>
+        changedOutsideLive(previous, next) ? next : previous,
+      );
+    };
+    void (enginePromise ?? import("@/universe/engine"))
       .then(({ UniverseEngine }) => {
         if (cancelled || !host.current) return;
         const instance = new UniverseEngine(
           host.current,
-          setState,
+          report,
           onAction,
           setError,
           research,
@@ -150,6 +222,9 @@ export default function Vastness({ research = false }: { research?: boolean }) {
       engine.current?.dispose();
       engine.current = null;
     };
+    // The engine is built once per document; `research` is fixed by the route that
+    // rendered this page and cannot change without a document load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (!state.ready) return;
@@ -163,6 +238,36 @@ export default function Vastness({ research = false }: { research?: boolean }) {
   useEffect(() => {
     if (panel === "experiment" && state.encounter !== "wound") setPanel(null);
   }, [panel, state.encounter]);
+  useEffect(() => {
+    if (panel !== "benchmark") return;
+    // Read outside render: the world counters are engine-owned, not snapshot fields.
+    const read = () =>
+      setWorld({
+        life: engine.current?.world.sanctuaries.life.count ?? 0,
+        generated: engine.current?.world.generatedSectors ?? 0,
+      });
+    read();
+    const timer = setInterval(read, 500);
+    return () => clearInterval(timer);
+  }, [panel]);
+  useEffect(() => {
+    const open = panel ? panelRef.current : help ? helpRef.current : null;
+    if (open) {
+      const active = document.activeElement;
+      if (!restore.current && active instanceof HTMLElement)
+        restore.current = active;
+      // Help has no close control, so the aside itself takes focus.
+      const target = panel
+        ? open.querySelector<HTMLElement>(
+            "button, a[href], select, input, [tabindex]:not([tabindex='-1'])",
+          )
+        : open;
+      target?.focus({ preventScroll: true });
+    } else if (restore.current) {
+      restore.current.focus({ preventScroll: true });
+      restore.current = null;
+    }
+  }, [panel, help]);
   return (
     <main
       className={`vastness${research ? " research-world" : ""}${state.quiet ? " quiet" : ""}${panel || help ? " has-panel" : ""}`}
@@ -183,7 +288,7 @@ export default function Vastness({ research = false }: { research?: boolean }) {
       <div className="vignette" aria-hidden="true" />
       <header className="masthead">
         <a href="/" aria-label={c.home}>
-          OFFLINE <span>//</span> VASTNESS
+          OFFLINE <span>{"//"}</span> VASTNESS
         </a>
         <button
           onClick={() => action("help")}
@@ -209,12 +314,12 @@ export default function Vastness({ research = false }: { research?: boolean }) {
             <p>{c.thought}</p>
             <span>{c.stay}</span>
           </div>
-          {state.selectionVisible && (
+          {live.selectionVisible && (
             <div
               className="focus-marker"
               style={{
-                left: `${state.selectionX}%`,
-                top: `${state.selectionY}%`,
+                left: `${live.selectionX}%`,
+                top: `${live.selectionY}%`,
               }}
             >
               <i />
@@ -225,16 +330,17 @@ export default function Vastness({ research = false }: { research?: boolean }) {
             </div>
           )}
           {help && (
-            <aside className="controls-help" aria-label={c.flightControls}>
+            <aside
+              ref={helpRef}
+              className="controls-help"
+              aria-label={c.flightControls}
+              tabIndex={-1}
+            >
               <p>{c.guideTitle}</p>
               <div>
                 <div className="control-row">
                   <kbd>Y / C / Z</kbd>
-                  <span>
-                    {language === "ko"
-                      ? "PILGRIM 타기 / 맡기기 / 쉬기"
-                      : "PILGRIM / carry / rest"}
-                  </span>
+                  <span>{c.pilgrimKeys}</span>
                 </div>
                 {[
                   "DRAG",
@@ -258,11 +364,7 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                 ))}
                 <div className="control-row">
                   <kbd>J</kbd>
-                  <span>
-                    {language === "ko"
-                      ? "Nacre 해안에서 걷기 / 날기"
-                      : "Walk / fly on Nacre's coast"}
-                  </span>
+                  <span>{c.walkKeys}</span>
                 </div>
               </div>
               <small className="desktop-help">{c.desktopHelp}</small>
@@ -287,32 +389,22 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                 <>
                   <button
                     onClick={() => action("pilgrim")}
-                    aria-label={
-                      language === "ko"
-                        ? "PILGRIM 타고 가기"
-                        : "Go with PILGRIM"
-                    }
+                    aria-label={c.goLabel}
                   >
-                    <span>{language === "ko" ? "가보기" : "Go"}</span>
+                    <span>{c.go}</span>
                   </button>
                   <button
                     onClick={() => action("rest")}
-                    aria-label={
-                      language === "ko" ? "멈춰서 쉬기" : "Stop and rest"
-                    }
+                    aria-label={c.restLabel}
                   >
-                    <span>{language === "ko" ? "쉬기" : "Rest"}</span>
+                    <span>{c.rest}</span>
                   </button>
                   <button
                     onClick={() => action("carry")}
                     aria-pressed={state.carrying}
                   >
                     <Mark kind="wander" />
-                    <span>
-                      {language === "ko"
-                        ? "어디든 데려다줘"
-                        : "Carry me somewhere"}
-                    </span>
+                    <span>{c.carry}</span>
                   </button>
                 </>
               )}
@@ -343,15 +435,8 @@ export default function Vastness({ research = false }: { research?: boolean }) {
             </div>
             <div className="flight-tools">
               {state.pilgrim && (
-                <button
-                  onClick={() => action("fly")}
-                  aria-label={
-                    language === "ko"
-                      ? "자유롭게 날기"
-                      : "Leave PILGRIM and fly"
-                  }
-                >
-                  ↗ <span>{language === "ko" ? "날기" : "Fly"}</span>
+                <button onClick={() => action("fly")} aria-label={c.flyLabel}>
+                  ↗ <span>{c.fly}</span>
                 </button>
               )}
               <button
@@ -392,6 +477,7 @@ export default function Vastness({ research = false }: { research?: boolean }) {
           </div>
           {panel && (
             <section
+              ref={panelRef}
               className={`small-panel ${panel}`}
               aria-label={
                 panel === "places"
@@ -504,12 +590,8 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                       }}
                     >
                       <span>
-                        {language === "ko" ? "오로라 해안" : "The aurora coast"}
-                        <small>
-                          {language === "ko"
-                            ? "땅에 내려 산책하기"
-                            : "Come down for a walk"}
-                        </small>
+                        {c.auroraCoast}
+                        <small>{c.auroraCoastWalk}</small>
                       </span>
                       <span>↘</span>
                     </button>
@@ -545,15 +627,15 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                 <GravityExperiment
                   language={language}
                   state={state}
-                  onRelease={(kind) => engine.current?.releaseMatter(kind)}
-                  onGravity={(value) => engine.current?.setGravity(value)}
-                  onClear={() => engine.current?.clearExperiment()}
+                  onRelease={releaseMatter}
+                  onGravity={setGravity}
+                  onClear={clearExperiment}
                 />
               )}
               {panel === "benchmark" && (
                 <>
                   <p className="eyebrow">{c.technical}</p>
-                  <pre>{`${state.fps} FPS · ${state.frameMs.toFixed(2)} ms\n${state.backend} · ${c.quality[state.quality]}\n${state.drawCalls} ${c.draws} · ${state.triangles.toLocaleString()} ${c.triangles}\n${state.particles.toLocaleString()} ${c.particles}\n${engine.current?.world.sanctuaries.life.count.toLocaleString() ?? 0} ${c.life}\nDPR ${state.dpr.toFixed(2)} · ${state.sectors} ${c.resident}\n${engine.current?.world.generatedSectors ?? 0} ${c.generated}\n${c.coordinates}\n${state.nearest}\n${Math.round(state.velocity).toLocaleString()} ${c.localUnits}`}</pre>
+                  <pre>{`${live.fps} FPS · ${live.frameMs.toFixed(2)} ms\n${state.backend} · ${c.quality[state.quality]}\n${live.drawCalls} ${c.draws} · ${live.triangles.toLocaleString()} ${c.triangles}\n${live.particles.toLocaleString()} ${c.particles}\n${world.life.toLocaleString()} ${c.life}\nDPR ${state.dpr.toFixed(2)} · ${live.sectors} ${c.resident}\n${world.generated} ${c.generated}\n${c.coordinates}\n${state.nearest}\n${Math.round(live.velocity).toLocaleString()} ${c.localUnits}`}</pre>
                   <label>
                     {c.stress}
                     <select
@@ -585,6 +667,7 @@ export default function Vastness({ research = false }: { research?: boolean }) {
               language={language}
               onLanguage={changeLanguage}
               state={state}
+              learning={live.learning}
               run={guideRun}
               onActive={setGuideActive}
               onLessonComplete={finishLesson}
@@ -596,32 +679,22 @@ export default function Vastness({ research = false }: { research?: boolean }) {
             />
           )}
           {research && engine.current && (
-            <ResearchLens engine={engine.current} language={language} />
+            <LensBoundary message={c.lensError}>
+              <ResearchLens engine={engine.current} language={language} />
+            </LensBoundary>
           )}
           {state.pilgrim && !panel && !help && (
             <div className="pilgrim-whisper" aria-live="polite">
               {state.carrying ? (
                 state.resting ? (
-                  language === "ko" ? (
-                    "잠깐, 여기 머물러도 좋아."
-                  ) : (
-                    "We can stay here a while."
-                  )
+                  c.stayHere
                 ) : (
                   ""
                 )
               ) : (
                 <>
-                  <span className="desktop-help">
-                    {language === "ko"
-                      ? "WASD로 움직이고, 드래그로 둘러봐. 커서는 자유로워."
-                      : "WASD to move. Drag to look. Your cursor stays free."}
-                  </span>
-                  <span className="touch-help">
-                    {language === "ko"
-                      ? "왼손으로 움직이고, 오른손으로 둘러봐."
-                      : "Left thumb to move. Right thumb to look."}
-                  </span>
+                  <span className="desktop-help">{c.pilgrimDesktop}</span>
+                  <span className="touch-help">{c.pilgrimTouch}</span>
                 </>
               )}
             </div>
@@ -650,30 +723,19 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                       disabled={state.paused}
                       onClick={() => engine.current?.releaseGas()}
                     >
-                      {language === "ko"
-                        ? "가스 한 줄기 흘려보내기"
-                        : "Release a stream of gas"}{" "}
-                      ↝
+                      {c.releaseGas} ↝
                     </button>
                     <button
                       disabled={state.relativityLoading}
                       onClick={() => void engine.current?.beginObservation()}
                     >
                       {state.relativityLoading
-                        ? language === "ko"
-                          ? "광선 계산 준비 중…"
-                          : "Preparing light paths…"
-                        : language === "ko"
-                          ? "지평선 안으로 · 자유낙하 관측"
-                          : "Beyond the horizon · observe freefall"}{" "}
+                        ? c.lightPaths
+                        : c.observeFreefall}{" "}
                       ↗
                     </button>
                     {state.relativityError && (
-                      <small role="status">
-                        {language === "ko"
-                          ? "관측 화면을 열지 못했어요. 기존 우주는 계속 탐험할 수 있어요."
-                          : "The observation could not open. Exploration is still available."}
-                      </small>
+                      <small role="status">{c.observationError}</small>
                     )}
                     <button onClick={() => action("experiment")}>
                       {c.experiment} <span aria-hidden="true">↗</span>
@@ -683,19 +745,13 @@ export default function Vastness({ research = false }: { research?: boolean }) {
                   <>
                     {state.walkAvailable && (
                       <button onClick={() => action("walk")}>
-                        {language === "ko"
-                          ? "여기서 걸어보기 · J"
-                          : "Walk here · J"}{" "}
-                        ↘
+                        {c.walkHere} ↘
                       </button>
                     )}
                     {approachText(state.encounter, language) &&
                       !state.approach && (
                         <button onClick={() => engine.current?.approach()}>
-                          {language === "ko"
-                            ? "더 가까이 · 풍경 속으로"
-                            : "Closer · into the landscape"}{" "}
-                          ↘
+                          {c.closer} ↘
                         </button>
                       )}
                     <button onClick={() => action("orbit")}>
@@ -715,41 +771,19 @@ export default function Vastness({ research = false }: { research?: boolean }) {
             <RelativityPanel
               language={language}
               state={state}
-              onExit={() => engine.current?.endObservation()}
-              onRate={(rate) => engine.current?.setObservationRate(rate)}
-              onPause={() => action("pause")}
-              onGas={() => engine.current?.releaseGas()}
+              onExit={endObservation}
+              onRate={setObservationRate}
+              onPause={pause}
+              onGas={releaseGas}
             />
           )}
           {state.walking && !panel && !help && (
-            <aside
-              className="walk-note"
-              aria-label={language === "ko" ? "해안 산책" : "Coastal walk"}
-            >
-              <p>
-                {language === "ko"
-                  ? "발걸음 닿는 곳마다, 작은 빛."
-                  : "A little light with every step."}
-              </p>
-              <small className="desktop-help">
-                {language === "ko"
-                  ? "WASD 걷기 · 드래그 둘러보기 · Space 작은 도약"
-                  : "WASD walk · drag to look · Space little hop"}
-              </small>
-              <small className="touch-help">
-                {language === "ko"
-                  ? "왼손으로 걷기 · 오른손으로 둘러보기"
-                  : "Left thumb walks · right thumb looks"}
-              </small>
-              <button onClick={() => action("seed")}>
-                {language === "ko" ? "빛 한 점 남기기" : "Leave a little light"}
-              </button>
-              <button onClick={() => action("walk")}>
-                {language === "ko"
-                  ? "다시 날아오르기 · J"
-                  : "Take flight again · J"}{" "}
-                ↗
-              </button>
+            <aside className="walk-note" aria-label={c.coastalWalk}>
+              <p>{c.walkNote}</p>
+              <small className="desktop-help">{c.walkDesktop}</small>
+              <small className="touch-help">{c.walkTouch}</small>
+              <button onClick={() => action("seed")}>{c.walkSeed}</button>
+              <button onClick={() => action("walk")}>{c.takeFlight} ↗</button>
             </aside>
           )}
           <div

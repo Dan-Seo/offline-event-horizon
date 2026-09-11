@@ -12,6 +12,8 @@ import { Sanctuaries } from "./sanctuaries";
 import { PlanetApproaches } from "./approaches";
 export type Body = Destination & {
   object: T.Group;
+  /** The planet inside the group. Only bodies that have one are updated at range. */
+  planet?: T.Group;
   color: number;
   archetype: number;
 };
@@ -129,6 +131,7 @@ export class UniverseWorld {
       ];
     for (const [id, name, kind, xyz, radius, color, archetype] of specs) {
       const object = new T.Group();
+      let planet: T.Group | undefined;
       if (archetype === 3) object.add(this.anomaly.group);
       else if (archetype === 4) {
         const ring = new T.Mesh(
@@ -146,7 +149,7 @@ export class UniverseWorld {
         volume.scale.set(3.6, 2.1, 1.8);
         object.add(volume);
       } else {
-        const planet = this.planets.create(id === "orpheus" ? 8 : archetype);
+        planet = this.planets.create(id === "orpheus" ? 8 : archetype);
         if (id === "orpheus") planet.scale.setScalar(0.9996);
         object.add(planet);
       }
@@ -158,6 +161,7 @@ export class UniverseWorld {
         position: new T.Vector3(...xyz),
         radius,
         object,
+        planet,
         color,
         archetype,
         solid: ![4, 5].includes(archetype),
@@ -308,8 +312,9 @@ export class UniverseWorld {
                     (random() - 0.5) * 250000,
                   ),
                 );
-            const object = new T.Group();
-            object.add(this.planets.create(kind));
+            const object = new T.Group(),
+              planet = this.planets.create(kind);
+            object.add(planet);
             this.scene.add(object);
             const body: Body = {
               id: `sector-${id}`,
@@ -329,6 +334,7 @@ export class UniverseWorld {
               position,
               radius,
               object,
+              planet,
               color: 0xaaaaaa,
               archetype: kind,
               solid: true,
@@ -370,20 +376,21 @@ export class UniverseWorld {
         });
         for (const b of sector.bodies) {
           this.scene.remove(b.object);
-          this.bodies.splice(this.bodies.indexOf(b), 1);
+          const at = this.bodies.indexOf(b);
+          if (at >= 0) this.bodies.splice(at, 1);
         }
         this.sectorMap.delete(id);
       }
     this.sectors = this.sectorMap.size;
   }
-  update(observer: T.Vector3, time: number, camera?: T.Camera, speed = 0) {
+  update(observer: T.Vector3, time: number, camera?: T.Camera, speed = 0, dt = 1 / 60) {
     this.stream(observer);
     this.planets.time.value = Number.isFinite(time) ? time : 0;
     this.nebulae.time.value = time;
     for (const sector of this.sectorMap.values())
       placeRelative(sector.group, sector.center, observer);
     this.sanctuaries.update(observer, time);
-    this.approaches.update(observer, time, speed);
+    this.approaches.update(observer, time, speed, dt);
     this.nebulae.density.value =
       (1 - this.sanctuaries.presence * 0.72) * this.nebulaBoost;
     for (const b of this.bodies) {
@@ -398,7 +405,7 @@ export class UniverseWorld {
           b.archetype === 0 && b.id !== "orpheus" ? 0.8 : 0,
         );
         this.planets.update(
-          b.object.children[0] as T.Group,
+          b.planet!,
           observer.distanceTo(b.position) / b.radius,
         );
       }
@@ -429,7 +436,7 @@ export class UniverseWorld {
       anomaly: this.anomaly.inspect(),
       planets: this.bodies.filter((b) => ![3, 4, 5, 7].includes(b.archetype)).map((b) => ({
         id: b.id, anchor: b.position.toArray(), rotation: b.object.rotation.toArray(),
-        ...this.planets.inspect(b.object.children[0] as T.Group, b.id === "orpheus" ? 8 : b.archetype),
+        ...this.planets.inspect(b.planet!, b.id === "orpheus" ? 8 : b.archetype),
       })),
     };
   }

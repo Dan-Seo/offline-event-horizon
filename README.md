@@ -1,6 +1,6 @@
-# OFFLINE // VASTNESS
+# OFFLINE // VASTNESS 3.0.0 — Living Cosmos
 
-A quiet, freely explorable sanctuary inside a persistent universe. **VASTNESS 3.0 // PILGRIM** opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
+A quiet, freely explorable sanctuary inside a persistent universe. **PILGRIM** opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. A small light you leave behind is saved on this device.
 
@@ -8,41 +8,7 @@ No chapters, timer, score, account, analytics, or mandatory route. Movement alwa
 
 ![Actual rendered mirror sea at The Last Light](public/poster.jpg)
 
-## Go. Rest. Carry me somewhere.
-
-PILGRIM is a small, almost silent leaf-like craft. Choose **Go** to ride, **Rest** to settle, or **Carry me somewhere** to give up the next decision. It hovers over terrain and water, banks gently, glides from edges and settles back onto the surface. A fading wake and softly bending grass follow it. There is no fuel, destination requirement or vehicle menu. WASD, a deliberate drag, or touch movement immediately takes over. The mouse is never locked.
-
-Carry observes local geometry through the craft's synthetic RGB-D camera. It chooses among short, visible routes using clearance, slope, water/vegetation color, motion restraint and recent estimated travel. It often rests for 30–60 seconds and holds still during a nearby beauty event. It does not cycle through landmark splines. Unknown or poorly observed ground may lead to a long rest. This is local scenic navigation, not a global route planner.
-
-Normal visitors see none of the instrumentation. Deliberately open **[Research Lens](https://offline-vastness.vercel.app/lab)** for the other identity of the same engine and vehicle: synchronized synthetic sensors, an actual RGB-D visual-odometry baseline, a bounded local map, candidate routes, truth/estimate separation and trajectory evaluation. The baseline tracks image features and fits rigid motion; it never receives renderer ground-truth poses. It is not a novel SLAM algorithm or a therapeutic result. [Model and data boundaries](docs/PILGRIM.md).
-
-Research Lens can record and download 32 synchronized raw sensor frames, camera calibration, synthetic IMU and paired trajectories. Replay the images outside the browser using `npm run replay:rgbd -- sequence.tar`. Everything stays on the device unless the user downloads a file. Research rendering is disabled during ordinary manual flight/riding; Carry loads the shared perception worker only when needed.
-
-## Places to stay
-
-- **The Last Light:** a curved mirror sea, long ripples, bioluminescent wakes, and a rare gossamer visitor reflected with the sky.
-- **Moonfall:** a 760-unit descending water curtain, layered cliffs, wet haze, and an occasional quiet moonbow.
-- **The Breathing Forest:** recursive trees, swaying leaves and grass, light that responds to stillness, and creatures that gather gently around a resting observer.
-- **The Veil:** an enterable three-dimensional cloud field around a suspended garden. Density and openings change slowly.
-- **The Living Sky:** thousands of stateful flow-following creatures, local avoidance, and a rare translucent form passing through them.
-
-These places are spatial neighbors on one ocean world. **Explore** opens optional directions to nearby sanctuaries and distant planets. There is no required order. **Wander** glides briefly, rests often, and holds its composition during a nearby beauty event. **Quiet** removes the interface.
-
-## Start comfortably
-
-Choose **한국어 / English** on arrival; the initial choice follows the browser language and a saved choice takes precedence. Choose **어디든 데려다줘 / Carry me somewhere** without learning controls, or use the optional movement guide. The guide responds to actual look, flight and speed input, with separate touch instructions. The cursor stays free throughout. Skip the guide or replay it from Help at any time. Language remains available in Comfort settings.
-
-Beyond the water, **Serein** has wind-shaped dunes and salt basins; **Nacre** has green oceans, pearl clouds, and luminous night coasts. Selene's ice basins and fractures, Ember's warm crustal seams, and the Silent Giant's slow storm bands distinguish the other worlds. Select a planet and use its orbit button or **O** to drift around it; manual input takes over immediately.
-
-At **The Wound**, choose **Release a little matter** or press **T**. Three initial speeds produce falling, bound, and escaping trajectories. Changing gravity affects particles already in flight. This optional experiment preserves the quiet default scene.
-
-Choose **Beyond the horizon · freefall observation** for a separate scientific observation. A radial infaller crosses an ideal Schwarzschild horizon while GPU-integrated null geodesics determine the visible disk and sky. Drag to look, P to pause, and WASD or Esc to restore the exterior flight position. The panel explains the proper-time clock, frequency transfer, and the chosen numerical stop. It makes no claim to show an observed interior or a physical escape. [Equations, references, and limits](docs/RELATIVITY.md).
-
-The five distant hero planets now offer **Closer · into the landscape**. Existing smooth flight continues into Selene's ice canyon, Serein's dune ridges, Ember's cooling caldera, Nacre's reflective lagoon and luminous canopy, or the Silent Giant's cloud tops beneath its rings. These regions stay attached to their planets and remain freely navigable. They are regional environments, not complete planet-wide landing systems. Manual movement interrupts the approach immediately.
-
-**The aurora coast**, in Explore, flies directly to Nacre's shoreline. Choose **Walk here** or press **J** to settle onto the actual terrain at eye height. WASD walks, drag looks, Space makes a small hop, and J takes flight again. Touch uses both thumbs. Curved aurora curtains reflect in the lagoon; small grass tiles stream underfoot, steps leave fading light in the moss, and delicate creatures gather when you rest. **Leave a little light** plants a miniature stellar keepsake. There are no scores or tasks. Grounded walking is currently specific to Nacre, with deep water and steep slopes limiting the route; vegetation is permeable.
-
-The Wound now receives irregular streams of gas. **Release a stream of gas** adds persistent parcels that orbit, shear, heat and accrete. Their emission also changes the optional ray-traced observation. This uses simplified dissipative particle dynamics, not magnetic plasma simulation. The photon equations remain Schwarzschild; variable emission uses a shared scene clock rather than retarded source time. Plain-language descriptions appear first; numerical readings and model details are collapsed.
+[Run](#run) · [Go. Rest. Carry me somewhere.](#go-rest-carry-me-somewhere) · [Places to stay](#places-to-stay) · [Start comfortably](#start-comfortably) · [Fly](#fly) · [Rendering and scale](#rendering-and-scale) · [Blender](#blender) · [Quality and fallback](#quality-and-fallback) · [Scientific and practical limits](#scientific-and-practical-limits) · [Verification and deployment](#verification-and-deployment)
 
 ## Run
 
@@ -57,12 +23,49 @@ Development runs at `http://localhost:3000`. To inspect the static production bu
 
 ```sh
 npm run typecheck
+npm run lint
 npm test
 npm run build
 npm start
 ```
 
 The production preview runs at `http://localhost:4173`. Vercel builds this Next.js static export directly; leave its output-directory override unset.
+
+## Go. Rest. Carry me somewhere.
+
+PILGRIM is a small, almost silent leaf-like craft. Choose **Go** to ride, **Rest** to settle, or **Carry me somewhere** to give up the next decision. It hovers over terrain and water, banks gently, glides from edges and settles back onto the surface. A fading wake and softly bending grass follow it. There is no fuel, destination requirement or vehicle menu. Go is offered only within a bounded clearance above contact, because a hand-over from higher up would be a long fall the craft could not settle from. WASD, a deliberate drag, or touch movement immediately takes over.
+
+Carry observes local geometry through the craft's synthetic RGB-D camera. It chooses among short, visible routes using clearance, slope, water/vegetation color, motion restraint and recent estimated travel. It often rests for 30–60 seconds and holds still during a nearby beauty event. While the craft rests its sensors capture at a quarter of the moving rate, never slower than one frame every 0.8 seconds, and a tracker that has lost its track publishes no pose at all instead of repeating its last one. It does not cycle through landmark splines. Unknown or poorly observed ground may lead to a long rest. This is local scenic navigation, not a global route planner.
+
+Normal visitors see none of the instrumentation. Deliberately open **[Research Lens](https://offline-vastness.vercel.app/lab)** for the other identity of the same engine and vehicle: synchronized synthetic sensors, an actual RGB-D visual-odometry baseline, a bounded local map, candidate routes, truth/estimate separation and trajectory evaluation. The baseline tracks image features and fits rigid motion; it never receives renderer ground-truth poses. It is not a novel SLAM algorithm or a therapeutic result. [Model and data boundaries](docs/PILGRIM.md).
+
+Research Lens can record and download 32 synchronized raw sensor frames, camera calibration, synthetic IMU and paired trajectories. Replay the images outside the browser using `npm run replay:rgbd -- sequence.tar`; it writes its report to `artifacts/replay/` and exits non-zero when a segment loses more than 0.1 of its samples, drifts more than 0.2 of the distance travelled, or exceeds 0.5 relative translation error, each overridable with `REPLAY_MAX_LOST`, `REPLAY_MAX_DRIFT` and `REPLAY_MAX_RPE`. Everything stays on the device unless the user downloads a file. Research rendering is disabled during ordinary manual flight/riding; Carry loads the shared perception worker only when needed.
+
+## Places to stay
+
+- **The Last Light:** a curved mirror sea, long ripples, bioluminescent wakes, and a rare gossamer visitor reflected with the sky.
+- **Moonfall:** a 760-unit descending water curtain, layered cliffs, wet haze, and an occasional quiet moonbow.
+- **The Breathing Forest:** recursive trees, swaying leaves and grass, light that responds to stillness, and creatures that gather gently around a resting observer.
+- **The Veil:** an enterable three-dimensional cloud field around a suspended garden. Density and openings change slowly.
+- **The Living Sky:** thousands of stateful flow-following creatures, local avoidance, and a rare translucent form passing through them.
+
+These places are spatial neighbors on one ocean world. **Explore** opens optional directions to nearby sanctuaries and distant planets. There is no required order. **Wander** glides briefly, rests often, and holds its composition during a nearby beauty event.
+
+## Start comfortably
+
+Choose **한국어 / English** on arrival; the initial choice follows the browser language, a saved choice takes precedence, and language remains available in Comfort settings. Choose **어디든 데려다줘 / Carry me somewhere** without learning controls, or use the optional movement guide, which responds to actual look, flight and speed input and carries separate touch instructions. Skip it or replay it from Help at any time.
+
+Beyond the water, **Serein** has wind-shaped dunes and salt basins; **Nacre** has green oceans, pearl clouds, and luminous night coasts. Selene's ice basins and fractures, Ember's warm crustal seams, and the Silent Giant's slow storm bands distinguish the other worlds. Select a planet and use its orbit button or **O** to drift around it.
+
+At **The Wound**, choose **Release a little matter** or press **T**. Three initial speeds produce falling, bound, and escaping trajectories. Changing gravity affects particles already in flight. This optional experiment preserves the quiet default scene.
+
+Choose **Beyond the horizon · freefall observation** for a separate scientific observation. A radial infaller crosses an ideal Schwarzschild horizon while GPU-integrated null geodesics determine the visible disk and sky. Drag to look, P to pause, and WASD or Esc to restore the exterior flight position. The panel explains the proper-time clock, frequency transfer, and the chosen numerical stop. It makes no claim to show an observed interior or a physical escape. [Equations, references, and limits](docs/RELATIVITY.md).
+
+The five distant hero planets now offer **Closer · into the landscape**. Existing smooth flight continues into Selene's ice canyon, Serein's dune ridges, Ember's cooling caldera, Nacre's reflective lagoon and luminous canopy, or the Silent Giant's cloud tops beneath its rings. These regions stay attached to their planets and remain freely navigable regional environments, not complete planet-wide landing systems; manual movement interrupts the approach immediately.
+
+**The aurora coast**, in Explore, flies directly to Nacre's shoreline. Choose **Walk here** or press **J** to settle onto the actual terrain at eye height. WASD walks, drag looks, Space makes a small hop, and J takes flight again. Touch uses both thumbs. Curved aurora curtains reflect in the lagoon; small grass tiles stream underfoot, steps leave fading light in the moss, and delicate creatures gather when you rest. **Leave a little light** plants a miniature stellar keepsake. There are no scores or tasks. Grounded walking is currently specific to Nacre, with deep water and steep slopes limiting the route; vegetation is permeable.
+
+The Wound now receives irregular streams of gas. **Release a stream of gas** adds persistent parcels that orbit, shear, heat and accrete. Their emission also changes the optional ray-traced observation. This uses simplified dissipative particle dynamics, not magnetic plasma simulation. The photon equations remain Schwarzschild; variable emission uses a shared scene clock rather than retarded source time. Plain-language descriptions appear first; numerical readings and model details are collapsed.
 
 ## Fly
 
@@ -86,58 +89,19 @@ The production preview runs at `http://localhost:4173`. Vercel builds this Next.
 | Y / C / Z          | PILGRIM Go / Carry me somewhere / Rest                       |
 | Backquote          | Technical observatory                                         |
 
-Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. The application never requests pointer lock. Hovering the free cursor leaves Wander undisturbed; an intentional drag or movement key takes control immediately.
+Touch: left thumb moves, right thumb looks, pinch changes speed, tap selects, and double tap approaches. Wander, Quiet, sound, and Comfort settings support keyboard focus. All decorative overlays pass pointer events through to the canvas. The application never requests pointer lock. Hovering the free cursor leaves Wander undisturbed, and a bare click or tap only selects: control passes when a drag travels more than four pixels (five on touch), when the wheel turns, or when a movement key is pressed. That single threshold decides both, so no gesture now selects and steers at once.
 
 These flight controls remain available when flying. Aboard PILGRIM, W/S move, A/D steer, drag looks and steers, Shift/Ctrl adjust pace, and Space gives a little lift. Its roll is a restrained response to steering; Q/E remain free-flight controls. **Fly** returns to the existing camera, and R recovers to the sea. On the craft, B also activates Carry. Touch uses the same movement/look zones.
 
-Wander remains optional for free flight and stays with a place instead of cycling through a destination list. Manual flight or look input immediately cancels automation. Reduced-motion preferences enable gentler camera response and remove CSS animation. Simulation can be paused independently of navigation. Quiet hides the interface and softens motion; Esc or the small restore control brings it back.
+Wander remains optional for free flight and stays with a place instead of cycling through a destination list. Reduced-motion preferences enable gentler camera response and remove CSS animation. Simulation can be paused independently of navigation. Quiet hides the interface and softens motion; Esc or the small restore control brings it back.
 
 ## Rendering and scale
 
-Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio. React owns the small interface; the renderer, input state, camera, and simulation run outside React's render loop. Raw Three.js gives direct control over GPU buffers, compilation, render passes, and streaming without another scene reconciler.
-
-- `universe/input.ts` centralizes keys, temporary drag capture, touch, wheel, blur, and cancellation.
-- `pilgrim/model.ts` integrates the actual craft at 120 Hz; `contact.ts` confines privileged terrain/trunk queries to physical contact. `system.ts` connects the craft to the existing flight camera. The renderer still uses the established floating origin and planetary surface frames.
-- `perception/rig.ts` renders synchronized 192×128 opaque RGB/depth/normals/semantic attachments from shared world geometry. `vo.ts`, `map.ts`, and `worker.ts` run image-based pose estimation and local mapping independently of rendering. `pilgrim/director.ts` converts observed local routes to physical steering and intentional rests. The worker receives no truth pose, semantic IDs or world destination.
-- `perception/metrics.ts` evaluates segment-local unscaled SE(3) ATE and approximately one-second RPE. Near-collinear alignment and tracking loss are explicit. `dataset.ts` exports bounded raw sensor clips; `scripts/replay-rgbd.ts` verifies the same estimator against saved images. `/lab` and its UI are separately loaded.
-- `flight.ts` handles damped velocity and angular input, distance-aware speed, focus, orbit, forgiving surface clearance, and optional Wander.
-- `coordinates.ts` retains double-precision global positions on CPU, subtracts the observer, then compresses the far field logarithmically while preserving angular size.
-- `world.ts` maintains 27 neighboring seeded sectors. New sectors arrive as the observer travels; distant sector resources are released. Landmark bodies coexist in the same spatial system.
-- `planets.ts` shares procedural terrain, ocean, cloud, atmosphere, aurora, night-light, and ring materials across mesh LODs.
-- `nebula.ts` raymarches spatial volumes through a seamless procedural 96³ density texture, with extinction and locally varying color. The camera can enter the volume.
-- `stars.ts` combines a distant clustered stellar population with sector stars and local matter for parallax.
-- `anomaly.ts` builds the accretion disk and lensed arcs; `engine.ts` adds bounded screen-space distortion and restrained bloom.
-- `orbit-model.ts` integrates up to 144 interactive test particles on CPU with fixed 1/120-second velocity-Verlet steps and softened inverse-square gravity. `orbit-experiment.ts` renders their measured position histories. Dense ambient matter remains on GPU; the small experiment uses the same force model on both render backends.
-- `relativity-model.ts` contains the Schwarzschild observer and null-ray reference model. The lazy-loaded `relativity.ts` traces the same equations per fragment through TSL, with a capped render target on both WebGPU and WebGL2. `RelativityPanel.tsx` keeps explanatory controls in English and Korean.
-- `approaches.ts`, `approach-terrain.ts`, and `approach-water.ts` attach deterministic regional geometry, collision clearance, reflective water, instanced organic forms, and three-dimensional cloud volumes to the existing planetary bodies. They reuse the current flight controller, materials, and floating origin.
-- `walk.ts` and `walk-ground.ts` add damped, grounded movement with height sampled from the rendered terrain triangles, slope/water limits, one-hop input, and a smooth departure into flight. `nacre-garden.ts` attaches reflected 3D aurora, nine recycled grass tiles, world-space footprint history, and 72 stateful ambient creatures. A tile rebuild is limited to one per frame.
-- `accretion-model.ts` and `accretion.ts` keep a bounded, fixed-step gas experiment separate from the exact null-ray equations; small source moments reach the GPU as uniforms. This modest simulation runs on CPU on both backends; the existing dense matter/creature fields remain on GPU.
-- `language.ts`, `ArrivalGuide.tsx`, and `GravityExperiment.tsx` provide English/Korean copy, actual-input onboarding, and the optional experiment. Opening keyboard-driven panels clears held input. Drag capture lasts only for the gesture and is also released on blur or cancellation; the cursor remains visible and unrestricted.
-- `matter.ts` maintains positions and velocities in GPU storage buffers, integrating softened fields, tangential motion, damping, and local-domain rebasing without per-frame readback.
-- `creation.ts` keeps user-planted stellar seeds in world coordinates and saves the latest 24 in local storage.
-- `sanctuaries.ts` coordinates local presence, stillness, and unannounced environmental events. It never changes scenes or takes camera control.
-- `sanctuary-water.ts` combines a radially graded spherical ocean cap, a real planar scene reflection, procedural waves, and a small wake history.
-- `sanctuary-atmosphere.ts` shares directional high-cloud radiance, local terrain haze, and bounded 3D raymarched mist. Per-view opaque-depth copies stop each ray at visible terrain; integrating the clipped interval avoids bands on nearby trunks. `sanctuary-nature.ts` instances recursive trees, leaves, rocks, grass, and noise-advected waterfall curtains.
-- `sanctuary-life.ts` integrates position/velocity storage buffers for a damped shared flow and observer attraction/avoidance. The large translucent visitor is a procedural animated mesh.
-
-High-frequency procedural detail is evaluated on the GPU. Planets have three geometry LODs; the Cathedral has two authored LODs. Material and light topology is shared to reduce shader compilation during streaming. The actual opening is shown as a static poster while the first shader set warms. The hero model loads progressively after flight becomes available. Reflection is warmed after async shader compilation to avoid the r183 nested-render/pending-pipeline race.
+Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio. React owns the small interface; the renderer, input state, camera, and simulation run outside React's render loop. Double-precision global positions, 27 streamed neighboring sectors, shared procedural materials, and GPU-resident matter hold one continuous world from the sea floor to the far field. [Module-by-module detail](docs/ARCHITECTURE.md).
 
 ## Blender
 
-Original hero geometry is authored by `scripts/build_vastness_assets.py`; editable source is `assets/source/cathedral.blend`.
-
-```sh
-blender --background --python scripts/build_vastness_assets.py
-```
-
-The Cathedral is a broken orbital gate assembled from arcs, ribs, buttresses, suspended observatory geometry, fins, and faint circuit detail. Blender 5.2.1 CLI was available; Blender MCP was not. The export is normalized, uses glTF Y-up, and has normals and UVs on every primitive. Four materials, four primitives, no image textures.
-
-| LOD  | Vertices | Triangles | GLB bytes |
-| ---- | -------: | --------: | --------: |
-| High |   20,974 |    31,308 |   863,452 |
-| Low  |    7,345 |     8,125 |   288,196 |
-
-See `public/assets/cathedral-report.json`. Reusable hero geometry belongs in Blender; stars, volumes, planets, asteroids, and changing matter are generated at runtime. DM Sans and Manrope are self-hosted with their OFL licenses.
+Original hero geometry is authored by `scripts/build_vastness_assets.py`; editable source is `assets/source/cathedral.blend`. The Cathedral is a broken orbital gate with two authored LODs, four materials, and no image textures. Reusable hero geometry belongs in Blender; stars, volumes, planets, asteroids, and changing matter are generated at runtime. [Build command, export settings, and the LOD table](docs/ARCHITECTURE.md#blender).
 
 ## Quality and fallback
 
@@ -148,17 +112,13 @@ See `public/assets/cathedral-report.json`. Reusable hero geometry belongs in Ble
 | BALANCED |               36,000 |     1,800 |           32 |    1.15 |
 | BATTERY  |               12,000 |       650 |           18 |    0.85 |
 
-Local sanctuary volumes use 40/28/20/12 steps and reflection resolution scales of .85/.65/.45/.30 across the four tiers. Living-particle budgets are 8,192/8,192/6,144/4,096. Leaf and grass density also scale. Mobile starts in Battery. Sustained slow frame cadence lowers detail automatically. Battery removes the bloom contribution; the post-processing pass graph remains warm. The hidden technical observatory offers particle, nebula, asteroid, and gravity stress scenarios, with automatic downgrading suspended during intentional stress.
+Local sanctuary volumes use 40/28/20/12 steps and reflection resolution scales of .85/.65/.45/.30 across the four tiers. Living-particle budgets are 8,192/8,192/6,144/4,096. Leaf and grass density also scale. All of these per-tier budgets live in one table, `QUALITY` in `universe/config.ts`. Mobile starts in Battery. Sustained slow frame cadence lowers detail automatically, except that a tier chosen through `?quality=` or in the interface is pinned and is never downgraded for you. Battery removes the bloom contribution; the post-processing pass graph remains warm. The hidden technical observatory offers particle, nebula, asteroid, and gravity stress scenarios, with automatic downgrading suspended during intentional stress.
 
 When WebGPU is unavailable, Three.js automatically uses WebGL2. Procedural shaders, reflection, local volumes, and navigation remain available; 5,000 matter particles and 1,200 living particles use reduced CPU force integrators. Missing hero downloads retain a procedural gate. Context/device loss shows a static view and an explicit lighter-graphics retry. Audio is synthesized locally and requires an opt-in gesture; air and tonal levels blend slowly with the local environment.
 
 ## Scientific and practical limits
 
-The main universe is physics-inspired interactive art. Dust and released test particles respond to actual force integration. The Newtonian black-hole experiment uses a prescribed absorbing sphere and a finite escape boundary; its gravity slider and starting speeds use artistic units. Its ambient lensing, accretion appearance, atmosphere, clouds, star growth, and companion orbits are artistic approximations. The separate **freefall observation** solves ideal Schwarzschild light geodesics and frequency transfer; its sources, exposure, and color remain illustrative. It omits spin, collapse history, plasma dynamics, and quantum gravity. See the [model document](docs/RELATIVITY.md) for numerical boundaries and validation. Neither mode is an N-body or planet-formation simulation.
-
-The five original sanctuaries and five added planetary regions contain near-surface geometry or cloud volumes and forgiving collision envelopes; free flight and walking remain permissive, while PILGRIM uses conservative trunk contacts. Procedurally streamed planets outside those hero regions support orbital inspection, not full terrain landing. Mirrors use tangent-plane reflection on curved caps, not physically exact curved-water reflection. Sanctuary volumes clip against opaque scene depth, while transparent foliage and water use approximate compositing; the planetary cloud volumes are cheaper box ray marches. There is no multiple-scattering solution. Waterfalls are animated geometric curtains rather than fluid simulation. The large visitor and rare-event timing are authored approximations; small creatures have integrated dynamic state. The distant galactic star field is an angular background population. Persistence is local to the browser and retains up to 24 created lights. Reduced motion softens navigation rather than eliminating all motion; P pauses the simulation. No UE5 edition was built.
-
-This is designed for a restful experience. No therapeutic benefit has been established. No participant study or personally photographed reconstruction has been completed. [Portfolio framing](docs/PORTFOLIO.md), [a small formative-study protocol](docs/FORMATIVE-STUDY.md), and [a future image-reconstruction workflow](docs/RECONSTRUCTION.md) make the next personal contributions concrete without inventing results.
+The main universe is physics-inspired interactive art: released test particles and the Newtonian black-hole experiment integrate actual forces in artistic units, the separate freefall observation solves ideal Schwarzschild light geodesics, and ambient lensing, accretion appearance, waterfalls, and near-surface hero geometry remain artistic approximations. Procedurally streamed planets outside the hero regions support orbital inspection, not full terrain landing, and persistence is local to the browser. This is designed for a restful experience. No therapeutic benefit has been established, and no participant study or personally photographed reconstruction has been completed; [Portfolio framing](docs/PORTFOLIO.md), [a small formative-study protocol](docs/FORMATIVE-STUDY.md), and [a future image-reconstruction workflow](docs/RECONSTRUCTION.md) make the next personal contributions concrete without inventing results, and [the full list of model boundaries](docs/ARCHITECTURE.md#scientific-and-practical-limits) stays with the architecture notes.
 
 ## Verification and deployment
 
@@ -177,13 +137,15 @@ npm run qa:resilience
 npm run qa:performance
 npm run qa
 npm run qa:place
+npm run qa:living-cosmos
+npm run replay:rgbd -- tests/fixtures/clear-eight-frames.tar.gz
 npm run test:reconstruction
 ```
 
-PILGRIM's model boundaries, dataset formats, privileged physical contact and baseline limitations are described in [PILGRIM.md](docs/PILGRIM.md). The craft does not implement global SLAM, global scenic planning or guaranteed obstacle avoidance. The independent local map and sensor estimator are real; their RGB appearance, water sensing and IMU remain explicitly simplified synthetic models.
+The eight-frame fixture replay now reports a maximum translation difference of about 1.3e-10 and a drift fraction of 0.06660124274743297, where it reported exactly 0 and 0.06660124275924947 before the Jacobi stopping tolerance became relative to the matrix it solves; both stay far inside the gates. PILGRIM's model boundaries, dataset formats, privileged physical contact and baseline limitations are described in [PILGRIM.md](docs/PILGRIM.md). The independent local map and sensor estimator are real; their RGB appearance, water sensing and IMU remain explicitly simplified synthetic models.
 
-These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; control, device, resilience, onboarding, encounter, and visual scripts accept `QA_BROWSER=msedge`. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. The encounter suite travels through five planets and the anomaly without teleporting, tests automatic-orbit interruption, and exercises all three release outcomes. Set `QA_BACKEND=webgl` for its fallback pass or `QA_PLACES=serein,nacre` for a shorter route. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions. Earlier pre-sanctuary scripts remain as historical records.
+These scripts use installed Chrome through Playwright and real input events against the real renderer. Set `QA_URL` for the deployed site; every runner except `qa:performance`, which stays pinned to installed Chrome, reads `QA_BROWSER`, which accepts `chrome` (the default), `msedge`, or `chromium` for Playwright's own bundled build. `QA_PLACE=moonfall|forest|veil|living-sky` chooses a place for a continuous flight and stillness observation; default is the sea. The encounter suite travels through five planets and the anomaly without teleporting, tests automatic-orbit interruption, and exercises all three release outcomes. Set `QA_BACKEND=webgl` for its fallback pass or `QA_PLACES=serein,nacre` for a shorter route. Reports and actual screenshots go to ignored `artifacts/`. `?qa=1` exposes read-only diagnostics; it does not provide camera teleport or test-only simulation actions.
 
-See [the 3.0 verification record](docs/QA-3.0.md), [the 2.3 verification record](docs/QA-2.3.md), [the 2.2 record](docs/QA-2.2.md), [the 2.1 record](docs/QA-2.1.md), and [the 2.0 record](docs/QA-2.0.md). Earlier performance numbers are browser frame intervals and renderer counters. The optional `?qa=1&profile=1` path adds GPU render/compute pass timestamps when supported; these exclude CPU and presentation time. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
+See [the 3.0 verification record](docs/QA-3.0.md), [the PILGRIM hardening record](docs/QA-3.0-HARDENING.md), [the Living Cosmos record](docs/QA-LIVING-COSMOS.md), [the living-ocean implementation record](docs/LIVING-OCEAN.md), [the exterior cosmic-motion record](docs/COSMIC-MOTION.md), [the 3.0 mission adoption and release plan](docs/RELEASE-PLAN-3.0.md), [the 2.3 verification record](docs/QA-2.3.md), [the 2.2 record](docs/QA-2.2.md), [the 2.1 record](docs/QA-2.1.md), and [the 2.0 record](docs/QA-2.0.md). Earlier performance numbers are browser frame intervals and renderer counters. The optional `?qa=1&profile=1` path adds GPU render/compute pass timestamps when supported; these exclude CPU and presentation time. Physical phones, Safari, Firefox, thermal behavior, and long-duration memory stability need additional coverage.
 
-The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.
+`vercel.json` ships a full Content-Security-Policy: `script-src` and `style-src` need `'unsafe-inline'` on a static export, and every other directive is `'self'` or tighter. `npm start` (`scripts/serve.mjs`) applies the same `vercel.json` headers, so local QA exercises them. The authenticated Vercel CLI deploys the project with `vercel deploy --prod`. Both `offline-vastness.vercel.app` and the previous address are registered production domains. GitHub source is available, but automatic Git-triggered Vercel deployment is not configured. The earlier timed Event Horizon edition is preserved in the `event-horizon-v1` tag; the current application has no forced progression.

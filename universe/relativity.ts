@@ -5,7 +5,6 @@ import {
   Loop,
   Break,
   float,
-  vec2,
   vec3,
   vec4,
   uniform,
@@ -22,7 +21,7 @@ import {
   tidalEigenvalues,
   radialLightSlopes,
 } from "./relativity-model";
-import type { Quality } from "./config";
+import { QUALITY, type Quality } from "./config";
 import type { AccretionWeather } from "./accretion";
 
 /** An optional observation, not a second universe or a traversable wormhole. */
@@ -256,9 +255,7 @@ export class RelativityObservation {
     this.quality = quality;
   }
   render(camera: T.PerspectiveCamera, width: number, height: number) {
-    const cap = { ULTRA: 1440, HIGH: 1200, BALANCED: 900, BATTERY: 600 }[
-      this.quality
-    ];
+    const cap = QUALITY[this.quality].relativityWidth;
     const w = Math.min(width, cap),
       h = Math.round((w * height) / width);
     if (this.target.width !== w || this.target.height !== h)

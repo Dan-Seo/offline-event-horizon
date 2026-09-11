@@ -1,13 +1,11 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs/promises";
 import { enterEnglishExperience } from "./qa-entry.mjs";
-const url = process.env.QA_URL || "http://localhost:3000",
+import { qaLaunch } from "./qa-browser.mjs";
+const url = process.env.QA_URL || "http://localhost:4173",
   backend =
     process.env.QA_BACKEND === "webgl" ? "&backend=webgl&quality=BATTERY" : "";
-const browser = await chromium.launch({
-  channel: process.env.QA_BROWSER || "chrome",
-  headless: true,
-});
+const browser = await chromium.launch(qaLaunch());
 const page = await browser.newPage({
     viewport: { width: 1600, height: 1000 },
     locale: "en-US",
@@ -21,7 +19,13 @@ page.on("console", (m) => {
     console.log(m.type(), m.text());
   }
 });
-const inspect = () => page.evaluate(() => window.__vastness.inspect());
+// backend below is the requested query; detected is what the renderer chose.
+let detected = null;
+const inspect = async () => {
+  const s = await page.evaluate(() => window.__vastness.inspect());
+  detected = { backend: s.backend, quality: s.quality, dpr: s.dpr };
+  return s;
+};
 const check = (name, ok, detail) => {
   checks.push({ name, passed: !!ok, detail });
   console.log(ok ? "PASS" : "FAIL", name, detail ?? "");
@@ -134,7 +138,15 @@ try {
   await fs.writeFile(
     "artifacts/pilgrim-smoke.json",
     JSON.stringify(
-      { url, backend, browser: browser.version(), checks, errors },
+      {
+        url,
+        backend,
+        detected,
+        viewport: page.viewportSize(),
+        browser: browser.version(),
+        checks,
+        errors,
+      },
       null,
       2,
     ),

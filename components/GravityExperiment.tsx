@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { copy, type Language } from "@/universe/language";
 import type { UniverseSnapshot } from "@/universe/state";
 import type { ReleaseKind } from "@/universe/orbit-model";
 
-export default function GravityExperiment({
+export default memo(function GravityExperiment({
   language,
   state,
   onRelease,
@@ -70,4 +71,4 @@ export default function GravityExperiment({
       </details>
     </>
   );
-}
+});

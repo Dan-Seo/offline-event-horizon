@@ -17,7 +17,14 @@ scope.onmessage = (
   }
   const { frame, generation, request, id } = event.data;
   const identity = { generation, request, id };
-  if (!frame) return;
+  if (!frame) {
+    scope.postMessage({
+      type: "error",
+      ...identity,
+      message: "Perception request carried no sensor frame",
+    });
+    return;
+  }
   try {
     const before = performance.now(),
       estimate = vo.update(frame),

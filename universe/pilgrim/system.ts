@@ -1,5 +1,11 @@
 import * as T from "three/webgpu";
-import { PilgrimDynamics, type Drive } from "./model";
+import {
+  PilgrimDynamics,
+  BOARD_CLEARANCE,
+  CRUISE_SPEED,
+  HOVER_HEIGHT,
+  type Drive,
+} from "./model";
 import { PilgrimContact } from "./contact";
 import { PilgrimCraft } from "./craft";
 import { PilgrimMeadow } from "./meadow";
@@ -39,17 +45,28 @@ export class PilgrimSystem {
     this.craft = new PilgrimCraft(scene);
     this.meadow = new PilgrimMeadow(scene);
   }
+  /** Boarding is only offered close to contact; higher up the hand-over would become a long fall.
+   *  The test is symmetric: a hand-over from more than the limit below contact is refused too.
+   *  `region` names the frame to measure in and is restored, so a refusal leaves nothing behind. */
+  boardable(position: T.Vector3, region?: WalkSurface): boolean {
+    const previous = this.contact.region;
+    if (region !== previous) this.contact.setRegion(region);
+    const p = this.contact.toLocal(position),
+      clearance = p.y - this.contact.sample(p.x, p.z).height;
+    if (region !== previous) this.contact.setRegion(previous);
+    return Number.isFinite(clearance) && Math.abs(clearance) <= BOARD_CLEARANCE;
+  }
   start(flight: FlightController, region?: WalkSurface) {
+    if (!this.boardable(flight.position, region)) return false;
     this.regionId = region?.id ?? "";
     this.contact.setRegion(region);
     const p = this.contact.toLocal(flight.position),
       g = this.contact.sample(p.x, p.z);
-    if (Math.abs(p.y - g.height) > 3000) return false;
     const f = new T.Vector3(0, 0, -1)
       .applyQuaternion(flight.quaternion)
       .applyQuaternion(this.contact.frame.clone().invert());
     this.model.reset(
-      new T.Vector3(p.x, Math.max(g.height + 2.8, p.y - 6), p.z),
+      new T.Vector3(p.x, Math.max(g.height + HOVER_HEIGHT, p.y - 6), p.z),
       Math.atan2(-f.x, -f.z),
     );
     this.pitch = Math.asin(clamp(f.y, -0.9, 0.9));
@@ -142,7 +159,8 @@ export class PilgrimSystem {
     };
     if (this.director.active)
       drive = this.director.update(this.time, paused ? 0 : dt, beauty);
-    if (this.lab && this.perception?.rig.condition === "FAST_MOTION")
+    // Documented as a manual-drive lab condition; it must not scale scenic output.
+    else if (this.lab && this.perception?.rig.condition === "FAST_MOTION")
       drive = { ...drive, boost: true };
     const previous = this.model.distance;
     this.model.advance(paused ? 0 : dt, drive, this.contact);
@@ -173,16 +191,11 @@ export class PilgrimSystem {
       .copy(flight.position)
       .sub(old)
       .divideScalar(Math.max(0.001, dt));
-    flight.speed = 12;
-    this.craft.update(
-      this.worldPosition.clone().sub(flight.position),
-      this.worldRotation,
-      this.time,
-    );
+    flight.speed = CRUISE_SPEED;
     input.consume();
   }
   afterWorld(observer: T.Vector3, time: number) {
-    this.contact.observer.copy(observer);
+    this.contact.setObserver(observer);
     pilgrimObserver.value.copy(observer);
     updateInfluence(
       this.active ? this.worldPosition : new T.Vector3(0, -100000, 0),
@@ -215,16 +228,21 @@ export class PilgrimSystem {
         this.worldRotation,
         this.worldVelocity,
         new T.Vector3(0, 1, 0).applyQuaternion(this.contact.frame),
+        this.resting,
       );
     }
+  }
+  /** The single resting reading: the director's own state under Carry, settled hull otherwise. */
+  get resting(): boolean {
+    return this.director.active
+      ? this.director.resting
+      : !this.cruise && this.model.velocity.length() < 0.3;
   }
   snapshot() {
     return {
       active: this.active,
       carry: this.director.active,
-      resting: this.director.active
-        ? this.director.resting
-        : !this.cruise && this.model.velocity.length() < 0.2,
+      resting: this.resting,
       preparing: this.preparing,
       speed: this.model.velocity.length(),
       water: this.model.water,

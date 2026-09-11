@@ -1,14 +1,11 @@
 import * as T from "three/webgpu";
 import {
-  cameraPosition,
   color,
   float,
-  max,
   mix,
   mx_noise_float,
   normalWorld,
   positionLocal,
-  positionWorld,
   reflector,
   sin,
   vec2,
@@ -16,12 +13,12 @@ import {
   uniform,
   attribute,
 } from "three/tsl";
-import type { Quality } from "./config";
+import { QUALITY, type Quality } from "./config";
 import { markSurface } from "./perception/surfaces";
 import { OceanLife } from "./ocean-life";
 import { groundHeight, lagoonHeight } from "./walk-ground";
 import { submersion, oceanRadialFloor, regionalDomain } from "./ocean-depth";
-import { preserveReflectorFramebuffer, waterSurfaceOptics } from "./ocean-optics";
+import { preserveReflectorFramebuffer, waterFresnel, waterSurfaceOptics } from "./ocean-optics";
 
 /** A local spherical lagoon, with a tangent reflection plane following the observer. */
 export class RegionalLagoon {
@@ -80,12 +77,7 @@ export class RegionalLagoon {
         b.sin().mul(0.0006),
       ).add(noise.mul(0.00015)),
     );
-    const view = cameraPosition.sub(positionWorld).normalize();
-    const fresnel = float(1)
-      .sub(max(0, view.dot(normalWorld).abs()))
-      .pow(5)
-      .mul(0.98)
-      .add(0.02);
+    const { view, fresnel } = waterFresnel(normalWorld);
     const optics = waterSurfaceOptics(float(attribute("waterColumn", "float")), view.dot(normalWorld), fresnel,
       this.mirror.rgb.mul(vec3(0.68, 0.89, 0.91)));
     material.opacityNode = mix(optics.opacity, float(0.6), this.submerged);
@@ -126,12 +118,7 @@ export class RegionalLagoon {
   }
   setQuality(quality: Quality) {
     this.ecosystem.setQuality(quality);
-    this.mirror.reflector.resolutionScale = {
-      ULTRA: 1,
-      HIGH: 0.65,
-      BALANCED: 0.45,
-      BATTERY: 0.3,
-    }[quality];
+    this.mirror.reflector.resolutionScale = QUALITY[quality].lagoonReflection;
   }
   dispose() {
     this.ecosystem.dispose();

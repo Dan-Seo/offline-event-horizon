@@ -1,6 +1,7 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
-const browser = await chromium.launch({ channel: process.env.QA_BROWSER || "chrome", headless: true });
+import { qaLaunch } from "./qa-browser.mjs";
+const browser = await chromium.launch(qaLaunch());
 const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, locale: "ko-KR" });
 const errors = [], checks = [], samples = [];
 const base = process.env.QA_URL || "http://localhost:4173", fallback = process.env.QA_BACKEND === "webgl";

@@ -1,6 +1,6 @@
 import * as T from "three/webgpu";
 import { positionLocal, normalLocal, sin, vec3, color, uniform, attribute } from "three/tsl";
-import { seeded, type Quality } from "./config";
+import { seeded, QUALITY, type Quality } from "./config";
 import { NACRE_ENTRY_Z } from "./walk-ground";
 
 /** Bounded authored ecosystem. Coordinates are local, unit is one artistic metre. */
@@ -166,7 +166,7 @@ export class OceanLife {
     this.fish.instanceMatrix.needsUpdate = true;
   }
   setQuality(q: Quality) {
-    const fraction = { ULTRA: 1, HIGH: 0.8, BALANCED: 0.55, BATTERY: 0.3 }[q];
+    const fraction = QUALITY[q].oceanLife;
     this.meshes.forEach(m => { m.count = Math.floor(m.instanceMatrix.count * fraction); });
   }
   inspect() { return { visible: this.root.visible, rocks: this.meshes[0].count, grass: this.meshes[1].count, fish: this.fish.count, particles: this.meshes[3].count, animatedTime: this.lastTime,

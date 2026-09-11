@@ -13,14 +13,30 @@ export class PilgrimContact implements ContactWorld {
   private cache = new Map<string, SurfaceSample>();
   private regional?: WalkSurface;
   private inverse = new T.Quaternion();
+  private candidates: T.Mesh[] | null = null;
+  private rayOrigin = new T.Vector3();
+  private down = new T.Vector3(0, -1, 0);
+  private instance = new T.Matrix4();
+  private normalMatrix = new T.Matrix3();
   private trunks: { p: T.Vector3; r: number; h: number }[] | null = null;
   constructor(private scene: T.Scene) {
     this.meshes = sensorSurfaces(scene).filter((m) => m.userData.contact);
+  }
+  /** The region the frame and the samples currently speak in; a boarding check restores it. */
+  get region() {
+    return this.regional;
+  }
+  /** The one observer update per frame. Visibility changes between frames, so the ray
+   *  candidates are dropped here and rebuilt on that frame's first cache miss, if it has one. */
+  setObserver(observer: T.Vector3) {
+    this.observer.copy(observer);
+    this.candidates = null;
   }
   setRegion(region?: WalkSurface) {
     this.regional = region;
     this.cache.clear();
     this.trunks = null;
+    this.candidates = null;
     if (region) {
       this.origin
         .copy(region.up)
@@ -92,19 +108,14 @@ export class PilgrimContact implements ContactWorld {
         SEA_RADIUS +
         0.3;
     let height = water,
-      isWater = true,
-      normal = new T.Vector3(x / SEA_RADIUS, 1, z / SEA_RADIUS).normalize();
-    this.ray.set(
-      new T.Vector3(x, 2400, z).sub(this.observer),
-      new T.Vector3(0, -1, 0),
-    );
+      isWater = true;
+    const normal = new T.Vector3(x / SEA_RADIUS, 1, z / SEA_RADIUS).normalize();
+    this.ray.set(this.rayOrigin.set(x, 2400, z).sub(this.observer), this.down);
     this.ray.far = 4800;
-    const hits = this.ray.intersectObjects(
-      this.meshes.filter(
-        (m) => m.userData.sensorKind !== "vegetation" && visibleInTree(m),
-      ),
-      false,
+    this.candidates ??= this.meshes.filter(
+      (m) => m.userData.sensorKind !== "vegetation" && visibleInTree(m),
     );
+    const hits = this.ray.intersectObjects(this.candidates, false);
     if (hits[0]) {
       const hit = hits[0],
         h = hit.point.y + this.observer.y;
@@ -115,14 +126,13 @@ export class PilgrimContact implements ContactWorld {
           normal.copy(hit.face.normal);
           let matrix = hit.object.matrixWorld;
           if (hit.instanceId !== undefined) {
-            const instance = new T.Matrix4();
             (hit.object as T.InstancedMesh).getMatrixAt(
               hit.instanceId,
-              instance,
+              this.instance,
             );
-            matrix = matrix.clone().multiply(instance);
+            matrix = this.instance.premultiply(matrix);
           }
-          normal.applyNormalMatrix(new T.Matrix3().getNormalMatrix(matrix));
+          normal.applyNormalMatrix(this.normalMatrix.getNormalMatrix(matrix));
         }
       }
     }

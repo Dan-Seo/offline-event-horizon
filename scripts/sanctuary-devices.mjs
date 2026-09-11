@@ -1,11 +1,9 @@
 ﻿import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
 import { enterEnglishExperience } from "./qa-entry.mjs";
+import { qaLaunch } from "./qa-browser.mjs";
 const url = process.env.QA_URL || "http://localhost:4173",
-  browser = await chromium.launch({
-    channel: process.env.QA_BROWSER || "chrome",
-    headless: true,
-  }),
+  browser = await chromium.launch(qaLaunch()),
   checks = [],
   errors = [],
   expectedErrors = [];

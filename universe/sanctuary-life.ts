@@ -22,7 +22,7 @@ import {
   vec3,
   vec4,
 } from "three/tsl";
-import { seeded, type Quality } from "./config";
+import { seeded, QUALITY, type Quality } from "./config";
 import type { SanctuaryAtmosphere } from "./sanctuary-atmosphere";
 
 /** A damped flow-following school, with real stateful attraction/avoidance.
@@ -397,7 +397,7 @@ export class SanctuaryLife {
   setQuality(q: Quality) {
     // Interleaving keeps both populations in every quality tier.
     this.count = this.gpu
-      ? { ULTRA: 8192, HIGH: 8192, BALANCED: 6144, BATTERY: 4096 }[q]
+      ? QUALITY[q].lifeAgents
       : this.maxCount;
     this.geometry.instanceCount = this.count;
     this.compute?.setCount(this.count);

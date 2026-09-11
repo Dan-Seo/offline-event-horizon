@@ -1,10 +1,8 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
 import { enterEnglishExperience } from "./qa-entry.mjs";
-const browser = await chromium.launch({
-  channel: process.env.QA_BROWSER || "chrome",
-  headless: true,
-});
+import { qaLaunch } from "./qa-browser.mjs";
+const browser = await chromium.launch(qaLaunch());
 const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } }),
   errors = [],
   samples = [];
@@ -30,7 +28,7 @@ const titles = {
 };
 try {
   await page.goto(
-    (process.env.QA_URL || "http://localhost:3000") +
+    (process.env.QA_URL || "http://localhost:4173") +
       "/?qa=1" +
       (fallback ? "&backend=webgl&quality=BATTERY" : ""),
   );

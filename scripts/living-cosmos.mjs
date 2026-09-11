@@ -4,6 +4,7 @@ import path from "node:path";
 import { Vector3, Quaternion } from "three";
 import { groundHeight, lagoonHeight } from "../universe/walk-ground.ts";
 import { enterEnglishExperience } from "./qa-entry.mjs";
+import { qaLaunch } from "./qa-browser.mjs";
 
 // Real-browser release evidence. QA_SCENARIOS accepts opening,ocean,coast,giant,wound,
 // or all (the default). The script never changes simulator state except through UI
@@ -15,10 +16,7 @@ const requested = new Set(
 );
 const active = (name) => requested.has("all") || requested.has(name);
 const root = process.env.QA_OUTPUT_DIR || path.join("artifacts", "living-cosmos", webgl ? "webgl" : "gpu");
-const browser = await chromium.launch({
-  channel: process.env.QA_BROWSER || "chrome",
-  headless: true,
-});
+const browser = await chromium.launch(qaLaunch());
 const context = await browser.newContext({
   viewport: { width: 1600, height: 1000 },
   locale: "en-US",
@@ -57,7 +55,8 @@ async function measure(name) {
         if (Number.isFinite(state.gpuRenderMs)) gpu.push(state.gpuRenderMs);
         if (Number.isFinite(state.gpuComputeMs)) compute.push(state.gpuComputeMs);
         previous = now;
-        rows.length < 180 ? requestAnimationFrame(frame) : resolve();
+        if (rows.length < 180) requestAnimationFrame(frame);
+        else resolve();
       };
       requestAnimationFrame(frame);
     });

@@ -14,7 +14,7 @@ export function submersion(depth: number, width = 1.5) {
   return t * t * (3 - 2 * t);
 }
 /** Authoritative Float32 mesh data, consumed directly by MirrorSea and recovery. */
-export const SEA_RINGS = 128, SEA_SLICES = 192, SEA_EXTENT = 46000;
+const SEA_RINGS = 128, SEA_SLICES = 192, SEA_EXTENT = 46000;
 export const seaMesh = (() => {
   const water = new Float32Array((SEA_RINGS + 1) * (SEA_SLICES + 1) * 3);
   const floor = new Float32Array(water.length), indices: number[] = [];

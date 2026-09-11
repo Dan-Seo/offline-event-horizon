@@ -11,8 +11,13 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run lint
       - run: npm test
-      - run: npm run replay:rgbd -- docs/evidence/vastness-3.0/clear-eight-frames.tar.gz
+      - run: npm run test:reconstruction
+      - run: npm run replay:rgbd -- tests/fixtures/clear-eight-frames.tar.gz
       - run: npm run build

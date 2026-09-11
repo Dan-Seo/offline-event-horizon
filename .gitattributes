@@ -3,3 +3,6 @@
 *.blend binary
 *.woff2 binary
 *.png binary
+*.jpg binary
+*.gz binary
+*.tar binary

@@ -1,5 +1,4 @@
 import * as T from "three/webgpu";
-import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import {
   attribute,
   color,
@@ -17,7 +16,7 @@ import {
 } from "three/tsl";
 import type { Body } from "./world";
 import { terrainHeight, terrainClearance } from "./approach-terrain";
-import { clamp, seeded, type Quality } from "./config";
+import { clamp, damp, seeded, QUALITY, type Quality } from "./config";
 import { treeGeometry } from "./sanctuary-nature";
 import type { NebulaLibrary } from "./nebula";
 import { reliefNormal } from "./planets";
@@ -25,6 +24,7 @@ import { RegionalLagoon } from "./approach-water";
 import { groundHeight, lagoonHeight, NACRE_ENTRY_Z } from "./walk-ground";
 import type { WalkSurface } from "./walk";
 import { NacreGarden } from "./nacre-garden";
+import { displacedIcosahedron } from "./place-parts";
 import { markSurface } from "./perception/surfaces";
 import { oceanRadialFloor, regionalDomain } from "./ocean-depth";
 
@@ -211,25 +211,10 @@ export class PlanetApproaches {
         leafMaterial.emissiveNode = color(0x63bba2).mul(
           float(1).sub(normalView.z.abs()).pow(3).mul(0.12).add(0.04),
         );
-        const leafSource = new T.IcosahedronGeometry(1, 2);
-        leafSource.deleteAttribute("normal");
-        leafSource.deleteAttribute("uv");
-        const leafGeometry = mergeVertices(leafSource);
-        leafSource.dispose();
-        const lp = leafGeometry.getAttribute("position");
-        for (let i = 0; i < lp.count; i++) {
-          const x = lp.getX(i),
-            y = lp.getY(i),
-            z = lp.getZ(i);
+        const leafGeometry = displacedIcosahedron(2, (x, y, z) => {
           const shape = 1 + Math.sin(Math.atan2(z, x) * 7 + y * 4) * 0.09;
-          lp.setXYZ(
-            i,
-            x * shape,
-            y + Math.sin(x * 5 + z * 3) * 0.12,
-            z * shape,
-          );
-        }
-        leafGeometry.computeVertexNormals();
+          return [x * shape, y + Math.sin(x * 5 + z * 3) * 0.12, z * shape];
+        });
         const leaves = tree
           ? new T.InstancedMesh(
               leafGeometry,
@@ -423,7 +408,7 @@ export class PlanetApproaches {
   inspectGarden() {
     return this.regions.find((r) => r.garden)?.garden?.inspect();
   }
-  update(observer: T.Vector3, time: number, speed: number) {
+  update(observer: T.Vector3, time: number, speed: number, dt = 1 / 60) {
     this.time.value = time;
     this.active = "";
     let presence = 0,
@@ -452,14 +437,14 @@ export class PlanetApproaches {
     this.background.copy(this.black);
     if (region) {
       this.background.lerp(region.color, presence * 0.09);
-      this.motion.value += (Math.min(1, speed / 30) - this.motion.value) * 0.03;
+      // 1.8275524 s⁻¹ is the rate whose 60 Hz step is the former per-frame factor 0.03.
+      this.motion.value +=
+        (Math.min(1, speed / 30) - this.motion.value) * damp(1.8275524, dt);
       if (presence > 0.15) this.active = region.body.id;
     }
   }
   setQuality(quality: Quality) {
-    const count = { ULTRA: 440, HIGH: 340, BALANCED: 220, BATTERY: 100 }[
-      quality
-    ];
+    const count = QUALITY[quality].regionMotes;
     this.regions.forEach((r) => {
       r.particles.count = count;
       r.lagoon?.setQuality(quality);

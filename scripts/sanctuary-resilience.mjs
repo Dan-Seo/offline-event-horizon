@@ -1,11 +1,9 @@
 ﻿import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
 import { enterEnglishExperience } from "./qa-entry.mjs";
+import { qaChannel, qaLaunch } from "./qa-browser.mjs";
 const url = process.env.QA_URL || "http://localhost:4173";
-const browser = await chromium.launch({
-  channel: process.env.QA_BROWSER || "chrome",
-  headless: true,
-});
+const browser = await chromium.launch(qaLaunch());
 const checks = [],
   errors = [],
   expectedErrors = [];
@@ -143,7 +141,7 @@ await slowed.close();
 await browser.close();
 const report = {
   url,
-  browser: process.env.QA_BROWSER || "chrome",
+  browser: qaChannel,
   checks,
   errors,
   expectedErrors,

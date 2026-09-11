@@ -17,6 +17,13 @@ export type Drive = {
   boost: boolean;
 };
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+/** The physical response the scenic planner and the host system must both speak in. */
+export const HOVER_HEIGHT = 2.8;
+export const CRUISE_SPEED = 12;
+export const STEER_YAW_RATE = 0.52;
+/** Boarding limit. Above the spring zone only the clearance-scaled descent remains (peak 14 u/s), which
+ *  settles a hand-over at this height in about 21 s; higher up it would be a long uncontrollable fall. */
+export const BOARD_CLEARANCE = 150;
 /** Fixed-step, damped hover dynamics. Contact truth belongs here, never in the scenic planner. */
 export class PilgrimDynamics {
   position = new Vector3();
@@ -45,7 +52,7 @@ export class PilgrimDynamics {
     this.recoveries = 0;
   }
   advance(dt: number, drive: Drive, world: ContactWorld) {
-    this.remainder += Math.min(0.05, Math.max(0, dt));
+    this.remainder += Number.isFinite(dt) ? clamp(dt, 0, 0.05) : 0;
     while (this.remainder >= 1 / 120 - 1e-10) {
       this.step(1 / 120, drive, world);
       this.remainder = Math.max(0, this.remainder - 1 / 120);
@@ -56,13 +63,15 @@ export class PilgrimDynamics {
     const ground = world.sample(this.position.x, this.position.z),
       clearance = this.position.y - ground.height;
     this.water = ground.water;
-    this.contact = clamp(1 - (clearance - 2.8) / 9, 0, 1);
+    this.contact = clamp(1 - (clearance - HOVER_HEIGHT) / 9, 0, 1);
     this.gliding = clearance > 12;
-    const angularTarget = -drive.steer * 0.52 * (drive.precision ? 0.4 : 1);
+    const angularTarget =
+      -drive.steer * STEER_YAW_RATE * (drive.precision ? 0.4 : 1);
     this.angularVelocity +=
       (angularTarget - this.angularVelocity) * (1 - Math.exp(-5 * dt));
     this.yaw += this.angularVelocity * dt;
-    const speed = 12 * (drive.precision ? 0.3 : 1) * (drive.boost ? 1.65 : 1),
+    const speed =
+        CRUISE_SPEED * (drive.precision ? 0.3 : 1) * (drive.boost ? 1.65 : 1),
       targetX = -Math.sin(this.yaw) * drive.throttle * speed,
       targetZ = -Math.cos(this.yaw) * drive.throttle * speed;
     const drag = this.gliding ? 1.2 : 3.2;
@@ -75,13 +84,15 @@ export class PilgrimDynamics {
       3,
     );
     const desiredHeight =
-      2.8 +
+      HOVER_HEIGHT +
       (ground.water ? 0.15 * Math.sin(this.time * 0.6) : 0) +
       (lift ? 6 : 0);
     // Spring only near a surface. Aloft, glide and controlled descent replace terrain snapping.
     const spring = (desiredHeight - clearance) * 14 - this.velocity.y * 7;
     const ay = clearance < 14 ? clamp(spring, -7, 12) : -2.8 + (lift ? 3.6 : 0);
-    this.velocity.y = clamp(this.velocity.y + ay * dt, -5.5, 7);
+    // Fall faster the higher the hand-over, so a boarding at the limit still settles in ~12 s.
+    const descent = clamp(clearance * 0.12, 5.5, 14);
+    this.velocity.y = clamp(this.velocity.y + ay * dt, -descent, 7);
     const next = this.position.clone().addScaledVector(this.velocity, dt),
       ahead = world.sample(next.x, next.z);
     const obstructed =

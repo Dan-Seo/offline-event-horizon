@@ -160,7 +160,10 @@ export class SurfaceWalker {
     flight.quaternion
       .setFromEuler(new T.Euler(this.pitch, this.yaw, 0, "YXZ"))
       .premultiply(this.viewFrame);
-    flight.velocity.copy(flight.position).sub(this.previous).divideScalar(dt);
+    flight.velocity
+      .copy(flight.position)
+      .sub(this.previous)
+      .divideScalar(Math.max(0.001, dt));
     flight.speed = speed;
     this.distance += this.velocity.length() * dt;
     input.learning.move += this.velocity.length() * dt;

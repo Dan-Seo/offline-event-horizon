@@ -12,6 +12,8 @@
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "qa": "node scripts/sanctuary-look.mjs",
     "qa:controls": "node scripts/sanctuary-controls.mjs",
     "qa:devices": "node scripts/sanctuary-devices.mjs",
@@ -25,6 +27,7 @@
     "qa:pilgrim": "node scripts/pilgrim-smoke.mjs",
     "qa:journey": "node scripts/pilgrim-journey.mjs",
     "qa:lab": "node scripts/pilgrim-lab.mjs",
+    "qa:living-cosmos": "node scripts/living-cosmos.mjs",
     "replay:rgbd": "node --experimental-strip-types scripts/replay-rgbd.ts",
     "qa:place": "node scripts/sanctuary-journey.mjs",
     "test:reconstruction": "python -m unittest discover -s tests -p test_reconstruction_report.py"
@@ -41,6 +44,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/three": "^0.183.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
     "typescript": "^5.9.0"
   }
 }

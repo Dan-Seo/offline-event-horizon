@@ -1,6 +1,7 @@
 import * as T from "three/webgpu";
 import { SensorRig, type Capture } from "./rig";
 import { evaluateTrajectory } from "./metrics";
+import { SENSOR_OFFSET, SENSOR_PITCH } from "./map";
 import { compose, inverse, rotationAngle, type Pose, type V3 } from "./math";
 import type { Analysis, Condition, RecordPair, TruthRecord, WorkerReply } from "./types";
 import type { RecordedCapture } from "./dataset";
@@ -143,10 +144,15 @@ export class PerceptionRuntime {
     quaternion: T.Quaternion,
     velocity: T.Vector3,
     gravityUp: T.Vector3,
+    resting = false,
   ) {
     if (!this.enabled || !this.ready || this.disposed || time < this.due)
       return;
-    this.due = time + 1 / this.frequency;
+    // A resting craft looks at one unchanging view for 30-60 s. A recording run is never
+    // slowed: its 32-frame bound has to be reached in the time the lab waits for it.
+    // A rest is sensed at a quarter rate, but never slower than the director's 0.85 s freshness window.
+    this.due =
+      time + Math.min((resting && !this.recording ? 4 : 1) / this.frequency, 0.8);
     if (this.busy) {
       this.dropped++;
       return;
@@ -168,18 +174,18 @@ export class PerceptionRuntime {
         p: camPosition.toArray() as V3,
         q: q.toArray() as Pose["q"],
       };
-      const dt = this.before ? time - this.before.timestamp : 0.2,
+      const dt = Math.max(0.001, this.before ? time - this.before.timestamp : 0.2),
         previousVelocity = this.before?.velocity ?? (velocity.toArray() as V3);
       const sensorVelocity = this.before
         ? camPosition
             .clone()
             .sub(new T.Vector3(...this.before.pose.p))
-            .divideScalar(Math.max(0.001, dt))
+            .divideScalar(dt)
         : velocity.clone();
       const acceleration = sensorVelocity
         .clone()
         .sub(new T.Vector3(...previousVelocity))
-        .divideScalar(Math.max(0.001, dt))
+        .divideScalar(dt)
         .addScaledVector(gravityUp, 9.81)
         .applyQuaternion(q.clone().invert());
       let dq = this.before
@@ -223,9 +229,11 @@ export class PerceptionRuntime {
               },
             };
           transaction.id = capture.frame.id;
-          this.worker.postMessage({ type: "frame", ...transaction, id: capture.frame.id, frame: capture.frame }, [
-            capture.frame.rgb.buffer,
-            capture.frame.depth.buffer,
+          // RGB and depth only: condition and seed stay on the capture and its truth record.
+          const { id, timestamp, rgb, depth, k } = capture.frame;
+          this.worker.postMessage({ type: "frame", ...transaction, id, frame: { id, timestamp, rgb, depth, k } }, [
+            rgb.buffer,
+            depth.buffer,
           ]);
         })
         .catch((e) => this.captureFailed(transaction, e));
@@ -261,7 +269,9 @@ export class PerceptionRuntime {
       points: this.analysis?.points ?? 0,
       route: this.analysis?.chosen ?? null,
       segment: this.analysis?.vo.segment ?? 0,
-      pose: this.analysis?.vo.pose ?? null,
+      // A lost tracker has no current pose; its last one is not an estimate of where it is now.
+      pose:
+        this.analysis?.vo.status === "TRACKING" ? this.analysis.vo.pose : null,
       readbackMs: this.capture?.readbackMs ?? null,
     };
   }
@@ -274,10 +284,10 @@ export class PerceptionRuntime {
       sensor: {
         ...this.rig.k,
         frequency: this.frequency,
-        pitch: 0.22,
+        pitch: SENSOR_PITCH,
         extrinsics: {
-          translation: [0, 1.2, -0.8],
-          pitchDown: 0.22,
+          translation: [...SENSOR_OFFSET],
+          pitchDown: SENSOR_PITCH,
           convention:
             "body x right, y up, z backward; camera x right, y down, z forward",
         },

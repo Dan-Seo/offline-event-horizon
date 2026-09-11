@@ -20,7 +20,7 @@ import {
   visibleInTree,
   type SurfaceKind,
 } from "./surfaces";
-import { SENSOR_PITCH } from "./map";
+import { SENSOR_OFFSET, SENSOR_PITCH } from "./map";
 import type { Condition, Intrinsics, SensorFrame } from "./types";
 export type Capture = {
   frame: SensorFrame;
@@ -195,7 +195,7 @@ export class SensorRig {
     this.camera.position
       .copy(worldPosition)
       .sub(observer)
-      .add(new T.Vector3(0, 1.2, -0.8).applyQuaternion(bodyRotation));
+      .add(new T.Vector3(...SENSOR_OFFSET).applyQuaternion(bodyRotation));
     this.camera.quaternion
       .copy(bodyRotation)
       .multiply(

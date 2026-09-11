@@ -38,6 +38,7 @@ export function ArrivalGuide({
   language,
   onLanguage,
   state,
+  learning,
   run,
   onActive,
   onLessonComplete,
@@ -47,6 +48,8 @@ export function ArrivalGuide({
   language: Language;
   onLanguage: (language: Language) => void;
   state: UniverseSnapshot;
+  // Read every report rather than from the snapshot: the lesson progress bar is a live value.
+  learning: UniverseSnapshot["learning"];
   run: number;
   onActive: (active: boolean) => void;
   onLessonComplete: () => void;
@@ -55,15 +58,11 @@ export function ArrivalGuide({
 }) {
   const [stage, setStage] = useState<number | null>(null);
   const [touch, setTouch] = useState(false);
-  const baseline = useRef(state.learning);
-  const latest = useRef(state.learning);
-  latest.current = state.learning;
+  const baseline = useRef(learning);
+  const latest = useRef(learning);
+  latest.current = learning;
   const c = copy[language];
-  const carryLabel = state.pilgrimAvailable
-    ? language === "ko"
-      ? "어디든 데려다줘"
-      : "Carry me somewhere"
-    : c.justWander;
+  const carryLabel = state.pilgrimAvailable ? c.carry : c.justWander;
   useEffect(() => {
     let complete = false;
     try {
@@ -91,19 +90,20 @@ export function ArrivalGuide({
   }, [stage]);
   const progress =
     stage === 0
-      ? state.learning.look - baseline.current.look
+      ? learning.look - baseline.current.look
       : stage === 1
-        ? state.learning.move - baseline.current.move
+        ? learning.move - baseline.current.move
         : stage === 2
-          ? state.learning.speed - baseline.current.speed
+          ? learning.speed - baseline.current.speed
           : 0;
   const goal = stage === 0 ? 0.075 : stage === 1 ? 1.5 : 0.05;
+  const reached = progress >= goal;
   useEffect(() => {
     if (
       stage === null ||
       stage < 0 ||
       stage > 2 ||
-      progress < goal ||
+      !reached ||
       state.quiet
     )
       return;
@@ -112,7 +112,7 @@ export function ArrivalGuide({
       650,
     );
     return () => clearTimeout(timer);
-  }, [stage, progress >= goal, goal, state.quiet]);
+  }, [stage, reached, goal, state.quiet]);
   function finish(next?: () => void) {
     try {
       localStorage.setItem(GUIDE_KEY, "done");

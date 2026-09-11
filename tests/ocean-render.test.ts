@@ -1,27 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import ts from "typescript";
+import { moduleUrl } from "./helpers/load.ts";
 import * as T from "three/webgpu";
 import { uniform, vec3 } from "three/tsl";
 
-// In-memory module loading only: actual constructors, no renderer, build or DOM.
-const modules = new Map<string, string>();
-async function moduleUrl(url: URL): Promise<string> {
-  if (modules.has(url.href)) return modules.get(url.href)!;
-  let source = ts.transpileModule(await readFile(url, "utf8"), {
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
-  }).outputText;
-  for (const match of [...source.matchAll(/from "([^"]+)"/g)]) {
-    const specifier = match[1];
-    const resolved = specifier.startsWith(".")
-      ? await moduleUrl(new URL(specifier.endsWith(".ts") ? specifier : specifier + ".ts", url))
-      : import.meta.resolve(specifier);
-    source = source.replace(match[0], `from ${JSON.stringify(resolved)}`);
-  }
-  const result = "data:text/javascript;base64," + Buffer.from(source).toString("base64");
-  modules.set(url.href, result); return result;
-}
 const owned = (name: string) => moduleUrl(new URL(`../universe/${name}.ts`, import.meta.url)).then(u => import(u));
 
 test("MirrorSea actual Float32 triangles agree with recovery, including reported centroid and cap edge", async () => {

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { OrbitModel, ORBIT_MU } from "../universe/orbit-model.ts";
-import { preferredLanguage } from "../universe/language.ts";
+import { copy, preferredLanguage } from "../universe/language.ts";
 function advance(model: OrbitModel, seconds: number, dt = 1 / 60) {
   for (let i = 0; i < Math.round(seconds / dt); i++) model.advance(dt);
 }
@@ -80,4 +80,30 @@ test("saved language takes precedence, Korean browser variants work, unknown lan
   assert.equal(preferredLanguage(null, ["ko-KR", "en"]), "ko");
   assert.equal(preferredLanguage("invalid", ["fr-FR"]), "en");
   assert.equal(preferredLanguage(null, []), "en");
+});
+
+// Every string in the copy, addressed by its full path. Arrays contribute their indices, so a
+// list that lost an entry in one language shows up as a missing path rather than a short read.
+const strings = (value: unknown, path = ""): [string, unknown][] =>
+  value && typeof value === "object"
+    ? Object.entries(value).flatMap(([key, child]) =>
+        strings(child, path ? `${path}.${key}` : key),
+      )
+    : [[path, value]];
+
+test("Korean copy covers every English key that the overlay renders", () => {
+  const en = strings(copy.en),
+    ko = strings(copy.ko);
+  assert.deepEqual(
+    ko.map(([path]) => path).sort(),
+    en.map(([path]) => path).sort(),
+  );
+  for (const [path, value] of [...en, ...ko])
+    assert.ok(typeof value === "string" && value.trim().length > 0, path);
+  assert.equal(copy.en.controls.length, copy.ko.controls.length);
+  // Strings that moved out of components/*.tsx keep their exact wording.
+  assert.equal(copy.en.carry, "Carry me somewhere");
+  assert.equal(copy.ko.carry, "어디든 데려다줘");
+  assert.equal(copy.ko.walkSeed, "빛 한 점 남기기");
+  assert.notEqual(copy.ko.walkSeed, copy.ko.seed);
 });

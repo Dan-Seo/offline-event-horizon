@@ -19,15 +19,15 @@ export type Intrinsics = {
   far: number;
 };
 // This boundary deliberately contains no renderer pose, object IDs, world geometry or destination.
-export type SensorFrame = {
+export type SensorImage = {
   id: number;
   timestamp: number;
   rgb: Uint8Array;
   depth: Float32Array;
   k: Intrinsics;
-  condition: Condition;
-  seed: number;
 };
+// The synthetic sensor configuration stays on the capture and its truth record; it never crosses the wire.
+export type SensorFrame = SensorImage & { condition: Condition; seed: number };
 export type Feature = { x: number; y: number; score: number };
 export type Track = {
   x: number;
@@ -94,7 +94,7 @@ export type RecordPair = { truth: TruthRecord; estimate: VOResult };
 export type TransactionIdentity = { generation: number; request: number; id: number };
 export type WorkerRequest =
   | { type: "reset" }
-  | ({ type: "frame"; frame: SensorFrame } & TransactionIdentity);
+  | ({ type: "frame"; frame: SensorImage } & TransactionIdentity);
 export type WorkerReply = TransactionIdentity & (
   | { type: "analysis"; result: Analysis }
   | { type: "error"; message: string }

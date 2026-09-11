@@ -1,5 +1,5 @@
 import type * as T from "three/webgpu";
-import { exp, mix, vec3, max, float, type reflector } from "three/tsl";
+import { cameraPosition, exp, mix, positionWorld, vec3, max, float, type reflector } from "three/tsl";
 import { SURFACE_EXTINCTION } from "./ocean-depth";
 
 /** r183 ReflectorBaseNode clears its last output when the camera crosses behind
@@ -37,6 +37,14 @@ export function waterSurfaceOptics(depth: T.Node<"float">, cosine: T.Node<"float
   const opacity = fresnel.add(absorbed);
   const scatter = vec3(0.008, 0.065, 0.078);
   return { opacity, color: reflection.mul(fresnel).add(scatter.mul(absorbed)).div(max(0.001, opacity)) };
+}
+
+/** The view vector and the Schlick-shaped Fresnel both water surfaces use, including the 2%
+ * floor that keeps a head-on surface from turning fully transparent. The caller supplies the
+ * normal: the sea derives one from its cap, the lagoon reads the one its geometry carries. */
+export function waterFresnel(normal: T.Node<"vec3">) {
+  const view = cameraPosition.sub(positionWorld).normalize();
+  return { view, fresnel: float(1).sub(max(0, view.dot(normal).abs())).pow(5).mul(0.98).add(0.02) };
 }
 
 /** Beauty-only integration hook. Distance is linear ray length in artistic metres,

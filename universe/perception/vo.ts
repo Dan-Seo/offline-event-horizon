@@ -7,8 +7,8 @@ import {
   rotationAngle,
   type V3,
 } from "./math.ts";
-import type { Feature, SensorFrame, Track, VOResult } from "./types.ts";
-const gray = (f: SensorFrame) => {
+import type { Feature, SensorImage, Track, VOResult } from "./types.ts";
+const gray = (f: SensorImage) => {
   const g = new Float32Array(f.k.width * f.k.height);
   for (let i = 0; i < g.length; i++)
     g[i] =
@@ -17,12 +17,15 @@ const gray = (f: SensorFrame) => {
       0.114 * f.rgb[i * 4 + 2];
   return g;
 };
+/** Bilinear read of the cell at (ix, iy), which also touches ix + 1 and iy + 1. Callers keep
+ *  their windows inside the image; the clamp is a last line of defence and is the identity for
+ *  every in-frame read, so no in-bounds result moves by a bit. */
 function sample(a: Float32Array, w: number, x: number, y: number) {
-  const ix = Math.floor(x),
-    iy = Math.floor(y),
+  const ix = Math.min(w - 2, Math.max(0, Math.floor(x))),
+    iy = Math.max(0, Math.floor(y)),
     u = x - ix,
     v = y - iy,
-    k = iy * w + ix;
+    k = Math.min(a.length - w - 2, iy * w + ix);
   return (
     (a[k] * (1 - u) + a[k + 1] * u) * (1 - v) +
     (a[k + w] * (1 - u) + a[k + w + 1] * u) * v
@@ -108,6 +111,10 @@ function down(g: Float32Array, w: number, h: number) {
 }
 type Pyramid = { image: Float32Array; w: number; h: number }[];
 function pyramid(g: Float32Array, w: number, h: number): Pyramid {
+  if (w % 4 || h % 4)
+    throw new Error(
+      `Sensor image ${w}x${h} needs a width and height divisible by 4 for the three-level tracking pyramid`,
+    );
   const half = down(g, w, h);
   return [
     { image: g, w, h },
@@ -115,6 +122,11 @@ function pyramid(g: Float32Array, w: number, h: number): Pyramid {
     { image: down(half, w / 2, h / 2), w: w / 4, h: h / 4 },
   ];
 }
+/** A 7x7 window with central differences reads c - 4 to c + 4, and a bilinear sample of that
+ *  takes the cell at floor(c + 4), so a centre inside this margin keeps every base index within
+ *  [1, w - 2] x [1, h - 2] and can never read past the end of the level. */
+const windowed = (cx: number, cy: number, w: number, h: number) =>
+  cx >= 5 && cy >= 5 && cx <= w - 6 && cy <= h - 6;
 function trackLK(x: number, y: number, a: Pyramid, b: Pyramid) {
   let dx = 0,
     dy = 0;
@@ -128,11 +140,11 @@ function trackLK(x: number, y: number, a: Pyramid, b: Pyramid) {
       factor = 2 ** level,
       px = (x + 0.5) / factor - 0.5,
       py = (y + 0.5) / factor - 0.5;
-    if (px < 5 || py < 5 || px > w - 6 || py > h - 6) continue;
+    if (!windowed(px, py, w, h)) continue;
     for (let iteration = 0; iteration < 18; iteration++) {
       const cx = px + dx,
         cy = py + dy;
-      if (cx < 5 || cy < 5 || cx > w - 6 || cy > h - 6) return null;
+      if (!windowed(cx, cy, w, h)) return null;
       let xx = 0,
         xy = 0,
         yy = 0,
@@ -171,14 +183,7 @@ function trackLK(x: number, y: number, a: Pyramid, b: Pyramid) {
   }
   const u = x + dx,
     v = y + dy;
-  if (
-    u < 5 ||
-    v < 5 ||
-    u > a[0].w - 6 ||
-    v > a[0].h - 6 ||
-    !Number.isFinite(u + v)
-  )
-    return null;
+  if (!windowed(u, v, a[0].w, a[0].h) || !Number.isFinite(u + v)) return null;
   return { x: u, y: v };
 }
 function match(p: Feature, a: Pyramid, b: Pyramid) {
@@ -192,7 +197,7 @@ function match(p: Feature, a: Pyramid, b: Pyramid) {
   if (!back || Math.hypot(back.x - p.x, back.y - p.y) > 0.9) return null;
   return forward;
 }
-function unproject(f: SensorFrame, x: number, y: number): V3 | null {
+function unproject(f: SensorImage, x: number, y: number): V3 | null {
   const ix = Math.floor(x),
     iy = Math.floor(y),
     u = x - ix,
@@ -219,7 +224,7 @@ function unproject(f: SensorFrame, x: number, y: number): V3 | null {
   return [((x - f.k.cx) * d) / f.k.fx, ((y - f.k.cy) * d) / f.k.fy, d];
 }
 export class RGBDOdometry {
-  private previous?: SensorFrame;
+  private previous?: SensorImage;
   private image?: Float32Array;
   private features: Feature[] = [];
   private pose = identity();
@@ -233,7 +238,7 @@ export class RGBDOdometry {
     this.segment = 0;
     this.lost = false;
   }
-  update(frame: SensorFrame): VOResult {
+  update(frame: SensorImage): VOResult {
     const image = gray(frame),
       { width: w, height: h } = frame.k,
       nextFeatures = corners(image, w, h, frame.depth);

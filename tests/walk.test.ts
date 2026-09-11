@@ -116,3 +116,17 @@ test("holding jump produces one small hop and lands; deep water blocks walking",
   );
   assert.ok(s.flight.position.toArray().every(Number.isFinite));
 });
+test("a zero-length frame leaves walking velocity and position finite", () => {
+  const s = setup();
+  s.input.keys.add("KeyW");
+  for (let i = 0; i < 60; i++) s.walker.update(1 / 60, s.input, s.flight);
+  const before = s.flight.position.toArray();
+  // Two animation callbacks with the same timestamp: dt is zero.
+  s.walker.update(0, s.input, s.flight);
+  assert.deepEqual(s.flight.position.toArray(), before);
+  assert.ok(s.flight.velocity.toArray().every(Number.isFinite));
+  assert.equal(s.flight.velocity.length(), 0);
+  s.walker.update(1 / 60, s.input, s.flight);
+  assert.ok(s.flight.velocity.length() > 0);
+  assert.ok(s.flight.position.toArray().every(Number.isFinite));
+});

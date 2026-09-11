@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { UniverseEngine } from "@/universe/engine";
 import { evaluateTrajectory } from "@/universe/perception/metrics";
 import type { Condition } from "@/universe/perception/types";
-import type { Language } from "@/universe/language";
+import { copy, type Language } from "@/universe/language";
 import { compose, inverse } from "@/universe/perception/math";
 const conditions: Condition[] = [
   "CLEAR",
@@ -28,16 +28,16 @@ export default function ResearchLens({
     labels = useRef<HTMLCanvasElement>(null),
     map = useRef<HTMLCanvasElement>(null),
     plot = useRef<HTMLCanvasElement>(null);
-  const [state, setState] = useState(engine.pilgrim.perception?.snapshot()),
+  const [state, setState] = useState(engine.pilgrim?.perception?.snapshot()),
     [metric, setMetric] = useState<ReturnType<
       typeof evaluateTrajectory
     > | null>(null),
     [condition, setCondition] = useState<Condition>("CLEAR"),
     [tab, setTab] = useState<"sensors" | "evaluation">("sensors");
-  const ko = language === "ko";
+  const text = copy[language];
   useEffect(() => {
     const draw = () => {
-      const p = engine.pilgrim.perception;
+      const p = engine.pilgrim?.perception;
       if (!p) return;
       setState(p.snapshot());
       const evaluation = evaluateTrajectory(p.records);
@@ -176,7 +176,7 @@ export default function ResearchLens({
     return () => clearInterval(timer);
   }, [engine, tab]);
   const download = () => {
-    const p = engine.pilgrim.perception;
+    const p = engine.pilgrim?.perception;
     if (!p) return;
     const c = p.capture;
     const data = {
@@ -206,7 +206,7 @@ export default function ResearchLens({
     number = (n: number | null | undefined, digits = 3) =>
       n == null ? "—" : n.toFixed(digits);
   const downloadSequence = async () => {
-    const p = engine.pilgrim.perception;
+    const p = engine.pilgrim?.perception;
     if (!p || p.sequence.length < 2) return;
     const { encodeDataset } = await import("@/universe/perception/dataset");
     const { records: _records, ...metadata } = p.export();
@@ -226,38 +226,27 @@ export default function ResearchLens({
     <aside className="research-lens" aria-label="Research Lens">
       <div className="lab-heading">
         <span>VASTNESS / 03</span>
-        <a href="/">{ko ? "세계로 돌아가기" : "Return to the world"} ↗</a>
+        <a href="/">{text.returnWorld} ↗</a>
       </div>
       <h1>Research Lens</h1>
-      <p className="lab-lead">
-        {ko ? "같은 세계, 다른 시선." : "One world. Two lenses."}
-      </p>
-      <p className="lab-boundary">
-        RGB-D baseline ·{" "}
-        {ko
-          ? "새로운 SLAM 알고리즘이나 치료 효과를 주장하지 않습니다."
-          : "No novel SLAM or therapeutic claim."}
-      </p>
+      <p className="lab-lead">{text.lensLead}</p>
+      <p className="lab-boundary">RGB-D baseline · {text.lensBoundary}</p>
       <div className="lab-run-controls">
-        <button onClick={() => engine.action("carry")}>
-          {ko ? "어디든 데려다줘" : "Carry me somewhere"}
-        </button>
-        <button onClick={() => engine.action("rest")}>
-          {ko ? "쉬기" : "Rest"}
-        </button>
+        <button onClick={() => engine.action("carry")}>{text.carry}</button>
+        <button onClick={() => engine.action("rest")}>{text.rest}</button>
         <button onClick={() => engine.resetLab(condition)}>
-          {ko ? "실험 다시 시작" : "Reset run"}
+          {text.resetRun}
         </button>
       </div>
       <label className="lab-condition">
-        {ko ? "센서 조건" : "Sensor condition"}
+        {text.sensorCondition}
         <select
-          aria-label={ko ? "센서 조건" : "Sensor condition"}
+          aria-label={text.sensorCondition}
           value={condition}
           onChange={(e) => {
             const c = e.target.value as Condition;
             setCondition(c);
-            engine.pilgrim.perception?.setCondition(c);
+            engine.pilgrim?.perception?.setCondition(c);
           }}
         >
           {conditions.map((c) => (
@@ -311,11 +300,7 @@ export default function ResearchLens({
               PLANNER · observed local geometry / candidate routes
             </figcaption>
           </figure>
-          <p className="lab-caption">
-            {ko
-              ? "지도와 주행은 RGB·깊이만 사용합니다. 법선·정답 라벨·정답 위치는 추정기에 전달되지 않습니다."
-              : "Mapping and planning consume RGB-D only. Normals, semantic truth and ground-truth poses never enter VO or the planner."}
-          </p>
+          <p className="lab-caption">{text.sensorTruth}</p>
         </>
       ) : (
         <>
@@ -397,36 +382,25 @@ export default function ResearchLens({
         </p>
       )}
       <button className="lab-export" onClick={download}>
-        {ko
-          ? "센서·궤적·평가 내려받기"
-          : "Export sensors, trajectories & evaluation"}{" "}
-        ↓
+        {text.lensExport} ↓
       </button>
       <div className="lab-run-controls lab-recording">
         <button
           disabled={state?.recording || !state?.ready}
-          onClick={() => engine.pilgrim.perception?.recordSequence()}
+          onClick={() => engine.pilgrim?.perception?.recordSequence()}
         >
-          {state?.recording
-            ? `${state.recordedFrames} / 32`
-            : ko
-              ? "센서 32프레임 기록"
-              : "Record 32 sensor frames"}
+          {state?.recording ? `${state.recordedFrames} / 32` : text.recordFrames}
         </button>
         <button
           disabled={state?.recording || (state?.recordedFrames ?? 0) < 2}
           onClick={() => void downloadSequence()}
         >
-          {ko ? "데이터 묶음 저장" : "Download RGB-D sequence"}
+          {text.downloadSequence}
         </button>
       </div>
-      <p className="lab-caption">
-        {ko
-          ? "기록은 이 기기에만 남습니다. 최대 32개의 동기화 프레임을 저장하며, 조건을 바꾸면 새로 시작합니다."
-          : "Local only. Up to 32 synchronized frames, raw sensor planes and paired poses. Changing the condition clears the recording."}
-      </p>
+      <p className="lab-caption">{text.recordingNote}</p>
       <details>
-        <summary>{ko ? "모델과 한계" : "Model & boundaries"}</summary>
+        <summary>{text.modelBoundaries}</summary>
         <p>
           Calibrated opaque RGB uses the artwork’s geometry with simplified
           appearance. Artistic fog, bloom and transparent foliage are excluded.

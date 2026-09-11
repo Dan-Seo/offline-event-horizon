@@ -1,10 +1,8 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
 import { enterEnglishExperience } from "./qa-entry.mjs";
-const browser = await chromium.launch({
-  channel: process.env.QA_BROWSER || "chrome",
-  headless: true,
-});
+import { qaChannel, qaLaunch } from "./qa-browser.mjs";
+const browser = await chromium.launch(qaLaunch());
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [],
   checks = [];
@@ -30,7 +28,7 @@ const reset = async () => {
 };
 const delta = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
 try {
-  await page.goto((process.env.QA_URL || "http://localhost:3000") + "/?qa=1");
+  await page.goto((process.env.QA_URL || "http://localhost:4173") + "/?qa=1");
   await page.locator("main[data-ready=true]").waitFor({ timeout: 120000 });
   await enterEnglishExperience(page);
   await wait(400);
@@ -101,6 +99,12 @@ try {
   await page.getByRole("button", { name: "Comfort settings", exact: true }).click();
   await expect(page.getByLabel("Look sensitivity")).toBeVisible();
   check("UI is clickable immediately after a drag without Esc", !await page.evaluate(() => Boolean(document.pointerLockElement)));
+  check(
+    "Opening a panel puts focus on its close button",
+    await page.evaluate(() =>
+      document.activeElement?.classList.contains("close-panel"),
+    ),
+  );
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await page.keyboard.press("b");
   await wait(100);
@@ -142,7 +146,8 @@ try {
   await wait(120);
   check("Free cursor movement leaves WANDER undisturbed", (await inspect()).mode === "WANDER");
   await page.mouse.down();
-  check("A real drag interrupts WANDER in its pointer-down event", (await inspect()).mode === "FREE");
+  await page.mouse.move(810, 440, { steps: 5 });
+  check("A real drag interrupts WANDER in its own pointer event", (await inspect()).mode === "FREE");
   await page.mouse.move(840, 450, { steps: 5 });
   await page.mouse.up();
   await wait(120);
@@ -224,6 +229,13 @@ try {
   await page.keyboard.press("Escape");
   await page.keyboard.press("h");
   await expect(page.getByRole("complementary", { name: "Flight controls", exact: true })).toBeVisible();
+  // The help overlay carries no close control, so the aside itself is the focus target.
+  check(
+    "Opening help puts focus on the overlay itself",
+    await page.evaluate(() =>
+      document.activeElement?.classList.contains("controls-help"),
+    ),
+  );
   await page.keyboard.press("h");
   await expect(page.getByRole("complementary", { name: "Flight controls", exact: true })).toHaveCount(0);
   checks.push("H toggles help both ways");
@@ -302,7 +314,7 @@ try {
 } finally {
   await fs.mkdir("artifacts", { recursive: true });
   await fs.writeFile(
-    `artifacts/sanctuary-controls-${process.env.QA_BROWSER || "chrome"}.json`,
+    `artifacts/sanctuary-controls-${qaChannel}.json`,
     JSON.stringify(
       {
         url: page.url(),

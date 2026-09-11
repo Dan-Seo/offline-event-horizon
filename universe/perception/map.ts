@@ -3,10 +3,12 @@ import type {
   Analysis,
   MapCell,
   Route,
-  SensorFrame,
+  SensorImage,
   VOResult,
 } from "./types.ts";
 export const SENSOR_PITCH = 0.22;
+// Body-relative sensor extrinsics, shared by the rig and the evaluation export.
+export const SENSOR_OFFSET: V3 = [0, 1.2, -0.8];
 export const CELL = 2;
 type Point = { p: V3; green: number; blue: number; age: number };
 const body = (p: V3): V3 => [
@@ -26,7 +28,7 @@ export class LocalMap {
     this.lastTurn = 0;
   }
   update(
-    f: SensorFrame,
+    f: SensorImage,
     vo: VOResult,
   ): Omit<Analysis, "id" | "timestamp" | "vo" | "ms"> {
     if (vo.delta && vo.status === "TRACKING")

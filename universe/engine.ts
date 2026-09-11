@@ -1,10 +1,10 @@
 import * as T from "three/webgpu";
 import { InputManager, type InputAction } from "./input";
-import { FlightController } from "./flight";
+import { FlightController, type Destination } from "./flight";
 import { SurfaceWalker } from "./walk";
 import { PilgrimSystem } from "./pilgrim/system";
 import type { Condition } from "./perception/types";
-import { UniverseWorld } from "./world";
+import { UniverseWorld, type Body } from "./world";
 import { QUALITY, type Quality } from "./config";
 import { Ambience } from "./audio";
 import { MatterField } from "./matter";
@@ -12,6 +12,7 @@ import { CreationSystem } from "./creation";
 import { pass, uniform, uv, float, smoothstep, Fn, If, vec3, vec4, logarithmicDepthToViewZ } from "three/tsl";
 import { oceanComposite } from "./ocean-optics";
 import { bloom } from "three/addons/tsl/display/BloomNode.js";
+import { encounterFor, hudPosition, nearestBody } from "./snapshot";
 import { initialSnapshot, type UniverseSnapshot } from "./state";
 import type { ReleaseKind } from "./orbit-model";
 import type { RelativityObservation } from "./relativity";
@@ -32,6 +33,7 @@ export class UniverseEngine {
   private previous = 0;
   private reportAt = 0;
   private frames: number[] = [];
+  private destinations: Destination[] = [];
   private resizeObserver?: ResizeObserver;
   private controller = new AbortController();
   private raycaster = new T.Raycaster();
@@ -39,6 +41,12 @@ export class UniverseEngine {
   private qualityAt = 0;
   private pipeline?: T.RenderPipeline;
   private scenePass?: T.PassNode;
+  private glow?: ReturnType<typeof bloom>;
+  private wound!: Body;
+  private qualityPinned = false;
+  private boardable = false;
+  private boardableAt = 0;
+  private labRefused = false;
   private lensCenter = uniform(new T.Vector2());
   private lensRadius = uniform(0.01);
   private lensStrength = uniform(0);
@@ -75,6 +83,7 @@ export class UniverseEngine {
           : innerWidth < 760
             ? "BATTERY"
             : "HIGH";
+      this.qualityPinned = !!(quality && quality in QUALITY);
       this.flight.gentle = matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -86,10 +95,8 @@ export class UniverseEngine {
       });
       await this.renderer.init();
       mark("renderer");
-      if (this.disposed) {
-        this.renderer.dispose();
-        return;
-      }
+      // dispose() during renderer.init() has already disposed this renderer.
+      if (this.disposed) return;
       this.state.backend = (
         this.renderer.backend as unknown as { isWebGLBackend: boolean }
       ).isWebGLBackend
@@ -105,7 +112,6 @@ export class UniverseEngine {
       ).trackTimestamp = this.profile;
       this.renderer.toneMapping = T.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.08;
-      this.scene.background = new T.Color(0x020407);
       this.host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         "aria-label",
@@ -115,6 +121,7 @@ export class UniverseEngine {
         this.scene,
         this.state.backend === "WebGPU",
       );
+      this.wound = this.world.bodies.find((b) => b.id === "wound")!;
       mark("world");
       this.world.setQuality(this.state.quality);
       this.pilgrim = new PilgrimSystem(this.scene, this.renderer);
@@ -162,7 +169,7 @@ export class UniverseEngine {
         });
       this.world.update(this.flight.position, 0);
       this.scene.updateMatrixWorld(true);
-      this.pilgrim.contact.observer.copy(this.flight.position);
+      this.pilgrim.contact.setObserver(this.flight.position);
       this.camera.quaternion.copy(this.flight.quaternion);
       this.camera.updateMatrixWorld();
       this.setupPost();
@@ -199,9 +206,9 @@ export class UniverseEngine {
       await pending;
       this.world.sanctuaries.air.depthReady = true;
       mark("compiled");
+      if (this.disposed) return;
       this.matter.prepare(this.renderer);
       this.world.sanctuaries.life.prepare(this.renderer);
-      if (this.disposed) return;
       // Scene compilation does not warm the post-processing graph. Complete its
       // first draw while the arrival poster is visible, before accepting flight.
       this.pipeline!.render();
@@ -246,6 +253,14 @@ export class UniverseEngine {
     this.walker.stop();
   }
   action = (a: InputAction) => {
+    if (this.pilgrimAction(a) || this.walkAction(a) || this.flightAction(a))
+      return;
+    this.uiAction(a);
+    this.report({ ...this.state });
+  };
+  /** Everything the craft owns: leaving it, boarding it, its two flying modes and its rest.
+   *  True when the action was the hand-over itself, which reports and ends the chain. */
+  private pilgrimAction(a: InputAction) {
     if (a === "manual") this.pilgrim?.manual();
     if (["reset", "focus", "orbit", "walk", "fly"].includes(a))
       this.leavePilgrim();
@@ -256,11 +271,14 @@ export class UniverseEngine {
         this.input.clear();
       } else {
         if (!this.pilgrim.active && this.state.pilgrimAvailable) {
-          this.walker.stop();
-          this.pilgrim.start(
+          // start() tests contact live; its refusal is the freshest answer.
+          const boarded = this.pilgrim.start(
             this.flight,
             this.world.approaches.pilgrimSurface(this.state.approach),
           );
+          if (boarded) this.walker.stop();
+          else this.boardable = false;
+          this.boardableAt = performance.now();
         }
         if (this.pilgrim.active) {
           if (a === "carry") void this.pilgrim.carry();
@@ -272,52 +290,35 @@ export class UniverseEngine {
       }
       this.updateSnapshot();
       this.report({ ...this.state });
-      return;
+      return true;
     }
     if (a === "wander" && this.pilgrim.active) {
       void this.pilgrim.carry();
-      return;
+      return true;
     }
     if (a === "cancel") this.pilgrim?.rest();
+    return false;
+  }
+  /** Leaving the ground, and the walk toggle itself. True when the action was the toggle. */
+  private walkAction(a: InputAction) {
     if (["reset", "focus", "wander", "orbit"].includes(a)) this.leaveGround();
-    if (a === "walk") {
-      if (this.walker.active) this.leaveGround();
-      else {
-        const surface = this.world.approaches.walkSurface(this.state.approach);
-        if (surface) this.walker.start(surface, this.flight);
-      }
-      this.input.clear();
-      this.updateSnapshot();
-      this.report({ ...this.state });
-      return;
+    if (a !== "walk") return false;
+    if (this.walker.active) this.leaveGround();
+    else {
+      const surface = this.world.approaches.walkSurface(this.state.approach);
+      if (surface) this.walker.start(surface, this.flight);
     }
+    this.input.clear();
+    this.updateSnapshot();
+    this.report({ ...this.state });
+    return true;
+  }
+  /** Flight controls, and the observation or panel an action interrupts on the way.
+   *  True only for taking the controls by hand, which reports nothing of its own. */
+  private flightAction(a: InputAction) {
     if (a === "manual") {
-      if (
-        this.relativity?.active &&
-        ([...this.input.keys].some((k) =>
-          [
-            "KeyW",
-            "KeyA",
-            "KeyS",
-            "KeyD",
-            "Space",
-            "KeyX",
-            "ShiftLeft",
-            "ShiftRight",
-          ].includes(k),
-        ) ||
-          this.input.touchMove.lengthSq() > 0.001)
-      )
-        this.endObservation();
-      if (this.state.relativityLoading) {
-        this.observationRequest++;
-        this.state.relativityLoading = false;
-      }
-      if (this.flight.mode !== "FREE") {
-        this.flight.cancel();
-        this.flight.velocity.multiplyScalar(0.15);
-      }
-      return;
+      this.manualAction();
+      return true;
     }
     if (
       [
@@ -350,47 +351,76 @@ export class UniverseEngine {
       this.flight.cancel();
       this.state.quiet = false;
       this.flight.quiet = false;
-    } else if (a === "seed" && this.creation) {
-      const walking = this.walker.active;
-      const local = walking || this.world.sanctuaries.presence > 0.5;
-      const distance = walking
-          ? 4
-          : local
-            ? 55
-            : Math.max(100, this.matter.domain * 0.35),
-        position = new T.Vector3(0, 0, -distance)
-          .applyQuaternion(this.flight.quaternion)
-          .add(this.flight.position);
-      if (walking && this.walker.surface) {
-        const up = this.flight.position
-          .clone()
-          .sub(this.walker.surface.center)
-          .normalize();
-        const direction = position
-          .clone()
-          .sub(this.flight.position)
-          .addScaledVector(
-            up,
-            -position.clone().sub(this.flight.position).dot(up),
-          )
-          .normalize();
-        position
-          .copy(this.flight.position)
-          .addScaledVector(direction, 4)
-          .addScaledVector(up, 0.5);
-      }
-      const star = this.creation.add(
-        position,
-        walking ? 0.12 : local ? 1.5 : Math.max(8, this.matter.domain * 0.012),
-        this.state.time,
-      );
-      this.state.seeds = this.creation.stars.length;
-      this.flight.selected = star;
-      this.input.selected = true;
+    } else if (a === "seed" && this.creation) this.seedStar();
+    return false;
+  }
+  /** Taking the controls by hand: it ends an observation and drops an automatic flight. */
+  private manualAction() {
+    if (
+      this.relativity?.active &&
+      ([...this.input.keys].some((k) =>
+        [
+          "KeyW",
+          "KeyA",
+          "KeyS",
+          "KeyD",
+          "Space",
+          "KeyX",
+          "ShiftLeft",
+          "ShiftRight",
+        ].includes(k),
+      ) ||
+        this.input.touchMove.lengthSq() > 0.001)
+    )
+      this.endObservation();
+    if (this.state.relativityLoading) {
+      this.observationRequest++;
+      this.state.relativityLoading = false;
     }
-    this.uiAction(a);
-    this.report({ ...this.state });
-  };
+    if (this.flight.mode !== "FREE") {
+      this.flight.cancel();
+      this.flight.velocity.multiplyScalar(0.15);
+    }
+  }
+  /** A new star ahead of the pilot: a step away on foot, near in a sanctuary, far in the deep. */
+  private seedStar() {
+    const walking = this.walker.active;
+    const local = walking || this.world.sanctuaries.presence > 0.5;
+    const distance = walking
+        ? 4
+        : local
+          ? 55
+          : Math.max(100, this.matter.domain * 0.35),
+      position = new T.Vector3(0, 0, -distance)
+        .applyQuaternion(this.flight.quaternion)
+        .add(this.flight.position);
+    if (walking && this.walker.surface) {
+      const up = this.flight.position
+        .clone()
+        .sub(this.walker.surface.center)
+        .normalize();
+      const direction = position
+        .clone()
+        .sub(this.flight.position)
+        .addScaledVector(
+          up,
+          -position.clone().sub(this.flight.position).dot(up),
+        )
+        .normalize();
+      position
+        .copy(this.flight.position)
+        .addScaledVector(direction, 4)
+        .addScaledVector(up, 0.5);
+    }
+    const star = this.creation.add(
+      position,
+      walking ? 0.12 : local ? 1.5 : Math.max(8, this.matter.domain * 0.012),
+      this.state.time,
+    );
+    this.state.seeds = this.creation.stars.length;
+    this.flight.selected = star;
+    this.input.selected = true;
+  }
   select(id: string, travel = false) {
     this.endObservation();
     if (travel) {
@@ -407,7 +437,7 @@ export class UniverseEngine {
   }
   async beginObservation() {
     if (this.state.relativityLoading || this.relativity?.active) return;
-    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    const hole = this.wound;
     if (this.flight.position.distanceTo(hole.position) > hole.radius * 12)
       return;
     const request = ++this.observationRequest;
@@ -483,7 +513,7 @@ export class UniverseEngine {
     }
   }
   releaseMatter(kind: ReleaseKind) {
-    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    const hole = this.wound;
     if (
       this.state.paused ||
       this.flight.position.distanceTo(hole.position) > hole.radius * 12
@@ -499,7 +529,7 @@ export class UniverseEngine {
     );
   }
   releaseGas() {
-    const hole = this.world.bodies.find((b) => b.id === "wound")!;
+    const hole = this.wound;
     if (
       this.state.paused ||
       (!this.relativity?.active &&
@@ -564,8 +594,9 @@ export class UniverseEngine {
     this.flight.quaternion.setFromEuler(new T.Euler(0.01, 0.58, 0));
     this.world.update(this.flight.position, this.state.time);
     this.scene.updateMatrixWorld(true);
-    this.pilgrim.contact.observer.copy(this.flight.position);
-    this.pilgrim.start(this.flight);
+    this.pilgrim.contact.setObserver(this.flight.position);
+    this.labRefused = !this.pilgrim.start(this.flight);
+    if (this.labRefused) console.warn("PILGRIM lab fixture is not boardable");
     void this.pilgrim.enableSensors().then(() => {
       if (this.pilgrim.perception) {
         this.pilgrim.perception.lab = true;
@@ -592,10 +623,10 @@ export class UniverseEngine {
         .mul(this.lensStrength)
         .mul(0.18),
     );
-    const lensed = sceneColor.sample(warped),
-      glow = bloom(sceneColor, 1, 0.48, 1.2);
+    const lensed = sceneColor.sample(warped);
+    this.glow = bloom(sceneColor, 1, 0.48, 1.2);
     this.pipeline = new T.RenderPipeline(this.renderer);
-    const beauty = lensed.add(glow.mul(this.glowStrength));
+    const beauty = lensed.add(this.glow.mul(this.glowStrength));
     this.pipeline.outputNode = Fn(() => {
       const result = beauty.toVar();
       If(this.oceanImmersion.greaterThan(0), () => {
@@ -625,7 +656,10 @@ export class UniverseEngine {
   private frame = (now: number) => {
     if (this.disposed || document.hidden) return;
     try {
-      const elapsed = this.previous ? (now - this.previous) / 1000 : 1 / 60;
+      const measured = this.previous ? (now - this.previous) / 1000 : 1 / 60;
+      // A repeated or non-monotonic timestamp must never reach the integrators.
+      const elapsed =
+        Number.isFinite(measured) && measured > 0 ? measured : 1 / 60;
       this.previous = now;
       const dt = Math.min(elapsed, 1 / 30);
       const force = this.input.keys.has("KeyG")
@@ -649,12 +683,10 @@ export class UniverseEngine {
         this.flight.update(
           dt,
           this.input,
-          this.relativity?.active
-            ? []
-            : [...this.world.bodies, ...this.creation.stars],
+          this.destinationsFor(this.relativity?.active),
         );
       if (this.relativity?.active) {
-        const hole = this.world.bodies.find((b) => b.id === "wound")!;
+        const hole = this.wound;
         this.relativity.advance(this.state.paused ? 0 : dt);
         this.flight.position
           .copy(hole.position)
@@ -677,14 +709,9 @@ export class UniverseEngine {
         this.state.time,
         this.camera,
         this.flight.velocity.length(),
+        dt,
       );
-      const regionalOcean = this.world.approaches.inspectOcean();
-      const sanctuaryOcean = this.world.sanctuaries.sea.inspect();
-      const ocean = regionalOcean ?? sanctuaryOcean;
-      this.oceanDepth.value = Math.max(0, ocean.signedDepth);
-      this.oceanImmersion.value = ocean.submersion * (regionalOcean ? 1 : this.world.sanctuaries.presence);
-      const tanHalfFov = Math.tan(this.camera.fov * Math.PI / 360);
-      this.oceanRayScale.value.set(tanHalfFov * this.camera.aspect, tanHalfFov);
+      this.updateOcean();
       this.world.anomaly.simulate(this.state.paused ? 0 : dt);
       this.world.sanctuaries.life.update(
         this.renderer,
@@ -696,7 +723,7 @@ export class UniverseEngine {
       this.creation.update(this.flight.position, this.state.time);
       this.scene.updateMatrixWorld(true);
       this.pilgrim.afterWorld(this.flight.position, this.state.time);
-      const hole = this.world.bodies.find((b) => b.id === "wound")!;
+      const hole = this.wound;
       const pull =
         this.creation.nearest(this.flight.position) ??
         (this.flight.position.distanceTo(hole.position) < hole.radius * 4
@@ -714,23 +741,7 @@ export class UniverseEngine {
         this.world.sanctuaries.stillness,
         this.flight.velocity,
       );
-      this.projection.copy(hole.object.position).project(this.camera);
-      this.lensCenter.value.set(
-        this.projection.x * 0.5 + 0.5,
-        this.projection.y * 0.5 + 0.5,
-      );
-      const angularRadius =
-        hole.object.scale.x / Math.max(1, hole.object.position.length());
-      this.lensRadius.value = Math.min(
-        0.42,
-        angularRadius / (2 * Math.tan((this.camera.fov * Math.PI) / 360)),
-      );
-      this.lensStrength.value =
-        this.projection.z < 1 &&
-        Math.abs(this.projection.x) < 1.6 &&
-        Math.abs(this.projection.y) < 1.6
-          ? 1
-          : 0;
+      this.updatePost();
       if (this.relativity?.active)
         this.relativity.render(
           this.camera,
@@ -763,21 +774,69 @@ export class UniverseEngine {
         this.updateSnapshot();
         this.report({ ...this.state });
       }
-      if (
-        this.benchmarkMode === "NONE" &&
-        now - this.qualityAt > 18000 &&
-        this.frames.length === 120 &&
-        this.state.frameMs > 29
-      ) {
-        const tiers: Quality[] = ["ULTRA", "HIGH", "BALANCED", "BATTERY"],
-          i = tiers.indexOf(this.state.quality);
-        if (i < 3) this.setQuality(tiers[i + 1]);
-        this.qualityAt = now;
-      }
+      this.governQuality(now);
     } catch (e) {
       this.fail(e instanceof Error ? e.message : "Rendering stopped.");
     }
   };
+  /** The bodies flight steers around, in one reused array: flight reads them during the call
+   *  and never keeps it. An observation flies the camera itself, so it steers around nothing. */
+  private destinationsFor(observing: boolean | undefined) {
+    this.destinations.length = 0;
+    if (!observing) {
+      for (const b of this.world.bodies) this.destinations.push(b);
+      for (const s of this.creation.stars) this.destinations.push(s);
+    }
+    return this.destinations;
+  }
+  /** The water the camera is in or looking through: the region's own ocean where there is one,
+   *  otherwise the sanctuary sea, faded by how present the sanctuary is. */
+  private updateOcean() {
+    const regionalOcean = this.world.approaches.inspectOcean();
+    const sanctuaryOcean = this.world.sanctuaries.sea.inspect();
+    const ocean = regionalOcean ?? sanctuaryOcean;
+    this.oceanDepth.value = Math.max(0, ocean.signedDepth);
+    this.oceanImmersion.value = ocean.submersion * (regionalOcean ? 1 : this.world.sanctuaries.presence);
+    const tanHalfFov = Math.tan(this.camera.fov * Math.PI / 360);
+    this.oceanRayScale.value.set(tanHalfFov * this.camera.aspect, tanHalfFov);
+  }
+  /** The lens the anomaly bends light through, placed and sized from where it lands on screen. */
+  private updatePost() {
+    const hole = this.wound;
+    this.projection.copy(hole.object.position).project(this.camera);
+    this.lensCenter.value.set(
+      this.projection.x * 0.5 + 0.5,
+      this.projection.y * 0.5 + 0.5,
+    );
+    const angularRadius =
+      hole.object.scale.x / Math.max(1, hole.object.position.length());
+    this.lensRadius.value = Math.min(
+      0.42,
+      angularRadius / (2 * Math.tan((this.camera.fov * Math.PI) / 360)),
+    );
+    this.lensStrength.value =
+      this.projection.z < 1 &&
+      Math.abs(this.projection.x) < 1.6 &&
+      Math.abs(this.projection.y) < 1.6
+        ? 1
+        : 0;
+  }
+  /** A tier the machine cannot hold is stepped down, but only on a full window of samples and
+   *  never within 18 s of the last change, so one slow moment cannot cascade to BATTERY. */
+  private governQuality(now: number) {
+    if (
+      this.benchmarkMode === "NONE" &&
+      !this.qualityPinned &&
+      now - this.qualityAt > 18000 &&
+      this.frames.length === 120 &&
+      this.state.frameMs > 29
+    ) {
+      const tiers: Quality[] = ["ULTRA", "HIGH", "BALANCED", "BATTERY"],
+        i = tiers.indexOf(this.state.quality);
+      if (i < 3) this.setQuality(tiers[i + 1], "auto");
+      this.qualityAt = now;
+    }
+  }
   private updateSnapshot() {
     this.state.sanctuary = this.world.sanctuaries.active;
     const selected = this.flight.selected;
@@ -797,66 +856,60 @@ export class UniverseEngine {
     this.state.walking = this.walker.active;
     this.state.pilgrim = this.pilgrim.active;
     this.state.carrying = this.pilgrim.director.active;
-    this.state.resting = this.pilgrim.director.active
-      ? this.pilgrim.director.resting
-      : this.pilgrim.model.velocity.length() < 0.3 && !this.pilgrim.cruise;
+    this.state.resting = this.pilgrim.resting;
+    const pilgrimSurface = this.world.approaches.pilgrimSurface(
+      this.state.approach,
+    );
+    const offered = this.world.sanctuaries.presence > 0.8 || !!pilgrimSurface;
+    // boardable() raycasts terrain, so hold its answer for half a second.
+    const now = performance.now();
+    if (offered && !this.pilgrim.active && now - this.boardableAt > 500) {
+      this.boardableAt = now;
+      this.boardable = this.pilgrim.boardable(
+        this.flight.position,
+        pilgrimSurface,
+      );
+    }
     this.state.pilgrimAvailable =
-      this.world.sanctuaries.presence > 0.8 ||
-      !!this.world.approaches.pilgrimSurface(this.state.approach);
+      offered && (this.pilgrim.active || this.boardable);
     const walkSurface = this.world.approaches.walkSurface(this.state.approach);
     this.state.walkAvailable =
       !!walkSurface && this.walker.canStart(walkSurface, this.flight.position);
-    const encounter =
-      this.world.bodies.find(
-        (b) =>
-          b.id === selected?.id &&
-          ![4, 5, 7].includes(b.archetype) &&
-          this.flight.position.distanceTo(b.position) <
-            b.radius * (b.archetype === 3 ? 12 : 7.5),
-      ) ??
-      this.world.bodies.find(
-        (b) =>
-          b.id !== "orpheus" &&
-          ![4, 5, 7].includes(b.archetype) &&
-          this.flight.position.distanceTo(b.position) <
-            b.radius * (b.archetype === 3 ? 4 : 1.5),
-      );
-    this.state.encounter =
-      this.flight.mode === "TRAVEL" ? "" : (encounter?.id ?? "");
-    let nearest = Infinity;
-    for (const b of this.world.bodies) {
-      const d = this.flight.position.distanceTo(b.position) - b.radius;
-      if (b.archetype === 7) continue;
-      if (d < nearest) {
-        nearest = d;
-        this.state.nearest = b.name;
-      }
-    }
-    this.state.distance = nearest;
+    this.state.encounter = encounterFor(
+      this.world.bodies,
+      selected?.id,
+      this.flight.position,
+      this.flight.mode,
+    );
+    const nearest = nearestBody(this.world.bodies, this.flight.position);
+    // Nothing to measure leaves the last reading standing rather than blanking the HUD.
+    if (nearest.name !== undefined) this.state.nearest = nearest.name;
+    this.state.distance = nearest.distance;
     if (this.world.sanctuaries.active !== "space")
       this.state.nearest = this.world.sanctuaries.places.find(
         (p) => p.id === this.world.sanctuaries.active,
       )!.name;
     this.state.sectors = this.world.sectors;
     if (selected) {
-      const b = [...this.world.bodies, ...this.creation.stars].find(
-        (b) => b.id === selected.id,
-      );
+      const b =
+        this.world.bodies.find((b) => b.id === selected.id) ??
+        this.creation.stars.find((b) => b.id === selected.id);
       if (b) {
         this.projection.copy(b.object.position).project(this.camera);
-        this.state.selectionX = Math.max(
-          10,
-          Math.min(
-            this.camera.aspect < 1 ? 65 : 84,
-            (this.projection.x * 0.5 + 0.5) * 100,
-          ),
-        );
-        this.state.selectionY = Math.max(
-          14,
-          Math.min(73, (-this.projection.y * 0.5 + 0.5) * 100),
-        );
+        const hud = hudPosition(this.projection, this.camera.aspect);
+        this.state.selectionX = hud.x;
+        this.state.selectionY = hud.y;
+        // A sanctuary is arrived at, not aimed at, so it carries no marker.
         this.state.selectionVisible =
-          this.projection.z < 1 && !("archetype" in b && b.archetype === 7);
+          hud.visible && !("archetype" in b && b.archetype === 7);
+      } else {
+        // Streamed out while selected; drop it rather than track a body that is gone.
+        this.flight.selected = undefined;
+        this.input.selected = false;
+        this.state.selected = null;
+        this.state.selectedId = "";
+        this.state.selectedKind = "";
+        this.state.selectionVisible = false;
       }
     } else this.state.selectionVisible = false;
     if (
@@ -864,15 +917,21 @@ export class UniverseEngine {
       this.state.approach === this.flight.selected?.id
     )
       this.state.selectionVisible = false;
-    this.state.frameMs =
-      this.frames.reduce((a, b) => a + b, 0) / this.frames.length;
-    this.state.fps = Math.round(1000 / this.state.frameMs);
+    this.state.frameMs = this.frames.length
+      ? this.frames.reduce((a, b) => a + b, 0) / this.frames.length
+      : 0;
+    this.state.fps = this.state.frameMs
+      ? Math.round(1000 / this.state.frameMs)
+      : 0;
     this.state.drawCalls = this.renderer.info.render.drawCalls;
     this.state.triangles = this.renderer.info.render.triangles;
   }
-  setQuality(q: Quality) {
+  setQuality(q: Quality, source: "user" | "auto" = "user") {
+    if (source === "user") this.qualityPinned = true;
     this.state.quality = q;
     this.qualityAt = performance.now();
+    // Samples from the tier just left must not trigger a second downgrade.
+    this.frames.length = 0;
     this.world?.setQuality(q);
     this.matter?.setQuality(q);
     if (this.pilgrim) this.pilgrim.quality = q;
@@ -884,7 +943,7 @@ export class UniverseEngine {
     if (this.benchmarkMode === "NONE")
       this.beforeBenchmark = this.state.quality;
     this.benchmarkMode = mode;
-    this.setQuality(this.beforeBenchmark);
+    this.setQuality(this.beforeBenchmark, "auto");
     this.world.nebulaBoost = 1;
     if (mode === "PARTICLES") this.matter.setQuality("ULTRA");
     if (mode === "NEBULA") {
@@ -923,6 +982,7 @@ export class UniverseEngine {
       livingParticles: this.world.sanctuaries.life.count,
       waterWakes: this.world.sanctuaries.sea.wakeCount,
       pilgrim: this.pilgrim.snapshot(),
+      labBoardingRefused: this.labRefused,
       position: this.flight.position.toArray(),
       quaternion: this.flight.quaternion.toArray(),
       velocityVector: this.flight.velocity.toArray(),
@@ -957,6 +1017,9 @@ export class UniverseEngine {
     this.world?.dispose();
     this.matter?.dispose();
     this.pipeline?.dispose();
+    // r183's RenderPipeline.dispose() frees only its own quad material.
+    this.scenePass?.dispose();
+    this.glow?.dispose();
     this.relativity?.dispose();
     const geometries = new Set<T.BufferGeometry>(),
       materials = new Set<T.Material>();
@@ -964,9 +1027,10 @@ export class UniverseEngine {
       if (
         o instanceof T.Mesh ||
         o instanceof T.Points ||
-        o instanceof T.LineSegments
+        o instanceof T.LineSegments ||
+        o instanceof T.Sprite
       ) {
-        geometries.add(o.geometry);
+        if (!(o instanceof T.Sprite)) geometries.add(o.geometry);
         for (const m of Array.isArray(o.material) ? o.material : [o.material])
           materials.add(m);
       }

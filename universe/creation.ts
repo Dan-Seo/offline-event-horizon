@@ -1,9 +1,14 @@
 import * as T from "three/webgpu";
-import { color, float, length, max, pow, uniform, uv } from "three/tsl";
+import { color, float, length, max, pow, uv } from "three/tsl";
 import type { Destination } from "./flight";
 import { placeRelative } from "./coordinates";
 import { clamp } from "./config";
-export type CreatedStar = Destination & { object: T.Group; born: number };
+export type CreatedStar = Destination & {
+  object: T.Group;
+  /** The moon, which is moved every frame; the star holds it rather than counting children. */
+  orbiter: T.Object3D;
+  born: number;
+};
 export class CreationSystem {
   stars: CreatedStar[] = [];
   template = new T.Group();
@@ -76,6 +81,7 @@ export class CreationSystem {
       position: position.clone(),
       radius,
       object,
+      orbiter: object.children[3],
       born: time,
       solid: radius >= 1,
     };
@@ -101,12 +107,12 @@ export class CreationSystem {
       const age = Math.max(0, time - s.born),
         growth = 0.05 + 0.95 * (1 - Math.exp(-age * 0.22));
       placeRelative(s.object, s.position, observer, s.radius * growth);
-      s.object.children[3].position.set(
+      s.orbiter.position.set(
         Math.cos(age * 0.12) * 3.8,
         Math.sin(age * 0.12) * 0.6,
         Math.sin(age * 0.12) * 3.8,
       );
-      s.object.children[3].scale.setScalar(clamp((age - 5) / 14));
+      s.orbiter.scale.setScalar(clamp((age - 5) / 14));
     }
   }
   nearest(observer: T.Vector3) {

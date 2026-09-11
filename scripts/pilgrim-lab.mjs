@@ -1,9 +1,19 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs/promises";
+import { qaChannel, qaLaunch } from "./qa-browser.mjs";
 const url = process.env.QA_URL || "http://localhost:4173",
-  fallback = process.env.QA_BACKEND === "webgl",
-  channel = process.env.QA_BROWSER || "chrome";
-const browser = await chromium.launch({ channel, headless: true }),
+  fallback = process.env.QA_BACKEND === "webgl";
+// The same accuracy gates as the offline replay (scripts/replay-rgbd.ts),
+// read from the same variables so one CI override moves both.
+const gate = (name, standard) => {
+  const value = Number(process.env[name] ?? standard);
+  if (!Number.isFinite(value)) throw new Error(`${name} must be a number`);
+  return value;
+};
+const maxLost = gate("REPLAY_MAX_LOST", 0.1),
+  maxDrift = gate("REPLAY_MAX_DRIFT", 0.2),
+  maxRpe = gate("REPLAY_MAX_RPE", 0.5);
+const browser = await chromium.launch(qaLaunch()),
   context = await browser.newContext({
     viewport: { width: 1600, height: 1000 },
     locale: "en-US",
@@ -88,9 +98,16 @@ try {
   await page
     .getByRole("button", { name: "Record 32 sensor frames", exact: true })
     .click();
+  // A straight run has no transverse energy, so hasArea is false and its ATE is unavailable
+  // by construction. Curve once, under way, so the manual segment can be aligned as well as
+  // measured; the throttle is never released, so the distance keeps accumulating.
   await page.keyboard.down("ControlLeft");
   await page.keyboard.down("KeyW");
-  await wait(4000);
+  await wait(2500);
+  await page.keyboard.down("KeyD");
+  await wait(1500);
+  await page.keyboard.up("KeyD");
+  await wait(2000);
   await page.keyboard.up("KeyW");
   await page.keyboard.up("ControlLeft");
   await wait(2000);
@@ -158,6 +175,34 @@ try {
       tracking: bundle.evaluation.trackingFraction,
       segments: bundle.evaluation.segments.length,
     },
+  );
+  check(
+    "Clear run holds visual odometry accuracy within the replay gates",
+    bundle.evaluation.lost <= maxLost * bundle.evaluation.samples &&
+      bundle.evaluation.segments.every(
+        (s) =>
+          (s.rpePairs === 0 || s.rpeTranslation <= maxRpe) &&
+          (s.driftFraction === null || s.driftFraction <= maxDrift),
+      ),
+    {
+      lost: bundle.evaluation.lost,
+      samples: bundle.evaluation.samples,
+      segments: bundle.evaluation.segments.map((s) => ({
+        drift: s.driftFraction,
+        rpe: s.rpeTranslation,
+      })),
+    },
+  );
+  check(
+    "Manual segment produces a conditioned ATE",
+    bundle.evaluation.segments.some(
+      (s) => s.alignment.startsWith("SE3") && Number.isFinite(s.ate),
+    ),
+    bundle.evaluation.segments.map((s) => ({
+      alignment: s.alignment,
+      ate: s.ate,
+      distance: s.distance,
+    })),
   );
   check(
     "Latest exported image and pose pair share the same capture",
@@ -374,6 +419,7 @@ try {
         url,
         at: new Date().toISOString(),
         browser: browser.version(),
+        channel: qaChannel,
         backend: carried.backend,
         checks,
         errors,

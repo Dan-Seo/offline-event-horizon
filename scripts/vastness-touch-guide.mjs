@@ -1,6 +1,7 @@
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs/promises";
-const browser = await chromium.launch({ channel: process.env.QA_BROWSER || "chrome", headless: true });
+import { qaLaunch } from "./qa-browser.mjs";
+const browser = await chromium.launch(qaLaunch());
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true, locale: "ko-KR", reducedMotion: "reduce" });
 const page = await context.newPage(), errors = [], checks = [];
 const base = process.env.QA_URL || "http://localhost:4173";

@@ -1,8 +1,8 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs/promises";
-const url = process.env.QA_URL || "http://localhost:4173",
-  channel = process.env.QA_BROWSER || "chrome";
-const browser = await chromium.launch({ channel, headless: true });
+import { qaChannel, qaLaunch } from "./qa-browser.mjs";
+const url = process.env.QA_URL || "http://localhost:4173";
+const browser = await chromium.launch(qaLaunch());
 const context = await browser.newContext({
     viewport: { width: 1600, height: 1000 },
     locale: "en-US",
@@ -20,7 +20,12 @@ const check = (name, ok, detail) => {
   checks.push({ name, passed: !!ok, detail });
   console.log(ok ? "PASS" : "FAIL", name, detail ?? "");
 };
-const read = () => page.evaluate(() => window.__vastness.inspect());
+let detected = null;
+const read = async () => {
+  const s = await page.evaluate(() => window.__vastness.inspect());
+  detected = { backend: s.backend, quality: s.quality, dpr: s.dpr };
+  return s;
+};
 const shot = async (name) =>
   page.screenshot({ path: `artifacts/journey-${name}.jpg`, quality: 90 });
 const sample = async (ms) => {
@@ -244,8 +249,9 @@ try {
     JSON.stringify(
       {
         url,
+        detected,
         browser: browser.version(),
-        channel,
+        channel: qaChannel,
         at: new Date().toISOString(),
         checks,
         errors,
@@ -262,7 +268,7 @@ try {
   await fs.writeFile(
     "artifacts/pilgrim-journey-failure.json",
     JSON.stringify(
-      { url, checks, errors, state: await read().catch(() => null) },
+      { url, detected, checks, errors, state: await read().catch(() => null) },
       null,
       2,
     ),

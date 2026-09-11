@@ -1,10 +1,10 @@
 // A small, deterministic test-particle model in horizon-radius units.
 // Velocity Verlet, fixed steps, softened Newtonian force. No GR or N-body claim.
 export type ReleaseKind = "fall" | "orbit" | "escape";
-export const ORBIT_STEP = 1 / 120;
+const ORBIT_STEP = 1 / 120;
 export const ORBIT_MU = 3.4;
 const SOFTENING = 0.025;
-export function gravityAcceleration(
+function gravityAcceleration(
   x: number,
   y: number,
   z: number,

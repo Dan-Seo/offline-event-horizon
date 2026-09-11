@@ -1,13 +1,5 @@
 import * as T from "three/webgpu";
-import {
-  color,
-  mix,
-  normalWorld,
-  positionLocal,
-  sin,
-  uniform,
-  uv,
-} from "three/tsl";
+import { color, mix, normalWorld, uniform } from "three/tsl";
 /** One quiet ceramic shell: no cockpit, engine flames, or vehicle HUD. */
 export class PilgrimCraft {
   root = new T.Group();

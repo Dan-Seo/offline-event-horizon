@@ -1,26 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import ts from "typescript";
+import { moduleUrl } from "./helpers/load.ts";
 import * as T from "three/webgpu";
-
-// Transpile owned rendering modules and their imports in memory. No DOM/GPU or files.
-const modules = new Map<string, string>();
-async function moduleUrl(url: URL): Promise<string> {
-  if (modules.has(url.href)) return modules.get(url.href)!;
-  let source = ts.transpileModule(await readFile(url, "utf8"), {
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
-  }).outputText;
-  for (const match of [...source.matchAll(/from "([^"]+)"/g)]) {
-    const specifier = match[1];
-    const resolved = specifier.startsWith(".")
-      ? await moduleUrl(new URL(specifier + ".ts", url)) : import.meta.resolve(specifier);
-    source = source.replace(match[0], `from ${JSON.stringify(resolved)}`);
-  }
-  const result = "data:text/javascript;base64," + Buffer.from(source).toString("base64");
-  modules.set(url.href, result);
-  return result;
-}
 
 test("actual cosmic lifecycle freezes, bounds geometry, and leaves planet transforms alone", async () => {
   const { PlanetLibrary } = await import(await moduleUrl(new URL("../universe/planets.ts", import.meta.url)));

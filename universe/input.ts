@@ -41,6 +41,9 @@ const movementKeys = new Set([
   "ControlLeft",
   "ControlRight",
 ]);
+// One threshold for the whole gesture: past it the drag steers, at or under it the press
+// still selects. Two different numbers left a band that did both.
+const DRAG_SLOP = 4;
 const actions: Record<string, InputAction> = {
   KeyF: "focus",
   KeyR: "reset",
@@ -126,7 +129,6 @@ export class InputManager {
     this.action("manual");
   }
   private keyDown = (e: KeyboardEvent) => {
-    if (this.editable(e.target)) return;
     // Keep browser shortcuts such as Ctrl+C/F/R available; Ctrl+movement is precision travel.
     if (
       e.metaKey ||
@@ -134,11 +136,13 @@ export class InputManager {
       (e.ctrlKey && (actions[e.code] || e.code === "KeyV"))
     )
       return;
+    // Escape closes a panel even while focus sits in one of its own controls.
     if (e.code === "Escape") {
       this.clear();
       this.action("cancel");
       return;
     }
+    if (this.editable(e.target)) return;
     if (
       e.target instanceof HTMLElement &&
       e.target.closest("button") &&
@@ -169,7 +173,7 @@ export class InputManager {
     this.canvas.focus({ preventScroll: true });
     this.updatePointer(e);
     this.buttons.add(e.button);
-    this.takeControl();
+    // A bare press only selects; a drag, wheel or movement key takes control.
     this.down = { x: e.clientX, y: e.clientY, moved: 0 };
     this.mouseLast.set(e.clientX, e.clientY);
     // Capture only the active drag: the cursor stays visible and unrestricted.
@@ -217,12 +221,13 @@ export class InputManager {
     const dx = e.clientX - this.mouseLast.x,
       dy = e.clientY - this.mouseLast.y;
     this.mouseLast.set(e.clientX, e.clientY);
-    if (this.buttons.has(0)) this.down.moved += Math.abs(dx) + Math.abs(dy);
+    this.down.moved += Math.abs(dx) + Math.abs(dy);
     if (Math.abs(dx) + Math.abs(dy) > 0) {
       if (this.selected && this.buttons.has(2))
         this.orbit.add(new Vector2(dx, dy));
       else this.look.add(new Vector2(dx, dy));
-      this.takeControl();
+      // Only an intentional drag takes control; a jittering click is not one.
+      if (this.down.moved > DRAG_SLOP) this.takeControl();
     }
   };
   private pointerUp = (e: PointerEvent) => {
@@ -239,7 +244,7 @@ export class InputManager {
       if (t?.move) this.touchMove.set(0, 0);
       this.touches.delete(e.pointerId);
       this.lastPinch = 0;
-    } else if (e.button === 0 && this.down.moved < 6) {
+    } else if (e.button === 0 && this.down.moved <= DRAG_SLOP) {
       this.pick(this.pointer, false);
     }
     this.buttons.delete(e.button);

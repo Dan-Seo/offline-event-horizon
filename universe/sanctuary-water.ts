@@ -1,12 +1,10 @@
 import * as T from "three/webgpu";
 import {
-  cameraPosition,
   float,
   length,
   max,
   mix,
   positionLocal,
-  positionWorld,
   pow,
   reflector,
   sin,
@@ -18,12 +16,12 @@ import {
   attribute,
 } from "three/tsl";
 import type { SanctuaryAtmosphere } from "./sanctuary-atmosphere";
-import type { Quality } from "./config";
+import { QUALITY, type Quality } from "./config";
 import { SEA_RADIUS } from "./sanctuary-layout";
 import { markSurface } from "./perception/surfaces";
 import { OceanLife } from "./ocean-life";
 import { renderedSeaFloor, seaHeight, signedSeaDepth, submersion, oceanRadialFloor, seaMesh } from "./ocean-depth";
-import { preserveReflectorFramebuffer, waterSurfaceOptics } from "./ocean-optics";
+import { preserveReflectorFramebuffer, waterFresnel, waterSurfaceOptics } from "./ocean-optics";
 
 export class MirrorSea {
   mesh: T.Mesh;
@@ -83,10 +81,7 @@ export class MirrorSea {
       1,
       p.z.div(northHeight).sub(a.cos().mul(0.0026).add(b.cos().mul(0.0037)).add(c.cos().mul(0.0015))),
     ).normalize();
-    const view = cameraPosition.sub(positionWorld).normalize();
-    const fresnel = pow(float(1).sub(max(0, view.dot(normal).abs())), 5)
-      .mul(0.98)
-      .add(0.02);
+    const { view, fresnel } = waterFresnel(normal);
     this.mirror.target.rotation.x = -Math.PI / 2;
     scene.add(this.mirror.target);
     this.mirror.uvNode = this.mirror.uvNode!.add(
@@ -187,12 +182,7 @@ export class MirrorSea {
   }
   setQuality(q: Quality) {
     this.ecosystem.setQuality(q);
-    this.mirror.reflector.resolutionScale = {
-      ULTRA: 0.85,
-      HIGH: 0.65,
-      BALANCED: 0.45,
-      BATTERY: 0.3,
-    }[q];
+    this.mirror.reflector.resolutionScale = QUALITY[q].seaReflection;
   }
   dispose() {
     this.ecosystem.dispose();
