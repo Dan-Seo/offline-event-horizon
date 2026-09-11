@@ -1098,8 +1098,11 @@ button:disabled {
   .flight-tools {
     margin-left: auto;
   }
+  /* Portrait phones draw the craft across the bottom; the whisper sits in the sky. */
   .pilgrim-whisper {
-    bottom: 144px;
+    top: 72px;
+    bottom: auto;
+    right: 20px;
   }
   .vastness[lang="ko"] .flight-actions button {
     font-size: 11px;
