@@ -116,7 +116,7 @@ try {
   await page.keyboard.up("KeyW");
   await page.waitForTimeout(1000);
   b = await inspect();
-  check(
+  timed(
     "Rendered RGB-D produces estimated motion",
     b.pilgrim.perception?.status === "TRACKING",
     b.pilgrim.perception,
