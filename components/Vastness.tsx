@@ -1,11 +1,9 @@
 "use client";
 import {
-  Component,
   useCallback,
   useEffect,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import {
   changedOutsideLive,
@@ -28,6 +26,7 @@ import {
 import { ArrivalGuide, LanguageChoice } from "./ArrivalGuide";
 import GravityExperiment from "./GravityExperiment";
 import RelativityPanel from "./RelativityPanel";
+import { LensBoundary } from "./LensBoundary";
 import { approachText } from "@/universe/approach-text";
 import dynamic from "next/dynamic";
 const ResearchLens = dynamic(() => import("./ResearchLens"), { ssr: false });
@@ -35,25 +34,6 @@ const ResearchLens = dynamic(() => import("./ResearchLens"), { ssr: false });
 // scope also runs during the prerender, where there is no window and nothing to render into.
 const enginePromise =
   typeof window === "undefined" ? null : import("@/universe/engine");
-// The lens reads live perception state; a draw failure must not take the world with it.
-class LensBoundary extends Component<
-  { message: string; children: ReactNode },
-  { failed: boolean }
-> {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? (
-      <p className="lab-error" role="alert">
-        {this.props.message}
-      </p>
-    ) : (
-      this.props.children
-    );
-  }
-}
 function Mark({
   kind,
 }: {

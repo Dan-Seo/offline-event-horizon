@@ -12,14 +12,23 @@ export async function moduleUrl(
 ): Promise<string> {
   if (modules.has(url.href)) return modules.get(url.href)!;
   let source = ts.transpileModule(await readFile(url, "utf8"), {
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
+    compilerOptions: {
+      target: ts.ScriptTarget.ES2022,
+      module: ts.ModuleKind.ESNext,
+      jsx: ts.JsxEmit.ReactJSX,
+    },
   }).outputText;
   if (rewrite) source = rewrite(source, url);
   for (const match of [...source.matchAll(/from "([^"]+)"/g)]) {
     const specifier = match[1];
     const resolved = specifier.startsWith(".")
       ? await moduleUrl(
-          new URL(specifier.endsWith(".ts") ? specifier : specifier + ".ts", url),
+          new URL(
+            specifier.endsWith(".ts") || specifier.endsWith(".tsx")
+              ? specifier
+              : specifier + ".ts",
+            url,
+          ),
           rewrite,
         )
       : import.meta.resolve(specifier);

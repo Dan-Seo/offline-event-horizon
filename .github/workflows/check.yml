@@ -21,3 +21,30 @@ jobs:
       - run: npm run test:reconstruction
       - run: npm run replay:rgbd -- tests/fixtures/clear-eight-frames.tar.gz
       - run: npm run build
+  webgpu-smoke:
+    # GitHub runners have no GPU: Chromium takes its SwiftShader WebGPU adapter, so
+    # this proves the WGSL compiles and the world boots on real WebGPU, while the
+    # real-time checks are recorded, not gated (see scripts/pilgrim-smoke.mjs).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: |
+          npm start &
+          for i in $(seq 1 30); do curl -sf http://localhost:4173/ >/dev/null && break; sleep 1; done
+      - run: npm run qa:pilgrim
+        env:
+          QA_URL: http://localhost:4173
+          QA_BROWSER: chromium
+          QA_SOFTWARE_GPU: "1"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pilgrim-smoke-software-gpu
+          path: artifacts/pilgrim-smoke.json
