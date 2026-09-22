@@ -1,0 +1,54 @@
+[
+  {
+    "side": "right",
+    "legacyValuesIdentical": true,
+    "inputSha256": "75b1563aa928fa4dddd07d59144925fdfcf833a0bdc5d9a5dcd2d09a849d436e",
+    "agreement": {
+      "passed": true,
+      "statusInlierFramesChecked": 31,
+      "deltaPairsCompared": 31,
+      "firstFailure": null
+    },
+    "gatesEvaluated": {
+      "lostFraction": true,
+      "rpeSegments": 1,
+      "driftSegments": 1
+    },
+    "metricAvailability": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "ateAvailable": true,
+        "rpeAvailable": true,
+        "rpePairs": 23,
+        "driftFractionAvailable": true
+      }
+    ]
+  },
+  {
+    "side": "left",
+    "legacyValuesIdentical": true,
+    "inputSha256": "b0693d9de68d72989257522f13fe4ee107419c6e8fab0f83403eb83573298ce6",
+    "agreement": {
+      "passed": true,
+      "statusInlierFramesChecked": 31,
+      "deltaPairsCompared": 31,
+      "firstFailure": null
+    },
+    "gatesEvaluated": {
+      "lostFraction": true,
+      "rpeSegments": 1,
+      "driftSegments": 1
+    },
+    "metricAvailability": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "ateAvailable": true,
+        "rpeAvailable": true,
+        "rpePairs": 23,
+        "driftFractionAvailable": true
+      }
+    ]
+  }
+]
