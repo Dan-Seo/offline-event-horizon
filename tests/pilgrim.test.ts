@@ -58,6 +58,7 @@ const observation: Analysis = {
 /** A fresh view whose only difference is the estimated position the director may see. */
 const estimated = (timestamp: number, x: number): Analysis => ({
   ...observation,
+  id: Math.round(timestamp * 1000),
   timestamp,
   vo: { ...observation.vo, pose: { p: [x, 0, 0], q: [0, 0, 0, 1] } },
 });
@@ -264,6 +265,91 @@ test("A blocked scan sweeps a new sector, holds 30-60 s, and continues around", 
     Math.hypot(m.position.x, m.position.z) < 1,
     "scanning turns in place",
   );
+  assert.equal(director.stops, 0, "failed searches are not scenic-rest successes");
+  assert.ok(director.holds >= 2);
+});
+test("Two distinct safe views reopen a blocked path, while intentional rest keeps its duration", () => {
+  const director = new ScenicDirector();
+  director.start(0);
+  assert.equal(director.slowSensing, false, "initial observations need full cadence");
+  for (let i = 1; i <= 360; i++) {
+    const t = i / 60;
+    director.observe({ ...estimated(t, 0), chosen: null }, t);
+    director.update(t, 1 / 60, false);
+  }
+  assert.equal(director.reason, "blocked");
+  assert.equal(director.intentionalRest, false);
+  assert.equal(director.holds, 1);
+  assert.equal(director.stops, 0);
+  director.observe(estimated(6.1, 0), 6.1);
+  assert.equal(director.update(6.1, .1, false).throttle, 0);
+  director.observe(estimated(6.1, 0), 6.2);
+  assert.equal(director.update(6.2, .1, false).throttle, 0, "duplicate capture cannot confirm an opening");
+  director.observe({ ...estimated(6.3, 0), chosen: null }, 6.3);
+  director.observe(estimated(6.4, 0), 6.4);
+  assert.equal(director.update(6.4, .1, false).throttle, 0, "a closed view breaks the confirmation streak");
+  director.observe(estimated(6.5, 0), 6.5);
+  assert.ok(director.update(6.5, .1, false).throttle > 0);
+  let restedAt = 0;
+  for (let i = 391; i < 60 * 35; i++) {
+    const t = i / 60;
+    director.observe(estimated(t, t * 5), t);
+    director.update(t, 1 / 60, false);
+    if (director.intentionalRest) { restedAt = t; break; }
+  }
+  assert.ok(restedAt > 24);
+  assert.equal(director.stops, 1);
+  for (const t of [restedAt + .1, restedAt + .2, restedAt + 20]) {
+    director.observe(estimated(t, t * 5), t);
+    assert.equal(director.update(t, .1, false).throttle, 0);
+    assert.equal(director.reason, "resting");
+    assert.equal(director.intentionalRest, true);
+  }
+  director.update(restedAt + 22, .1, false);
+  assert.equal(director.reason, "waiting for a fresh view");
+  assert.equal(director.intentionalRest, false);
+  assert.equal(director.slowSensing, false, "stale views must not slow reacquisition");
+});
+test("LOST bookkeeping poses and new VO gauges never imply a held hull", () => {
+  const director = new ScenicDirector();
+  director.start(0);
+  for (let i = 180; i <= 60 * 15; i++) {
+    const t = i / 60;
+    const a = estimated(t, t < 5 ? t * 5 : 25);
+    if (t >= 5 && t < 12) {
+      a.vo = { ...a.vo, status: "LOST", delta: null };
+      a.chosen = { ...a.chosen!, speed: 4 };
+    } else if (t >= 12) a.vo = { ...a.vo, segment: 1, pose: identity() };
+    director.observe(a, t);
+    assert.ok(director.update(t, 1 / 60, false).throttle > 0, `unexpected hold at ${t}`);
+    if (t >= 5 && t < 12) assert.equal(director.reason, "following current depth");
+  }
+  assert.equal(director.holds, 0);
+  assert.equal(director.stops, 0);
+});
+test("A genuinely held hull keeps its cooldown even when the same open route persists", () => {
+  const director = new ScenicDirector();
+  director.start(0);
+  for (let i = 180; i <= 60 * 12; i++) {
+    const t = i / 60;
+    const a = estimated(t, 0);
+    if (t > 7.1) {
+      a.chosen = null;
+      a.vo = { ...a.vo, status: "LOST" };
+    }
+    director.observe(a, t);
+    director.update(t, 1 / 60, false);
+  }
+  assert.equal(director.reason, "stalled", "tracking loss during the scan cannot erase its original stall cause");
+  assert.equal(director.holds, 1);
+  for (const t of [12.1, 12.2, 12.3]) {
+    director.observe(estimated(t, 0), t);
+    assert.equal(director.update(t, .1, false).throttle, 0);
+  }
+  assert.equal(director.intentionalRest, false);
+  director.cancel();
+  assert.equal(director.reason, "manual");
+  assert.equal(director.update(13, .1, false).throttle, 0);
 });
 test("Boarding is limited to a clearance the craft can actually settle from", () => {
   const near = new PilgrimDynamics();
@@ -320,7 +406,7 @@ test("Boarding is limited to a clearance the craft can actually settle from", ()
 test("Scenic observations reject late delivery, future clocks and previous Carry history", () => {
   const director = new ScenicDirector();
   const view = (timestamp: number) => ({
-    timestamp, chosen: { speed: 5, curvature: .02 }, green: 0,
+    ...observation, timestamp, chosen: { ...observation.chosen!, speed: 5, curvature: .02 }, green: 0,
   }) as Analysis;
   director.start(0);
   director.observe(view(.2), 10);

@@ -19,18 +19,31 @@ const STALL_TIME = 4,
 export class ScenicDirector {
   active = false;
   resting = true;
+  // Completed journeys and failed searches must never share a success counter.
   stops = 0;
+  holds = 0;
   age = 0;
   reason = "rest";
   private until = 0;
+  private holdReason = "looking";
+  private safeViews = 0;
   private latest?: Analysis;
   private started = -Infinity;
   private movingTime = 0;
   private random = seeded(731);
   private blockedTime = 0;
+  private scanCause = "blocked";
   private stallTime = 0;
   private throttled = false;
   private anchor?: V3;
+  private segment?: number;
+  get intentionalRest() {
+    return this.active && (this.reason === "resting" || this.reason === "watching");
+  }
+  get slowSensing() {
+    return this.resting && this.reason !== "looking" &&
+      this.reason !== "waiting for a fresh view";
+  }
   start(time: number) {
     this.clearObservation();
     this.started = time;
@@ -38,6 +51,7 @@ export class ScenicDirector {
     this.resting = true;
     this.age = time;
     this.until = time + 2;
+    this.holdReason = "looking";
     this.movingTime = 0;
     this.reason = "looking";
   }
@@ -51,11 +65,20 @@ export class ScenicDirector {
     this.stallTime = 0;
     this.throttled = false;
     this.anchor = undefined;
+    this.segment = undefined;
+    this.safeViews = 0;
   }
   observe(a: Analysis, time: number) {
     const age = time - a.timestamp;
-    this.latest = this.active && Number.isFinite(age) && age >= 0 &&
-      age <= 0.85 && a.timestamp >= this.started ? a : undefined;
+    if (!this.active || !Number.isFinite(age) || age < 0 || age > 0.85 || a.timestamp < this.started) {
+      this.latest = undefined;
+      this.safeViews = 0;
+      return;
+    }
+    if (a.id !== this.latest?.id)
+      this.safeViews = a.chosen?.safe && a.chosen.speed > 0
+        ? Math.min(2, this.safeViews + 1) : 0;
+    this.latest = a;
   }
   private hold(reason: string) {
     this.resting = true;
@@ -65,7 +88,13 @@ export class ScenicDirector {
   }
   /** Estimated translation only: no truth pose, contact query or world coordinate enters here. */
   private stalled(dt: number) {
-    const p = this.latest?.vo?.pose?.p;
+    const vo = this.latest?.vo;
+    if (vo?.status !== "TRACKING" || vo.segment !== this.segment) {
+      this.anchor = undefined;
+      this.stallTime = 0;
+      this.segment = vo?.status === "TRACKING" ? vo.segment : undefined;
+    }
+    const p = vo?.status === "TRACKING" ? vo.pose.p : undefined;
     if (p && p.every((v) => Number.isFinite(v))) {
       const moved =
         !this.anchor ||
@@ -86,33 +115,51 @@ export class ScenicDirector {
     this.age = time;
     if (beauty) {
       this.until = Math.max(this.until, time + 14);
+      this.holdReason = "watching";
       return this.hold("watching");
     }
     const captureAge = time - (this.latest?.timestamp ?? -Infinity);
-    if (!Number.isFinite(captureAge) || captureAge < 0 || captureAge > 0.85)
+    if (!Number.isFinite(captureAge) || captureAge < 0 || captureAge > 0.85) {
+      this.safeViews = 0;
       return this.hold("waiting for a fresh view");
-    if (time < this.until) return this.hold("resting");
+    }
     const route = this.latest?.chosen;
-    if (!route || this.stalled(dt)) {
+    if (time < this.until) {
+      // A newly observed opening may end a failed search, never a scenic pause
+      // or a held-hull cooldown whose supposedly open route already failed.
+      if ((this.holdReason === "blocked" || this.holdReason === "tracking lost") && this.safeViews >= 2)
+        this.until = time;
+      else return this.hold(this.holdReason);
+    }
+    const stalled = this.stalled(dt);
+    if (!route || stalled) {
+      if (this.blockedTime === 0 || stalled)
+        this.scanCause = stalled ? "stalled" :
+          this.latest?.vo.status === "LOST" ? "tracking lost" : "blocked";
       this.blockedTime += dt;
       if (this.blockedTime > SCAN_TIME) {
         this.until = time + 30 + this.random() * 30;
         this.blockedTime = this.movingTime = this.stallTime = 0;
         this.anchor = undefined;
-        this.stops++;
-        return this.hold("resting");
+        this.safeViews = 0;
+        this.holdReason = this.scanCause;
+        this.holds++;
+        return this.hold(this.holdReason);
       }
       // Turning in place is not rest, and the retained heading carries the sweep onward.
       this.resting = this.throttled = false;
-      this.reason = "looking for an opening";
+      this.reason = this.latest?.vo.status === "LOST"
+        ? "reobserving after tracking loss" : "looking for an opening";
       return { ...rest(), steer: SCAN_STEER };
     }
     this.blockedTime = 0;
     this.resting = false;
-    this.reason = "following observed ground";
+    this.reason = this.latest?.vo.status === "TRACKING"
+      ? "following observed ground" : "following current depth";
     this.movingTime += dt;
     if (this.movingTime > 18 + this.latest!.green * 18) {
       this.until = time + 32 + this.random() * 26;
+      this.holdReason = "resting";
       this.movingTime = this.stallTime = 0;
       this.anchor = undefined;
       this.stops++;

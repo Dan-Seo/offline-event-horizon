@@ -856,7 +856,8 @@ export class UniverseEngine {
     this.state.walking = this.walker.active;
     this.state.pilgrim = this.pilgrim.active;
     this.state.carrying = this.pilgrim.director.active;
-    this.state.resting = this.pilgrim.resting;
+    this.state.resting = this.pilgrim.director.active
+      ? this.pilgrim.director.intentionalRest : this.pilgrim.resting;
     const pilgrimSurface = this.world.approaches.pilgrimSurface(
       this.state.approach,
     );

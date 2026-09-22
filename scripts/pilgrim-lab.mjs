@@ -3,6 +3,9 @@ import fs from "node:fs/promises";
 import { qaChannel, qaLaunch } from "./qa-browser.mjs";
 const url = process.env.QA_URL || "http://localhost:4173",
   fallback = process.env.QA_BACKEND === "webgl";
+const turn = process.env.QA_TURN || "right";
+if (!["left", "right"].includes(turn)) throw new Error("QA_TURN must be left or right");
+const turnKey = turn === "left" ? "KeyA" : "KeyD";
 // The same accuracy gates as the offline replay (scripts/replay-rgbd.ts),
 // read from the same variables so one CI override moves both.
 const gate = (name, standard) => {
@@ -53,7 +56,7 @@ const download = async (name) => {
   await d.saveAs(`artifacts/${name}.json`);
   return JSON.parse(await fs.readFile(`artifacts/${name}.json`, "utf8"));
 };
-const suffix = fallback ? "-webgl" : "",
+const suffix = (fallback ? "-webgl" : "") + (turn === "left" ? "-left" : ""),
   shot = async (name) =>
     page.screenshot({
       path: `artifacts/lab-${name}${suffix}.jpg`,
@@ -104,9 +107,9 @@ try {
   await page.keyboard.down("ControlLeft");
   await page.keyboard.down("KeyW");
   await wait(2500);
-  await page.keyboard.down("KeyD");
+  await page.keyboard.down(turnKey);
   await wait(1500);
-  await page.keyboard.up("KeyD");
+  await page.keyboard.up(turnKey);
   await wait(2000);
   await page.keyboard.up("KeyW");
   await page.keyboard.up("ControlLeft");
@@ -144,7 +147,7 @@ try {
   check(
     "Carry rests without ending the live world",
     carried.pilgrim.stops > 0 && carried.time > moved.time + 30,
-    carried.pilgrim.stops,
+    { scenicRests: carried.pilgrim.stops, failedSearchHolds: carried.pilgrim.holds },
   );
   check(
     "Perception history and contact caches remain bounded",
@@ -324,6 +327,7 @@ try {
       n: x.length,
       p50: x[Math.floor(x.length * 0.5)],
       p95: x[Math.floor(x.length * 0.95)],
+      p99: x[Math.floor(x.length * 0.99)],
       max: x.at(-1),
     };
   };
@@ -420,6 +424,7 @@ try {
         at: new Date().toISOString(),
         browser: browser.version(),
         channel: qaChannel,
+        turn,
         backend: carried.backend,
         checks,
         errors,
@@ -427,6 +432,8 @@ try {
           frameInterval: stats(frameSamples),
           gpuRenderPass: stats(gpuSamples),
           worker: stats(workerSamples),
+          // One latest-result sample per second, not every capture/worker transaction.
+          readback: stats(samples.map((s) => s.pilgrim.perception?.readbackMs).filter((x) => x != null)),
           viewport: { width: 1600, height: 1000 },
           quality: carried.quality,
           dpr: carried.dpr,

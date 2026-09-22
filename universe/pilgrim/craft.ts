@@ -8,13 +8,13 @@ export class PilgrimCraft {
   constructor(scene: T.Scene) {
     const shell = new T.MeshStandardNodeMaterial({
       color: 0xb4beb6,
-      roughness: 0.43,
-      metalness: 0.25,
+      roughness: 0.62,
+      metalness: 0.12,
       side: T.DoubleSide,
     });
     shell.colorNode = mix(
-      color(0x667c79),
-      color(0xc7c9b7),
+      color(0x476765),
+      color(0x91b0ad),
       normalWorld.y.mul(0.35).add(0.65),
     );
     const positions: number[] = [],
@@ -50,7 +50,7 @@ export class PilgrimCraft {
       new T.MeshStandardMaterial({
         color: 0x638c87,
         emissive: 0x193934,
-        emissiveIntensity: 0.25,
+        emissiveIntensity: 0.12,
         roughness: 0.48,
         metalness: 0.12,
       }),
@@ -91,7 +91,7 @@ export class PilgrimCraft {
         depthWrite: false,
       });
       seamMaterial.colorNode = color(0xbac8a2);
-      seamMaterial.opacityNode = this.breathing.mul(0.16).add(0.24);
+      seamMaterial.opacityNode = this.breathing.mul(0.10).add(0.16);
       const seam = new T.Mesh(
         new T.TubeGeometry(curve, 44, 0.02, 6, false),
         seamMaterial,

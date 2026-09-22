@@ -85,7 +85,13 @@ try {
       seconds: duration / 1000,
       distance: carried.pilgrim.distance,
       stops: carried.pilgrim.stops,
+      failedSearchHolds: carried.pilgrim.holds,
     },
+  );
+  check(
+    "Carry only presents deliberate pauses as scenic rest",
+    samples.filter((s) => s.pilgrim.carry).every((s) =>
+      s.pilgrim.intentionalRest === ["resting", "watching"].includes(s.pilgrim.reason)),
   );
   check(
     "Live state remains bounded throughout the ride",

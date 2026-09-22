@@ -228,7 +228,7 @@ export class PilgrimSystem {
         this.worldRotation,
         this.worldVelocity,
         new T.Vector3(0, 1, 0).applyQuaternion(this.contact.frame),
-        this.resting,
+        this.director.active ? this.director.slowSensing : this.resting,
       );
     }
   }
@@ -249,6 +249,8 @@ export class PilgrimSystem {
       gliding: this.model.gliding,
       distance: this.model.distance,
       stops: this.director.stops,
+      holds: this.director.holds,
+      intentionalRest: this.director.intentionalRest,
       position: this.worldPosition.toArray(),
       local: this.model.position.toArray(),
       yaw: this.model.yaw,

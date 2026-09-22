@@ -1,5 +1,8 @@
 ﻿import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
+import { decodeDataset } from "../universe/perception/dataset.ts";
 import { moduleUrl } from "./helpers/load.ts";
 import * as T from "three/webgpu";
 import type { Capture } from "../universe/perception/rig.ts";
@@ -192,6 +195,39 @@ test("actual worker success, caught exception and frame-less request echo the co
   for (const [index, reply] of replies.entries()) {
     assert.equal(reply.generation, 4); assert.equal(reply.id, 7); assert.equal(reply.request, 9 + index);
   }
+});
+test("real captured RGB-D gives identical worker routes and commands with truth absent or corrupted", async () => {
+  const captures = decodeDataset(new Uint8Array(gunzipSync(readFileSync(
+    new URL("./fixtures/clear-eight-frames.tar.gz", import.meta.url),
+  )))).captures;
+  const replies: WorkerReply[] = [];
+  Object.assign(globalThis, { postMessage: (reply: WorkerReply) => replies.push(reply) });
+  await loadModule("../universe/perception/worker.ts");
+  const scope = globalThis as unknown as { onmessage: (e: { data: WorkerRequest }) => void };
+  const run = (corrupt: boolean) => {
+    scope.onmessage({ data: { type: "reset" } });
+    const director = new ScenicDirector();
+    director.start(captures[0].frame.timestamp - 3);
+    return captures.map((capture, request) => {
+      const { id, timestamp, rgb, depth, k } = capture.frame;
+      const frame = { id, timestamp, rgb, depth, k, ...(corrupt ? {
+        truth: { pose: { p: [1e12, -1e12, 42], q: [1, 0, 0, 0] } },
+        labels: new Uint8Array(capture.labels.length).fill(255),
+        normals: new Float32Array(capture.normals.length).fill(99),
+      } : {}) };
+      scope.onmessage({ data: { type: "frame", frame, id, request, generation: 0 } });
+      const reply = replies.at(-1)!;
+      assert.equal(reply.type, "analysis");
+      if (reply.type !== "analysis") throw new Error("worker failed");
+      const { ms, ...result } = reply.result;
+      assert.ok(Number.isFinite(ms));
+      director.observe(reply.result, timestamp);
+      return { result, command: director.update(timestamp, .125, false), reason: director.reason };
+    });
+  };
+  const clean = run(false);
+  assert.ok(clean.some((r) => r.result.vo.status === "TRACKING"));
+  assert.deepEqual(run(true), clean);
 });
 test("a resting craft is sensed at a quarter of the moving rate", async () => {
   // 4 s of frames at 240 Hz, every capture and analysis settled at once, so the only thing
