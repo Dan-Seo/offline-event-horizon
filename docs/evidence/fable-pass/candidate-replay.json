@@ -1,0 +1,38 @@
+{
+  "file": "artifacts/fable-pass/candidate-turn.tar",
+  "report": "artifacts/fable-pass/candidate-replay.json",
+  "frames": 32,
+  "compared": 31,
+  "maxTranslationDifference": 3.552713678800501e-15,
+  "maxRotationDifference": 0,
+  "analysisMs": 367.81510000000003,
+  "gates": {
+    "maxLost": 0.1,
+    "maxDrift": 0.2,
+    "maxRpe": 0.5,
+    "lostFraction": 0,
+    "failures": []
+  },
+  "evaluation": {
+    "samples": 32,
+    "tracked": 31,
+    "lost": 0,
+    "trackingFraction": 0.96875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "distance": 13.201304338691285,
+        "alignment": "SE3 least squares, no scale",
+        "ate": 0.09709214033183816,
+        "rotation": 0.3811649993941034,
+        "rpeTranslation": 0.15709638335696113,
+        "rpeRotation": 0.009461103123360457,
+        "rpePairs": 23,
+        "rpeInterval": 1,
+        "endpointDrift": 0.27585432005336175,
+        "driftFraction": 0.020895989742836928
+      }
+    ]
+  }
+}

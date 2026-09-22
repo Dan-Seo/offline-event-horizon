@@ -1,0 +1,24 @@
+[
+  {
+    "file": "right-32-frames.tar.gz",
+    "sourceRevision": "a75f9f5ad49741d37025b892e126197ff1ae63d9",
+    "sensorEstimatorUnchangedAt": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+    "width": 192,
+    "height": 128,
+    "frames": 32,
+    "compressedBytes": 8303703,
+    "tarBytes": 16805888,
+    "tarSha256": "d6d4d564ed35107330906c4ea8a94cd1e5d5298edee6c71b630e68baa4c1dc0e"
+  },
+  {
+    "file": "left-32-frames.tar.gz",
+    "sourceRevision": "a75f9f5ad49741d37025b892e126197ff1ae63d9",
+    "sensorEstimatorUnchangedAt": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+    "width": 192,
+    "height": 128,
+    "frames": 32,
+    "compressedBytes": 8283953,
+    "tarBytes": 16802304,
+    "tarSha256": "ef35d7b5f2a7f76cd67c40692333d0962e27e09f17a46a919d582ce136a2c844"
+  }
+]

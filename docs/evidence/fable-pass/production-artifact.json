@@ -1,0 +1,50 @@
+{
+  "at": "2026-09-22T09:36:49.162Z",
+  "url": "https://offline-vastness.vercel.app",
+  "deployment": "dpl_DsqUqYYtJekVNyey8ZSvneZm9FDH",
+  "immutableUrl": "https://offline-event-horizon-hulpbadfy-sf-i455.vercel.app",
+  "sourceCommit": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+  "previewDeployment": "dpl_5NZXNY9uzmumMFvN8jkRmCVor9Rr",
+  "sameScriptHashes": false,
+  "htmlSha256": "94f82d558299065c34cf5e568e14be322ffd55b54ff5c6e36012216f3b2a9396",
+  "scripts": {
+    "/_next/static/chunks/0zk3aevrcffqw.js": "e26d00893bd184a09640d84798f5d6215179ec32798d990ee94e41bbabadf76d",
+    "/_next/static/chunks/1nuijb25y5ixc.js": "21bd39bfcec8f9bd845bb4d2d7914f84e71184b9d76a67ae37b7a79a58629af8",
+    "/_next/static/chunks/turbopack-3iqom_zwdf8z3.js": "63d017923448888c70fa55de667228cdb3b64f4d2a880c779b9e344b818add74",
+    "/_next/static/chunks/2corl6wyj4669.js": "34ed6abf4c6d0d1bb3dc56d3f133d2a5dbc3a3c89c791deab314e27143ac14ce",
+    "/_next/static/chunks/3ocnbeodfsml2.js": "e305f61a050d684f9f2d89ef5e953cdeb683fd5aad4b25b5fda0af0001cf0489",
+    "/_next/static/chunks/0gd6oxlo68bi8.js": "3a67719ad220ee9b92493e62d3ec11da5b8ede964a32255b27c7b63cb4717687",
+    "/_next/static/chunks/0c0hxoamwjsbw.js": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+    "/_next/static/chunks/261jhajw2-lo-.js": "b218706af8a3ba93b0ed0e54da588c0357e5e8430d8fa563ec5a1f232ca42f1e"
+  },
+  "provenance": {
+    "deployment": "dpl_DsqUqYYtJekVNyey8ZSvneZm9FDH",
+    "url": "https://offline-event-horizon-hulpbadfy-sf-i455.vercel.app",
+    "target": "production",
+    "readyState": "READY",
+    "sourceCommit": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+    "githubCommitSha": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+    "action": "promote",
+    "originalDeploymentId": "dpl_5NZXNY9uzmumMFvN8jkRmCVor9Rr",
+    "gitDirty": "1",
+    "buildSkipped": false,
+    "alias": [
+      "offline-vastness.vercel.app",
+      "offline-event-horizon.vercel.app",
+      "offline-event-horizon-sf-i455.vercel.app"
+    ]
+  },
+  "identityNote": "Promotion rebuilt the same source in the production environment. Six of eight entry-script hashes match; the React/Next bootstrap and Turbopack loader differ. This is not byte-identical to preview. Public production is validated separately.",
+  "uploadWorkingTreeEvidence": {
+    "atomicUploadInventoryRecorded": false,
+    "observedStage": "After preview upload, before the locale comment and final evidence documentation edits",
+    "trackedDiff": [],
+    "untrackedPaths": [
+      "docs/RENDERING-RESEARCH-SURVEY-2026-09-22.md",
+      "docs/evidence/fable-pass/"
+    ],
+    "appPublicScriptsUntrackedInThisSnapshot": [],
+    "limitation": "This actual subsequent git status snapshot is not an atomic inventory of files uploaded to Vercel. Historical completeness is not certified."
+  },
+  "frameworkEquivalence": "Not proven for the two differing framework/loader chunks; public production was independently exercised."
+}

@@ -1,0 +1,36 @@
+{
+  "task_id": "vastness-A-jev",
+  "requestedModel": "jev-latest",
+  "elapsedMs": 667.6239999999999,
+  "requestId": null,
+  "result": {
+    "model": "jev-1.13.0",
+    "answers": {
+      "accounting": {
+        "type": "choice",
+        "choice": "unsupported",
+        "confidence": 0.99,
+        "probabilities": {
+          "supported": 0.01,
+          "unsupported": 0.99,
+          "insufficient": 0
+        }
+      },
+      "proposal": {
+        "type": "choice",
+        "choice": "correctness",
+        "confidence": 1,
+        "probabilities": {
+          "correctness": 1,
+          "unsafe": 0,
+          "feature_expansion": 0,
+          "insufficient": 0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1827,
+      "output_tokens": 95
+    }
+  }
+}

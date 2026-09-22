@@ -5,7 +5,7 @@ const url = process.env.QA_URL || "http://localhost:4173";
 const browser = await chromium.launch(qaLaunch());
 const context = await browser.newContext({
     viewport: { width: 1600, height: 1000 },
-    locale: "en-US",
+    locale: "en-US", // The rest-whisper assertions below intentionally use English.
     hasTouch: true,
   }),
   page = await context.newPage();

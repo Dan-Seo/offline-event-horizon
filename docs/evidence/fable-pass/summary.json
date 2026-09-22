@@ -1,0 +1,3512 @@
+{
+  "baselineRevision": "9e02ad6ecf5c8322084f89313bbf2a3263a64714",
+  "runtimeRevision": "64306e97bbe632a7e06006842e1f49b8d53b7520",
+  "browser": "153.0.8010.53",
+  "adapter": {
+    "vendor": "nvidia",
+    "architecture": "ampere"
+  },
+  "tests": 95,
+  "reconstructionTests": 3,
+  "ci": "https://github.com/Dan-Seo/offline-event-horizon/actions/runs/35707896308",
+  "preview": "https://offline-event-horizon-gefhrta9q-sf-i455.vercel.app",
+  "reports": {
+    "baseline-journey": {
+      "at": "2026-09-22T08:29:52.529Z",
+      "url": "http://localhost:4173",
+      "checks": [
+        {
+          "name": "Ordinary arrival does not run research sensors",
+          "passed": true
+        },
+        {
+          "name": "Arrival can hand over without a tutorial",
+          "passed": true
+        },
+        {
+          "name": "Quiet hides the interface while Carry stays active",
+          "passed": true
+        },
+        {
+          "name": "A sustained quiet ride alternates motion and rests",
+          "passed": true,
+          "detail": {
+            "seconds": 120,
+            "distance": 142.9829828929364,
+            "stops": 1
+          }
+        },
+        {
+          "name": "Live state remains bounded throughout the ride",
+          "passed": true
+        },
+        {
+          "name": "W interrupts Carry directly even in Quiet",
+          "passed": true
+        },
+        {
+          "name": "Manual rest stops disabled research work",
+          "passed": true
+        },
+        {
+          "name": "Ctrl+C does not start a ride",
+          "passed": true
+        },
+        {
+          "name": "Flight remains available",
+          "passed": true
+        },
+        {
+          "name": "The same craft boards the planetary coastal frame",
+          "passed": true
+        },
+        {
+          "name": "Planetary surface traversal moves and settles",
+          "passed": true,
+          "detail": {
+            "distance": 246.80929938231353,
+            "water": true,
+            "gliding": false
+          }
+        },
+        {
+          "name": "Scenic sensing also works in a planetary frame",
+          "passed": true
+        },
+        {
+          "name": "Portrait craft controls fit the viewport",
+          "passed": true
+        },
+        {
+          "name": "Two-thumb input interrupts Carry and drives the craft",
+          "passed": true
+        },
+        {
+          "name": "Recovery returns to the original sea without trapping input",
+          "passed": true
+        },
+        {
+          "name": "No browser or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frames": 17504,
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.100000000005821,
+        "max": 14,
+        "over50": 0,
+        "quality": "HIGH",
+        "dpr": 1,
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        }
+      }
+    },
+    "candidate-journey": {
+      "at": "2026-09-22T08:48:55.442Z",
+      "url": "http://localhost:4173",
+      "checks": [
+        {
+          "name": "Ordinary arrival does not run research sensors",
+          "passed": true
+        },
+        {
+          "name": "Arrival can hand over without a tutorial",
+          "passed": true
+        },
+        {
+          "name": "Quiet hides the interface while Carry stays active",
+          "passed": true
+        },
+        {
+          "name": "A sustained quiet ride alternates motion and rests",
+          "passed": true,
+          "detail": {
+            "seconds": 120,
+            "distance": 142.48683675070174,
+            "stops": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Carry only presents deliberate pauses as scenic rest",
+          "passed": true
+        },
+        {
+          "name": "Live state remains bounded throughout the ride",
+          "passed": true
+        },
+        {
+          "name": "W interrupts Carry directly even in Quiet",
+          "passed": true
+        },
+        {
+          "name": "Manual rest stops disabled research work",
+          "passed": true
+        },
+        {
+          "name": "Ctrl+C does not start a ride",
+          "passed": true
+        },
+        {
+          "name": "Flight remains available",
+          "passed": true
+        },
+        {
+          "name": "The same craft boards the planetary coastal frame",
+          "passed": true
+        },
+        {
+          "name": "Planetary surface traversal moves and settles",
+          "passed": true,
+          "detail": {
+            "distance": 247.4495911418739,
+            "water": true,
+            "gliding": false
+          }
+        },
+        {
+          "name": "Scenic sensing also works in a planetary frame",
+          "passed": true
+        },
+        {
+          "name": "Portrait craft controls fit the viewport",
+          "passed": true
+        },
+        {
+          "name": "Two-thumb input interrupts Carry and drives the craft",
+          "passed": true
+        },
+        {
+          "name": "Recovery returns to the original sea without trapping input",
+          "passed": true
+        },
+        {
+          "name": "No browser or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frames": 17553,
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.100000000005821,
+        "max": 20.80000000000291,
+        "over50": 0,
+        "quality": "HIGH",
+        "dpr": 1,
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        }
+      }
+    },
+    "preview-journey": {
+      "at": "2026-09-22T09:10:03.357Z",
+      "url": "https://offline-event-horizon-gefhrta9q-sf-i455.vercel.app",
+      "checks": [
+        {
+          "name": "Ordinary arrival does not run research sensors",
+          "passed": true
+        },
+        {
+          "name": "Arrival can hand over without a tutorial",
+          "passed": true
+        },
+        {
+          "name": "Quiet hides the interface while Carry stays active",
+          "passed": true
+        },
+        {
+          "name": "A sustained quiet ride alternates motion and rests",
+          "passed": true,
+          "detail": {
+            "seconds": 120,
+            "distance": 141.2496812417167,
+            "stops": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Carry only presents deliberate pauses as scenic rest",
+          "passed": true
+        },
+        {
+          "name": "Live state remains bounded throughout the ride",
+          "passed": true
+        },
+        {
+          "name": "W interrupts Carry directly even in Quiet",
+          "passed": true
+        },
+        {
+          "name": "Manual rest stops disabled research work",
+          "passed": true
+        },
+        {
+          "name": "Ctrl+C does not start a ride",
+          "passed": true
+        },
+        {
+          "name": "Flight remains available",
+          "passed": true
+        },
+        {
+          "name": "The same craft boards the planetary coastal frame",
+          "passed": true
+        },
+        {
+          "name": "Planetary surface traversal moves and settles",
+          "passed": true,
+          "detail": {
+            "distance": 247.10202727444712,
+            "water": true,
+            "gliding": false
+          }
+        },
+        {
+          "name": "Scenic sensing also works in a planetary frame",
+          "passed": true
+        },
+        {
+          "name": "Portrait craft controls fit the viewport",
+          "passed": true
+        },
+        {
+          "name": "Two-thumb input interrupts Carry and drives the craft",
+          "passed": true
+        },
+        {
+          "name": "Recovery returns to the original sea without trapping input",
+          "passed": true
+        },
+        {
+          "name": "No browser or shader errors",
+          "passed": false,
+          "detail": [
+            "Loading the script 'https://vercel.live/_next-live/feedback/feedback.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+          ]
+        }
+      ],
+      "errors": [
+        "Loading the script 'https://vercel.live/_next-live/feedback/feedback.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+      ],
+      "performance": {
+        "frames": 17501,
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "max": 14,
+        "over50": 0,
+        "quality": "HIGH",
+        "dpr": 1,
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        }
+      }
+    },
+    "baseline-lab": {
+      "at": "2026-09-22T08:32:51.329Z",
+      "url": "http://localhost:4173",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.0036892975280693463,
+            "meanDepthError": 0.0010335567595675481,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": 1
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9972602739726028,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 365,
+            "segments": [
+              {
+                "drift": 0.0343128243115406,
+                "rpe": 0.18336969610591755
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.3158814298135222,
+              "distance": 182.94107605461346
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 71,
+            "estimate": 142
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.778643261765822,
+            "status": "TRACKING"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frameInterval": {
+          "n": 13728,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "max": 34.80000000000291
+        },
+        "gpuRenderPass": {
+          "n": 108,
+          "p50": 0.589824,
+          "p95": 0.7208960000000001,
+          "max": 0.9830400000000001
+        },
+        "worker": {
+          "n": 108,
+          "p50": 10.600000023841858,
+          "p95": 15.5,
+          "max": 19
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "evaluation": {
+        "samples": 365,
+        "tracked": 364,
+        "lost": 0,
+        "trackingFraction": 0.9972602739726028,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 364,
+            "distance": 182.94107605461346,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.3158814298135222,
+            "rotation": 0.24711794105994647,
+            "rpeTranslation": 0.18336969610591755,
+            "rpeRotation": 0.011553794205193816,
+            "rpePairs": 352,
+            "rpeInterval": 1,
+            "endpointDrift": 6.277225002026139,
+            "driftFraction": 0.0343128243115406
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 376,
+          "dropped": 0,
+          "analysisMs": 0.8999999761581421,
+          "readbackMs": 3.600000023841858
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 380,
+          "dropped": 0,
+          "analysisMs": 9.299999952316284,
+          "readbackMs": 3.200000047683716
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 384,
+          "dropped": 0,
+          "analysisMs": 0.5,
+          "readbackMs": 8.100000023841858
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 388,
+          "dropped": 0,
+          "analysisMs": 10.100000023841858,
+          "readbackMs": 3.100000023841858
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 392,
+          "dropped": 0,
+          "analysisMs": 7.300000071525574,
+          "readbackMs": 4.100000023841858
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 396,
+          "dropped": 0,
+          "analysisMs": 10.100000023841858,
+          "readbackMs": 3
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 438,
+          "dropped": 0,
+          "analysisMs": 10.899999976158142,
+          "readbackMs": 2.8000000715255737
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 448,
+          "dropped": 0,
+          "analysisMs": 9,
+          "readbackMs": 3.3000000715255737
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 452,
+          "dropped": 0,
+          "analysisMs": 8.100000023841858,
+          "readbackMs": 2.600000023841858
+        }
+      ]
+    },
+    "candidate-lab": {
+      "at": "2026-09-22T08:51:18.715Z",
+      "url": "http://localhost:4173",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.0039666797310786706,
+            "meanDepthError": 0.0013326814114528556,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": {
+            "scenicRests": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9973614775725593,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 379,
+            "segments": [
+              {
+                "drift": 0.029740227045988412,
+                "rpe": 0.19324803174687644
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.339810813209485,
+              "distance": 183.09662733696928
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 72,
+            "estimate": 135
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.78218202403489,
+            "status": "TRACKING"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frameInterval": {
+          "n": 13784,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "p99": 7.100000000005821,
+          "max": 34.80000000000291
+        },
+        "gpuRenderPass": {
+          "n": 108,
+          "p50": 0.589824,
+          "p95": 0.7208960000000001,
+          "p99": 0.98304,
+          "max": 0.9830400000000001
+        },
+        "worker": {
+          "n": 108,
+          "p50": 10.699999928474426,
+          "p95": 18.600000023841858,
+          "p99": 20.899999976158142,
+          "max": 21.699999928474426
+        },
+        "readback": {
+          "n": 108,
+          "p50": 3.299999952316284,
+          "p95": 5.700000047683716,
+          "p99": 8.700000047683716,
+          "max": 11.900000095367432
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "evaluation": {
+        "samples": 379,
+        "tracked": 378,
+        "lost": 0,
+        "trackingFraction": 0.9973614775725593,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 378,
+            "distance": 183.09662733696928,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.339810813209485,
+            "rotation": 0.21339074504294445,
+            "rpeTranslation": 0.19324803174687644,
+            "rpeRotation": 0.011201992687079282,
+            "rpePairs": 366,
+            "rpeInterval": 1,
+            "endpointDrift": 5.445335268356195,
+            "driftFraction": 0.029740227045988412
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 391,
+          "dropped": 0,
+          "analysisMs": 1.7999999523162842,
+          "readbackMs": 5
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 395,
+          "dropped": 0,
+          "analysisMs": 9.299999952316284,
+          "readbackMs": 3.4000000953674316
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 399,
+          "dropped": 0,
+          "analysisMs": 0.6999999284744263,
+          "readbackMs": 6.299999952316284
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 403,
+          "dropped": 0,
+          "analysisMs": 12.200000047683716,
+          "readbackMs": 4.5
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 407,
+          "dropped": 0,
+          "analysisMs": 10.800000071525574,
+          "readbackMs": 5.299999952316284
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 411,
+          "dropped": 0,
+          "analysisMs": 8.700000047683716,
+          "readbackMs": 3.399999976158142
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 453,
+          "dropped": 0,
+          "analysisMs": 9.799999952316284,
+          "readbackMs": 4.299999952316284
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 463,
+          "dropped": 0,
+          "analysisMs": 11.100000023841858,
+          "readbackMs": 4.900000095367432
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 467,
+          "dropped": 0,
+          "analysisMs": 6.099999904632568,
+          "readbackMs": 3.200000047683716
+        }
+      ]
+    },
+    "holdout-lab": {
+      "at": "2026-09-22T08:54:25.205Z",
+      "url": "http://localhost:4173",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.0035213343790942986,
+            "meanDepthError": 0.0007651511526856799,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": {
+            "scenicRests": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9973404255319149,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 376,
+            "segments": [
+              {
+                "drift": 0.060979217369475515,
+                "rpe": 0.17440679993076771
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.1447079067984292,
+              "distance": 180.80615318358312
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 58,
+            "estimate": 133
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.781333198345536,
+            "status": "TRACKING"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frameInterval": {
+          "n": 13734,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "p99": 7.100000000005821,
+          "max": 41.69999999999709
+        },
+        "gpuRenderPass": {
+          "n": 108,
+          "p50": 0.5242880000000001,
+          "p95": 0.7208960000000001,
+          "p99": 0.917504,
+          "max": 0.9830400000000001
+        },
+        "worker": {
+          "n": 108,
+          "p50": 11.300000071525574,
+          "p95": 20.799999952316284,
+          "p99": 22.200000047683716,
+          "max": 28.399999976158142
+        },
+        "readback": {
+          "n": 108,
+          "p50": 3.6999999284744263,
+          "p95": 6.200000047683716,
+          "p99": 8.5,
+          "max": 18.899999976158142
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "evaluation": {
+        "samples": 376,
+        "tracked": 375,
+        "lost": 0,
+        "trackingFraction": 0.9973404255319149,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 375,
+            "distance": 180.80615318358312,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.1447079067984292,
+            "rotation": 0.03241003405633807,
+            "rpeTranslation": 0.17440679993076771,
+            "rpeRotation": 0.010246921164526893,
+            "rpePairs": 363,
+            "rpeInterval": 1,
+            "endpointDrift": 11.025417716720403,
+            "driftFraction": 0.060979217369475515
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 387,
+          "dropped": 0,
+          "analysisMs": 1.399999976158142,
+          "readbackMs": 5.299999952316284
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 391,
+          "dropped": 0,
+          "analysisMs": 9.100000023841858,
+          "readbackMs": 3.5
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 395,
+          "dropped": 0,
+          "analysisMs": 1.2000000476837158,
+          "readbackMs": 6.5
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 399,
+          "dropped": 0,
+          "analysisMs": 13.199999928474426,
+          "readbackMs": 4.800000071525574
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 403,
+          "dropped": 0,
+          "analysisMs": 15.100000023841858,
+          "readbackMs": 4.800000071525574
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 407,
+          "dropped": 0,
+          "analysisMs": 13.899999976158142,
+          "readbackMs": 4.399999976158142
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 449,
+          "dropped": 0,
+          "analysisMs": 17.600000023841858,
+          "readbackMs": 3.600000023841858
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 459,
+          "dropped": 0,
+          "analysisMs": 10.300000071525574,
+          "readbackMs": 3.600000023841858
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 463,
+          "dropped": 0,
+          "analysisMs": 10.5,
+          "readbackMs": 4.100000023841858
+        }
+      ]
+    },
+    "preview-lab": {
+      "at": "2026-09-22T09:17:11.127Z",
+      "url": "https://offline-event-horizon-gefhrta9q-sf-i455.vercel.app",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.003508920448666686,
+            "meanDepthError": 0.0005964565175829625,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": {
+            "scenicRests": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9974093264248705,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 386,
+            "segments": [
+              {
+                "drift": 0.036213055024964524,
+                "rpe": 0.19524927559890676
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.5504001418057678,
+              "distance": 188.2154389262782
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 31,
+            "estimate": 146
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.779564537008596,
+            "status": "TRACKING"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": false,
+          "detail": [
+            "Loading the script 'https://vercel.live/_next-live/feedback/feedback.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+          ]
+        }
+      ],
+      "errors": [
+        "Loading the script 'https://vercel.live/_next-live/feedback/feedback.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+      ],
+      "performance": {
+        "frameInterval": {
+          "n": 13954,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "p99": 7.100000000005821,
+          "max": 326.5
+        },
+        "gpuRenderPass": {
+          "n": 108,
+          "p50": 0.589824,
+          "p95": 0.786432,
+          "p99": 0.7864320000000001,
+          "max": 1.245184
+        },
+        "worker": {
+          "n": 108,
+          "p50": 9.799999952316284,
+          "p95": 16.799999952316284,
+          "p99": 21.899999976158142,
+          "max": 24.5
+        },
+        "readback": {
+          "n": 108,
+          "p50": 3.1999999284744263,
+          "p95": 5,
+          "p99": 7.5,
+          "max": 8.5
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "evaluation": {
+        "samples": 386,
+        "tracked": 385,
+        "lost": 0,
+        "trackingFraction": 0.9974093264248705,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 385,
+            "distance": 188.2154389262782,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.5504001418057678,
+            "rotation": 0.2260445694756844,
+            "rpeTranslation": 0.19524927559890676,
+            "rpeRotation": 0.013058259788203878,
+            "rpePairs": 373,
+            "rpeInterval": 1,
+            "endpointDrift": 6.8158560463851625,
+            "driftFraction": 0.036213055024964524
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 399,
+          "dropped": 0,
+          "analysisMs": 5.399999976158142,
+          "readbackMs": 5
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 403,
+          "dropped": 0,
+          "analysisMs": 8.5,
+          "readbackMs": 3.100000023841858
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 407,
+          "dropped": 0,
+          "analysisMs": 0.5,
+          "readbackMs": 4.399999976158142
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 411,
+          "dropped": 0,
+          "analysisMs": 9.100000023841858,
+          "readbackMs": 2.8000000715255737
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 415,
+          "dropped": 0,
+          "analysisMs": 7.700000047683716,
+          "readbackMs": 2.899999976158142
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 419,
+          "dropped": 0,
+          "analysisMs": 10.100000023841858,
+          "readbackMs": 3.299999952316284
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 461,
+          "dropped": 0,
+          "analysisMs": 9.600000023841858,
+          "readbackMs": 3.799999952316284
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 471,
+          "dropped": 0,
+          "analysisMs": 9.299999952316284,
+          "readbackMs": 3.3000000715255737
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 475,
+          "dropped": 0,
+          "analysisMs": 6.600000023841858,
+          "readbackMs": 3.100000023841858
+        }
+      ]
+    },
+    "lifecycle": {
+      "checks": [
+        {
+          "name": "Manual arrival creates no perception worker",
+          "passed": true
+        },
+        {
+          "name": "Carry 1 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 1 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 1 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 2 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 2 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 2 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 3 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 3 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 3 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 4 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 4 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 4 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 5 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 5 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 5 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Repeated Carry retains one reusable worker",
+          "passed": true
+        },
+        {
+          "name": "Portrait lab uses 4Hz configuration",
+          "passed": true
+        },
+        {
+          "name": "Portrait Carry progresses beyond waiting",
+          "passed": true
+        },
+        {
+          "name": "Low light reports loss",
+          "passed": true
+        },
+        {
+          "name": "Clear observations recover tracking",
+          "passed": true
+        },
+        {
+          "name": "Reset recovers with one worker",
+          "passed": true
+        },
+        {
+          "name": "Leaving Research Lens disposes worker",
+          "passed": true
+        },
+        {
+          "name": "No runtime errors",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "cycles": [
+        {
+          "cycle": 0,
+          "workers": 1,
+          "heapUsed": 20400084,
+          "heapTotal": 22982656,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11264
+        },
+        {
+          "cycle": 1,
+          "workers": 1,
+          "heapUsed": 20801520,
+          "heapTotal": 22687744,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 528,
+          "points": 11232
+        },
+        {
+          "cycle": 2,
+          "workers": 1,
+          "heapUsed": 21884256,
+          "heapTotal": 23408640,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 769,
+          "points": 11254
+        },
+        {
+          "cycle": 3,
+          "workers": 1,
+          "heapUsed": 22628444,
+          "heapTotal": 23670784,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 1146,
+          "points": 11297
+        },
+        {
+          "cycle": 4,
+          "workers": 1,
+          "heapUsed": 23936760,
+          "heapTotal": 25346048,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 1146,
+          "points": 11232
+        }
+      ]
+    },
+    "memory": {
+      "checks": [
+        {
+          "name": "Manual arrival creates no perception worker",
+          "passed": true
+        },
+        {
+          "name": "Carry 1 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 1 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 1 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 2 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 2 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 2 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 3 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 3 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 3 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 4 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 4 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 4 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 5 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 5 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 5 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 6 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 6 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 6 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 7 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 7 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 7 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 8 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 8 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 8 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 9 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 9 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 9 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 10 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 10 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 10 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 11 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 11 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 11 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 12 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 12 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 12 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 13 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 13 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 13 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 14 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 14 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 14 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 15 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 15 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 15 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 16 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 16 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 16 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 17 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 17 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 17 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 18 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 18 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 18 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 19 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 19 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 19 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Carry 20 has fresh 4Hz sensor work",
+          "passed": true
+        },
+        {
+          "name": "Manual input 20 cancels Carry",
+          "passed": true
+        },
+        {
+          "name": "Manual rest 20 stops captures",
+          "passed": true
+        },
+        {
+          "name": "Repeated Carry retains one reusable worker",
+          "passed": true
+        },
+        {
+          "name": "No runtime errors",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "cycles": [
+        {
+          "cycle": 0,
+          "workers": 1,
+          "heapUsed": 19794528,
+          "heapTotal": 22065152,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 10714
+        },
+        {
+          "cycle": 1,
+          "workers": 1,
+          "heapUsed": 20479136,
+          "heapTotal": 22032384,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 2,
+          "workers": 1,
+          "heapUsed": 20030336,
+          "heapTotal": 22032384,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 3,
+          "workers": 1,
+          "heapUsed": 20822072,
+          "heapTotal": 22753280,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 4,
+          "workers": 1,
+          "heapUsed": 21179636,
+          "heapTotal": 23015424,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 5,
+          "workers": 1,
+          "heapUsed": 21694840,
+          "heapTotal": 23539712,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 6,
+          "workers": 1,
+          "heapUsed": 21947784,
+          "heapTotal": 24326144,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 7,
+          "workers": 1,
+          "heapUsed": 22575348,
+          "heapTotal": 24297472,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 8,
+          "workers": 1,
+          "heapUsed": 23273420,
+          "heapTotal": 25477120,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 9,
+          "workers": 1,
+          "heapUsed": 23581336,
+          "heapTotal": 25214976,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 10,
+          "workers": 1,
+          "heapUsed": 23826264,
+          "heapTotal": 26525696,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 11232
+        },
+        {
+          "cycle": 11,
+          "workers": 1,
+          "heapUsed": 24081980,
+          "heapTotal": 26525696,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 12,
+          "workers": 1,
+          "heapUsed": 24858092,
+          "heapTotal": 26787840,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 13,
+          "workers": 1,
+          "heapUsed": 25021120,
+          "heapTotal": 27049984,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 14,
+          "workers": 1,
+          "heapUsed": 25119732,
+          "heapTotal": 26787840,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 15,
+          "workers": 1,
+          "heapUsed": 25344648,
+          "heapTotal": 27541504,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 16,
+          "workers": 1,
+          "heapUsed": 27414680,
+          "heapTotal": 29900800,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 17,
+          "workers": 1,
+          "heapUsed": 27666456,
+          "heapTotal": 29638656,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 18,
+          "workers": 1,
+          "heapUsed": 27899204,
+          "heapTotal": 29638656,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        },
+        {
+          "cycle": 19,
+          "workers": 1,
+          "heapUsed": 28573792,
+          "heapTotal": 30687232,
+          "nodes": 130,
+          "documents": 1,
+          "contactCache": 527,
+          "points": 7488
+        }
+      ]
+    },
+    "memory-control": {
+      "errors": [],
+      "cycles": [
+        {
+          "cycle": 0,
+          "workers": 0,
+          "heapUsed": 18964328,
+          "heapTotal": 22065152,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 1,
+          "workers": 0,
+          "heapUsed": 19553188,
+          "heapTotal": 21508096,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 2,
+          "workers": 0,
+          "heapUsed": 19395228,
+          "heapTotal": 20983808,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 3,
+          "workers": 0,
+          "heapUsed": 20164212,
+          "heapTotal": 21704704,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 4,
+          "workers": 0,
+          "heapUsed": 20516348,
+          "heapTotal": 22491136,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 5,
+          "workers": 0,
+          "heapUsed": 21030432,
+          "heapTotal": 23015424,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 6,
+          "workers": 0,
+          "heapUsed": 21290780,
+          "heapTotal": 23801856,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 7,
+          "workers": 0,
+          "heapUsed": 21642680,
+          "heapTotal": 23248896,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 8,
+          "workers": 0,
+          "heapUsed": 22676608,
+          "heapTotal": 25477120,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 9,
+          "workers": 0,
+          "heapUsed": 22889868,
+          "heapTotal": 25214976,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 10,
+          "workers": 0,
+          "heapUsed": 23123076,
+          "heapTotal": 25739264,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 11,
+          "workers": 0,
+          "heapUsed": 23381492,
+          "heapTotal": 25477120,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 12,
+          "workers": 0,
+          "heapUsed": 23915872,
+          "heapTotal": 26001408,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 13,
+          "workers": 0,
+          "heapUsed": 24136024,
+          "heapTotal": 26263552,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 14,
+          "workers": 0,
+          "heapUsed": 24399936,
+          "heapTotal": 26001408,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 15,
+          "workers": 0,
+          "heapUsed": 24631388,
+          "heapTotal": 26755072,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 16,
+          "workers": 0,
+          "heapUsed": 26890452,
+          "heapTotal": 29638656,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 17,
+          "workers": 0,
+          "heapUsed": 27113848,
+          "heapTotal": 29376512,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 18,
+          "workers": 0,
+          "heapUsed": 27373828,
+          "heapTotal": 28852224,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        },
+        {
+          "cycle": 19,
+          "workers": 0,
+          "heapUsed": 27853376,
+          "heapTotal": 29376512,
+          "nodes": 128,
+          "documents": 1,
+          "contactCache": 527
+        }
+      ]
+    },
+    "baseline-manual": {
+      "at": "2026-09-22T08:39:29.214Z",
+      "frameInterval": {
+        "n": 1498,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000000364
+      },
+      "gpuRenderPass": {
+        "n": 1500,
+        "p50": 0.45875199999999994,
+        "p95": 0.524288,
+        "p99": 0.589824
+      },
+      "adapter": {
+        "vendor": "nvidia",
+        "architecture": "ampere",
+        "device": "",
+        "description": ""
+      },
+      "errors": []
+    },
+    "candidate-manual": {
+      "at": "2026-09-22T08:44:32.217Z",
+      "frameInterval": {
+        "n": 1498,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000000364
+      },
+      "gpuRenderPass": {
+        "n": 1500,
+        "p50": 0.458752,
+        "p95": 0.589824,
+        "p99": 0.589824
+      },
+      "adapter": {
+        "vendor": "nvidia",
+        "architecture": "ampere",
+        "device": "",
+        "description": ""
+      },
+      "errors": []
+    },
+    "production-journey": {
+      "url": "https://offline-vastness.vercel.app",
+      "detected": {
+        "backend": "WebGPU",
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "browser": "153.0.8010.53",
+      "channel": "chrome",
+      "at": "2026-09-22T09:41:45.558Z",
+      "checks": [
+        {
+          "name": "Ordinary arrival does not run research sensors",
+          "passed": true
+        },
+        {
+          "name": "Arrival can hand over without a tutorial",
+          "passed": true
+        },
+        {
+          "name": "Quiet hides the interface while Carry stays active",
+          "passed": true
+        },
+        {
+          "name": "A sustained quiet ride alternates motion and rests",
+          "passed": true,
+          "detail": {
+            "seconds": 120,
+            "distance": 141.65638889621067,
+            "stops": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Carry only presents deliberate pauses as scenic rest",
+          "passed": true
+        },
+        {
+          "name": "Live state remains bounded throughout the ride",
+          "passed": true
+        },
+        {
+          "name": "W interrupts Carry directly even in Quiet",
+          "passed": true
+        },
+        {
+          "name": "Manual rest stops disabled research work",
+          "passed": true
+        },
+        {
+          "name": "Ctrl+C does not start a ride",
+          "passed": true
+        },
+        {
+          "name": "Flight remains available",
+          "passed": true
+        },
+        {
+          "name": "The same craft boards the planetary coastal frame",
+          "passed": true
+        },
+        {
+          "name": "Planetary surface traversal moves and settles",
+          "passed": true,
+          "detail": {
+            "distance": 246.91535960508284,
+            "water": true,
+            "gliding": false
+          }
+        },
+        {
+          "name": "Scenic sensing also works in a planetary frame",
+          "passed": true
+        },
+        {
+          "name": "Portrait craft controls fit the viewport",
+          "passed": true
+        },
+        {
+          "name": "Two-thumb input interrupts Carry and drives the craft",
+          "passed": true
+        },
+        {
+          "name": "Recovery returns to the original sea without trapping input",
+          "passed": true
+        },
+        {
+          "name": "No browser or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frames": 17488,
+        "p50": 6.900000000008731,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "max": 13.89999999999418,
+        "over50": 0,
+        "quality": "HIGH",
+        "dpr": 1,
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        }
+      }
+    },
+    "production-lab": {
+      "url": "https://offline-vastness.vercel.app",
+      "at": "2026-09-22T09:43:54.684Z",
+      "browser": "153.0.8010.53",
+      "channel": "chrome",
+      "turn": "right",
+      "backend": "WebGPU",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.003508920448666686,
+            "meanDepthError": 0.000592085510300322,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": {
+            "scenicRests": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9973890339425587,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 383,
+            "segments": [
+              {
+                "drift": 0.027982710148000495,
+                "rpe": 0.19983112394135394
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.445966989777523,
+              "distance": 182.93806482676118
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 64,
+            "estimate": 136
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.779564537008596,
+            "status": "LOST"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frameInterval": {
+          "n": 13839,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "p99": 7.100000000005821,
+          "max": 34.60000000000582
+        },
+        "gpuRenderPass": {
+          "n": 108,
+          "p50": 0.5242880000000001,
+          "p95": 0.7208960000000001,
+          "p99": 0.7208960000000001,
+          "max": 0.7864320000000001
+        },
+        "worker": {
+          "n": 108,
+          "p50": 9,
+          "p95": 14.700000047683716,
+          "p99": 20.5,
+          "max": 20.800000071525574
+        },
+        "readback": {
+          "n": 108,
+          "p50": 2.600000023841858,
+          "p95": 3.5,
+          "p99": 5.299999952316284,
+          "max": 6
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "HIGH",
+        "dpr": 1
+      },
+      "evaluation": {
+        "samples": 383,
+        "tracked": 382,
+        "lost": 0,
+        "trackingFraction": 0.9973890339425587,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 382,
+            "distance": 182.93806482676118,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.445966989777523,
+            "rotation": 0.1569102421823031,
+            "rpeTranslation": 0.19983112394135394,
+            "rpeRotation": 0.011570316925264784,
+            "rpePairs": 369,
+            "rpeInterval": 1,
+            "endpointDrift": 5.1191028430833825,
+            "driftFraction": 0.027982710148000495
+          }
+        ]
+      },
+      "conditionResults": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 396,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 3.5999999046325684,
+          "analysisMs": 0.8999999761581421,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 400,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 3.399999976158142,
+          "analysisMs": 7.900000095367432,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 404,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 3,
+          "analysisMs": 0.8999999761581421,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 408,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 2.600000023841858,
+          "analysisMs": 8.699999928474426,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 412,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 2.600000023841858,
+          "analysisMs": 7.5,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 416,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 2.399999976158142,
+          "analysisMs": 10.600000023841858,
+          "segment": 0,
+          "routeSpeed": 5.46
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 457,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 2.600000023841858,
+          "analysisMs": 15.300000071525574,
+          "segment": 1,
+          "routeSpeed": 10
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 467,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 3.299999952316284,
+          "analysisMs": 7.399999976158142,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 471,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 2.299999952316284,
+          "analysisMs": 7.199999928474426,
+          "segment": 0,
+          "routeSpeed": 10
+        }
+      ],
+      "recordingSamples": 108
+    },
+    "production-replay": {
+      "file": "artifacts/fable-pass/production-turn.tar",
+      "report": "artifacts/fable-pass/production-replay.json",
+      "frames": 32,
+      "compared": 31,
+      "maxTranslationDifference": 0,
+      "maxRotationDifference": 0,
+      "analysisMs": 331.7422,
+      "gates": {
+        "maxLost": 0.1,
+        "maxDrift": 0.2,
+        "maxRpe": 0.5,
+        "lostFraction": 0,
+        "failures": []
+      },
+      "evaluation": {
+        "samples": 32,
+        "tracked": 31,
+        "lost": 0,
+        "trackingFraction": 0.96875,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 31,
+            "distance": 12.925946347851394,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 0.2200547114644292,
+            "rotation": 0.1282383969449959,
+            "rpeTranslation": 0.23130568240038094,
+            "rpeRotation": 0.008645524620678654,
+            "rpePairs": 23,
+            "rpeInterval": 1,
+            "endpointDrift": 0.7712079195248043,
+            "driftFraction": 0.059663555670954625
+          }
+        ]
+      }
+    },
+    "production-lab-webgl": {
+      "url": "https://offline-vastness.vercel.app",
+      "at": "2026-09-22T09:46:09.146Z",
+      "browser": "153.0.8010.53",
+      "channel": "chrome",
+      "turn": "right",
+      "backend": "WebGL2",
+      "checks": [
+        {
+          "name": "Sensor depth matches independent mesh-ray intersections",
+          "passed": true,
+          "detail": {
+            "samples": 12,
+            "maxDepthError": 0.004717142278749975,
+            "meanDepthError": 0.001411705172367957,
+            "labelMismatches": 0
+          }
+        },
+        {
+          "name": "Research route contains live synchronized sensors",
+          "passed": true
+        },
+        {
+          "name": "Precision manual motion yields a real visual estimate",
+          "passed": true
+        },
+        {
+          "name": "Sensor sequence recording stops at its explicit memory bound",
+          "passed": true
+        },
+        {
+          "name": "Scenic travel advances from perceived routes",
+          "passed": true
+        },
+        {
+          "name": "Carry rests without ending the live world",
+          "passed": true,
+          "detail": {
+            "scenicRests": 1,
+            "failedSearchHolds": 0
+          }
+        },
+        {
+          "name": "Perception history and contact caches remain bounded",
+          "passed": true
+        },
+        {
+          "name": "No stale analysis queue accumulates",
+          "passed": true
+        },
+        {
+          "name": "Export synchronizes truth, estimates, intrinsics and sensor planes",
+          "passed": true
+        },
+        {
+          "name": "Clear run produces evaluable relative-motion pairs",
+          "passed": true,
+          "detail": {
+            "tracking": 0.9973684210526316,
+            "segments": 1
+          }
+        },
+        {
+          "name": "Clear run holds visual odometry accuracy within the replay gates",
+          "passed": true,
+          "detail": {
+            "lost": 0,
+            "samples": 380,
+            "segments": [
+              {
+                "drift": 0.025823206720956275,
+                "rpe": 0.18479317363857578
+              }
+            ]
+          }
+        },
+        {
+          "name": "Manual segment produces a conditioned ATE",
+          "passed": true,
+          "detail": [
+            {
+              "alignment": "SE3 least squares, no scale",
+              "ate": 1.3795318623586779,
+              "distance": 183.56728601751948
+            }
+          ]
+        },
+        {
+          "name": "Latest exported image and pose pair share the same capture",
+          "passed": true
+        },
+        {
+          "name": "The moving trajectory plot renders truth and estimate",
+          "passed": true,
+          "detail": {
+            "truth": 53,
+            "estimate": 133
+          }
+        },
+        {
+          "name": "Manual input cancels autonomous control immediately",
+          "passed": true
+        },
+        {
+          "name": "Pause freezes physical and sensor simulation time",
+          "passed": true
+        },
+        {
+          "name": "LOW_LIGHT applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking loss is visible under low light",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "FOG applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REPETITIVE applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "REFLECTIVE_WATER applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "DYNAMIC applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Fast-motion condition changes the physical drive",
+          "passed": true,
+          "detail": {
+            "speed": 19.779568017277615,
+            "status": "TRACKING"
+          }
+        },
+        {
+          "name": "FAST_MOTION applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "RAIN applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "CLEAR applies a new sensor configuration",
+          "passed": true
+        },
+        {
+          "name": "Tracking recovers after clear visibility returns",
+          "passed": true
+        },
+        {
+          "name": "laptop layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "laptop visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "laptop help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "tablet layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "tablet visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "tablet help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "portrait layout has no horizontal overflow",
+          "passed": true
+        },
+        {
+          "name": "portrait visible canvas receives pointer input",
+          "passed": true
+        },
+        {
+          "name": "portrait help remains inside the visible world",
+          "passed": true
+        },
+        {
+          "name": "Both thumbs steer and look in the portrait research viewport",
+          "passed": true
+        },
+        {
+          "name": "Touch release leaves no held input or motion",
+          "passed": true
+        },
+        {
+          "name": "Cursor is never locked",
+          "passed": true
+        },
+        {
+          "name": "No unexpected console or shader errors",
+          "passed": true,
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "performance": {
+        "frameInterval": {
+          "n": 13754,
+          "p50": 6.900000000008731,
+          "p95": 7,
+          "p99": 7.100000000005821,
+          "max": 34.80000000000291
+        },
+        "gpuRenderPass": {
+          "n": 0
+        },
+        "worker": {
+          "n": 108,
+          "p50": 9,
+          "p95": 17.399999976158142,
+          "p99": 19.800000071525574,
+          "max": 20.199999928474426
+        },
+        "readback": {
+          "n": 108,
+          "p50": 12.300000071525574,
+          "p95": 13.299999952316284,
+          "p99": 13.5,
+          "max": 14.900000095367432
+        },
+        "viewport": {
+          "width": 1600,
+          "height": 1000
+        },
+        "quality": "BATTERY",
+        "dpr": 0.85
+      },
+      "evaluation": {
+        "samples": 380,
+        "tracked": 379,
+        "lost": 0,
+        "trackingFraction": 0.9973684210526316,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 379,
+            "distance": 183.56728601751948,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 1.3795318623586779,
+            "rotation": 0.08076287616644377,
+            "rpeTranslation": 0.18479317363857578,
+            "rpeRotation": 0.01115293347647415,
+            "rpePairs": 367,
+            "rpeInterval": 1,
+            "endpointDrift": 4.740295974035312,
+            "driftFraction": 0.025823206720956275
+          }
+        ]
+      },
+      "conditionResults": [
+        {
+          "condition": "LOW_LIGHT",
+          "status": "LOST",
+          "captures": 393,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 13.399999976158142,
+          "analysisMs": 7.200000047683716,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 397,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 11.799999952316284,
+          "analysisMs": 7.899999976158142,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "FOG",
+          "status": "LOST",
+          "captures": 401,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 13.100000023841858,
+          "analysisMs": 0.6000000238418579,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "REPETITIVE",
+          "status": "TRACKING",
+          "captures": 405,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 12.300000071525574,
+          "analysisMs": 8.400000095367432,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "REFLECTIVE_WATER",
+          "status": "TRACKING",
+          "captures": 409,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 12.100000023841858,
+          "analysisMs": 7,
+          "segment": 0,
+          "routeSpeed": 7.95875095112192
+        },
+        {
+          "condition": "DYNAMIC",
+          "status": "TRACKING",
+          "captures": 413,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 13.5,
+          "analysisMs": 9.399999976158142,
+          "segment": 0,
+          "routeSpeed": 5.46
+        },
+        {
+          "condition": "FAST_MOTION",
+          "status": "TRACKING",
+          "captures": 454,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 12.700000047683716,
+          "analysisMs": 13.199999928474426,
+          "segment": 0,
+          "routeSpeed": 10
+        },
+        {
+          "condition": "RAIN",
+          "status": "LOST",
+          "captures": 464,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 12.899999976158142,
+          "analysisMs": 7.5,
+          "segment": 0,
+          "routeSpeed": 4
+        },
+        {
+          "condition": "CLEAR",
+          "status": "TRACKING",
+          "captures": 468,
+          "dropped": 0,
+          "error": "",
+          "frequency": 8,
+          "readbackMs": 12.100000023841858,
+          "analysisMs": 6.900000095367432,
+          "segment": 0,
+          "routeSpeed": 10
+        }
+      ],
+      "recordingSamples": 108
+    },
+    "production-replay-webgl": {
+      "file": "artifacts/fable-pass/production-turn-webgl.tar",
+      "report": "artifacts/fable-pass/production-replay-webgl.json",
+      "frames": 32,
+      "compared": 31,
+      "maxTranslationDifference": 1.7763568394002505e-15,
+      "maxRotationDifference": 0,
+      "analysisMs": 323.3287,
+      "gates": {
+        "maxLost": 0.1,
+        "maxDrift": 0.2,
+        "maxRpe": 0.5,
+        "lostFraction": 0,
+        "failures": []
+      },
+      "evaluation": {
+        "samples": 32,
+        "tracked": 31,
+        "lost": 0,
+        "trackingFraction": 0.96875,
+        "segments": [
+          {
+            "segment": 0,
+            "samples": 31,
+            "distance": 13.22083410851904,
+            "alignment": "SE3 least squares, no scale",
+            "ate": 0.13406028118671962,
+            "rotation": 0.11841974113455236,
+            "rpeTranslation": 0.1507474650482872,
+            "rpeRotation": 0.008132483488575997,
+            "rpePairs": 23,
+            "rpeInterval": 1,
+            "endpointDrift": 0.51355028952992,
+            "driftFraction": 0.03884401584004494
+          }
+        ]
+      }
+    }
+  },
+  "limits": [
+    "Desktop Chrome with viewport emulation, not a physical mobile-device test.",
+    "Readback/worker timings sample the latest result, not capture-to-command latency.",
+    "Main-thread JS heap grows in both Carry and sensor-free control; root cause, VRAM and multi-hour stability unverified.",
+    "Preview interaction assertions pass; console gate fails on Vercel feedback.js injection blocked by unchanged CSP.",
+    "Short curved clips have weak aligned orientation despite conditioned positional ATE; no global localization claim."
+  ],
+  "review": {
+    "A2": {
+      "revision": "9e02ad6",
+      "verdict": "ACCEPT",
+      "file": "fable-A2.md"
+    },
+    "B": {
+      "revision": "a75f9f5",
+      "verdict": "REVISE",
+      "file": "fable-B.md"
+    },
+    "C": {
+      "revision": "64306e9",
+      "verdict": "ACCEPT_WITH_LIMITS",
+      "file": "fable-C.md"
+    },
+    "D": {
+      "revision": "64306e9",
+      "verdict": "ACCEPT_CANDIDATE_PENDING_PRODUCTION",
+      "file": "fable-D.md"
+    },
+    "D2": {
+      "revision": "64306e9",
+      "verdict": "ACCEPT",
+      "file": "fable-D2.md",
+      "reportingCorrection": "WebGL2 replay translation difference is 1.7763568394002505e-15, not exactly 0."
+    }
+  },
+  "production": {
+    "url": "https://offline-vastness.vercel.app",
+    "deployment": "dpl_DsqUqYYtJekVNyey8ZSvneZm9FDH",
+    "status": "ACCEPTED",
+    "identity": "production-artifact.json",
+    "totalChecks": 99,
+    "errors": 0
+  }
+}

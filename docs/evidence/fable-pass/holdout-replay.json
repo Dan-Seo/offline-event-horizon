@@ -1,0 +1,38 @@
+{
+  "file": "artifacts/fable-pass/holdout-turn.tar",
+  "report": "artifacts/fable-pass/holdout-replay.json",
+  "frames": 32,
+  "compared": 31,
+  "maxTranslationDifference": 5.617333549722722e-15,
+  "maxRotationDifference": 0,
+  "analysisMs": 368.90470000000005,
+  "gates": {
+    "maxLost": 0.1,
+    "maxDrift": 0.2,
+    "maxRpe": 0.5,
+    "lostFraction": 0,
+    "failures": []
+  },
+  "evaluation": {
+    "samples": 32,
+    "tracked": 31,
+    "lost": 0,
+    "trackingFraction": 0.96875,
+    "segments": [
+      {
+        "segment": 0,
+        "samples": 31,
+        "distance": 13.498442954097923,
+        "alignment": "SE3 least squares, no scale",
+        "ate": 0.104946096789888,
+        "rotation": 0.4476685534998306,
+        "rpeTranslation": 0.19107018338228043,
+        "rpeRotation": 0.010131171666498984,
+        "rpePairs": 23,
+        "rpeInterval": 1,
+        "endpointDrift": 0.07525390184728126,
+        "driftFraction": 0.005575006102791678
+      }
+    ]
+  }
+}
