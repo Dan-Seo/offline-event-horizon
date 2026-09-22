@@ -25,6 +25,7 @@ export class ScenicDirector {
   age = 0;
   reason = "rest";
   private until = 0;
+  private watchUntil = 0;
   private holdReason = "looking";
   private safeViews = 0;
   private latest?: Analysis;
@@ -51,6 +52,7 @@ export class ScenicDirector {
     this.resting = true;
     this.age = time;
     this.until = time + 2;
+    this.watchUntil = 0;
     this.holdReason = "looking";
     this.movingTime = 0;
     this.reason = "looking";
@@ -113,14 +115,10 @@ export class ScenicDirector {
   update(time: number, dt: number, beauty: boolean): Drive {
     if (!this.active) return rest();
     this.age = time;
-    if (beauty) {
-      this.until = Math.max(this.until, time + 14);
-      this.holdReason = "watching";
-      return this.hold("watching");
-    }
+    if (beauty) this.watchUntil = Math.max(this.watchUntil, time + 14);
+    if (time < this.watchUntil) return this.hold("watching");
     const captureAge = time - (this.latest?.timestamp ?? -Infinity);
     if (!Number.isFinite(captureAge) || captureAge < 0 || captureAge > 0.85) {
-      this.safeViews = 0;
       return this.hold("waiting for a fresh view");
     }
     const route = this.latest?.chosen;

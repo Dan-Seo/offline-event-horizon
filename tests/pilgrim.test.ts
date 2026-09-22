@@ -310,6 +310,45 @@ test("Two distinct safe views reopen a blocked path, while intentional rest keep
   assert.equal(director.intentionalRest, false);
   assert.equal(director.slowSensing, false, "stale views must not slow reacquisition");
 });
+test("An event watch ends without relabeling the underlying failed-search hold", () => {
+  const director = new ScenicDirector();
+  director.start(0);
+  for (let i = 1; i <= 360; i++) {
+    const t = i / 60;
+    director.observe({ ...estimated(t, 0), chosen: null }, t);
+    director.update(t, 1 / 60, false);
+  }
+  for (const t of [7, 7.1, 7.2]) director.update(t, .1, true);
+  assert.equal(director.reason, "watching");
+  director.observe({ ...estimated(21.3, 0), chosen: null }, 21.3);
+  director.update(21.3, .1, false);
+  assert.equal(director.reason, "blocked");
+  assert.equal(director.intentionalRest, false);
+  for (const t of [21.4, 21.5]) director.observe(estimated(t, 0), t);
+  assert.ok(director.update(21.5, .1, false).throttle > 0);
+  director.update(22, .1, true);
+  director.cancel();
+  director.start(23);
+  director.observe(estimated(23, 0), 23);
+  director.update(23, .1, false);
+  assert.equal(director.reason, "looking", "a new ride cannot inherit a previous watch");
+});
+test("Fresh safe captures can confirm recovery across a stale render interval", () => {
+  const director = new ScenicDirector();
+  director.start(0);
+  for (let i = 1; i <= 360; i++) {
+    const t = i / 60;
+    director.observe({ ...estimated(t, 0), chosen: null }, t);
+    director.update(t, 1 / 60, false);
+  }
+  director.observe(estimated(10, 0), 10.06);
+  assert.equal(director.update(10.06, .1, false).throttle, 0);
+  assert.equal(director.update(10.86, .1, false).throttle, 0);
+  assert.equal(director.reason, "waiting for a fresh view");
+  assert.equal(director.slowSensing, false);
+  director.observe(estimated(10.8, 0), 10.9);
+  assert.ok(director.update(10.9, .1, false).throttle > 0);
+});
 test("LOST bookkeeping poses and new VO gauges never imply a held hull", () => {
   const director = new ScenicDirector();
   director.start(0);

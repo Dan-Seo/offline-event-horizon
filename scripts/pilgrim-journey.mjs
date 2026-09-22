@@ -22,7 +22,10 @@ const check = (name, ok, detail) => {
 };
 let detected = null;
 const read = async () => {
-  const s = await page.evaluate(() => window.__vastness.inspect());
+  const s = await page.evaluate(() => ({
+    ...window.__vastness.inspect(),
+    whisper: document.querySelector(".pilgrim-whisper")?.textContent ?? "",
+  }));
   detected = { backend: s.backend, quality: s.quality, dpr: s.dpr };
   return s;
 };
@@ -90,8 +93,13 @@ try {
   );
   check(
     "Carry only presents deliberate pauses as scenic rest",
-    samples.filter((s) => s.pilgrim.carry).every((s) =>
-      s.pilgrim.intentionalRest === ["resting", "watching"].includes(s.pilgrim.reason)),
+    // React receives periodic snapshots; compare states stable across two samples.
+    samples.filter((s, i) => s.pilgrim.carry && samples[i - 1]?.pilgrim.carry &&
+      s.pilgrim.reason === samples[i - 1].pilgrim.reason).every((s) =>
+      ["resting", "watching"].includes(s.pilgrim.reason) ||
+      !s.whisper.includes("We can stay here a while.")) &&
+    samples.some((s) => s.pilgrim.carry && ["resting", "watching"].includes(s.pilgrim.reason) &&
+      s.whisper.includes("We can stay here a while.")),
   );
   check(
     "Live state remains bounded throughout the ride",
