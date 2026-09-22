@@ -1,16 +1,19 @@
 import { execFileSync } from "node:child_process";
+import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 export function executionSource(cwd = fileURLToPath(new URL("..", import.meta.url))) {
   const dirtyScope = "tracked and untracked files; ignored files excluded";
+  const unknown = { revision: "unknown", dirty: null, dirtyScope };
   try {
     const git = (args: string[]) => execFileSync("git", args, {
       cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 5000,
     }).trim();
+    if (realpathSync(git(["rev-parse", "--show-toplevel"])) !== realpathSync(cwd)) return unknown;
     return { revision: git(["rev-parse", "HEAD"]),
       dirty: git(["status", "--porcelain", "--untracked-files=normal"]) !== "", dirtyScope };
   } catch {
-    return { revision: "unknown", dirty: null, dirtyScope };
+    return unknown;
   }
 }
 

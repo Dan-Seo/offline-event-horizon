@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,7 +32,7 @@ test("GPU held reads retain missing values and zero without claiming live querie
   assert.equal(varied.freshness, "unknown");
 });
 
-test("Replay preserves success and records the first mismatch without partial accuracy", (t) => {
+test("Replay preserves success, failure boundaries and execution provenance", (t) => {
   const directory = mkdtempSync(path.join(tmpdir(), "vastness-report-"));
   // Verify the exact recursive-cleanup target remains inside the intended temp root.
   assert.ok(path.resolve(directory).startsWith(path.resolve(tmpdir()) + path.sep));
@@ -40,6 +40,21 @@ test("Replay preserves success and records the first mismatch without partial ac
   const unknown = executionSource(directory);
   assert.equal(unknown.revision, "unknown");
   assert.equal(unknown.dirty, null);
+  const repository = path.join(directory, "repository");
+  mkdirSync(repository);
+  const git = (args: string[]) => {
+    const result = spawnSync("git", ["-C", repository, ...args], { encoding: "utf8", timeout: 10000 });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  git(["init", "--quiet"]);
+  git(["-c", "user.name=Reporting Test", "-c", "user.email=reporting@example.invalid",
+    "-c", "commit.gpgsign=false", "commit", "--quiet", "--allow-empty", "-m", "Temporary provenance fixture"]);
+  assert.equal(executionSource(repository).revision, git(["rev-parse", "HEAD"]));
+  const nested = path.join(repository, "nested-harness"), sibling = path.join(directory, "unversioned");
+  mkdirSync(nested); mkdirSync(sibling);
+  assert.equal(executionSource(nested).revision, "unknown", "never attribute a parent repository to the harness");
+  assert.equal(executionSource(sibling).revision, "unknown");
   const script = fileURLToPath(new URL("../scripts/replay-rgbd.ts", import.meta.url));
   const fixture = fileURLToPath(new URL("fixtures/clear-eight-frames.tar.gz", import.meta.url));
   const run = (file: string, name: string) => {

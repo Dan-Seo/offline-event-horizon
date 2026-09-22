@@ -3,7 +3,10 @@
 //   lost frames / samples <= 0.1 [REPLAY_MAX_LOST]; the first STARTING frame is not a loss
 //   segment endpoint drift / travelled distance <= 0.2 [REPLAY_MAX_DRIFT]
 //   segment RMS relative translation error <= 0.5 [REPLAY_MAX_RPE], segments with rpePairs > 0 only
-// Existing defaults are preserved; newer recordings are evaluated without retuning them.
+// Historical calibration at 9e02ad6: retained runs had maximum drift fraction 0.0703
+// (0.067 on the eight-frame fixture), maximum RPE translation 0.179 m and no LOST frames.
+// This gave roughly 2.8x margin for the 0.2 drift / 0.5 m RPE limits. These are original
+// calibration observations, not maxima across newer clips. All defaults remain unchanged.
 // A segment that travelled less than one unit reports no drift fraction (metrics.ts) and is
 // gated by lost fraction alone. scripts/pilgrim-lab.mjs reads the same three variables with the
 // same defaults, so one CI override moves the offline gate and the live lab gate together.
