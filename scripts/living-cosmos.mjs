@@ -5,6 +5,7 @@ import { Vector3, Quaternion } from "three";
 import { groundHeight, lagoonHeight } from "../universe/walk-ground.ts";
 import { enterEnglishExperience } from "./qa-entry.mjs";
 import { qaLaunch } from "./qa-browser.mjs";
+import { executionSource, heldGpuReads } from "./report-observations.ts";
 
 // Real-browser release evidence. QA_SCENARIOS accepts opening,ocean,coast,giant,wound,
 // or all (the default). The script never changes simulator state except through UI
@@ -16,6 +17,10 @@ const requested = new Set(
 );
 const active = (name) => requested.has("all") || requested.has(name);
 const root = process.env.QA_OUTPUT_DIR || path.join("artifacts", "living-cosmos", webgl ? "webgl" : "gpu");
+const provenance = {
+  executionSource: executionSource(),
+  servedRuntime: { identity: "unknown", matchesExecutionSource: "unknown", byteIdentity: "unknown" },
+};
 const browser = await chromium.launch(qaLaunch());
 const context = await browser.newContext({
   viewport: { width: 1600, height: 1000 },
@@ -47,13 +52,20 @@ function quantiles(values) {
 async function measure(name) {
   const result = await page.evaluate(async () => {
     const rows = [], gpu = [], compute = [];
+    const settings = () => {
+      const s = window.__vastness.inspect();
+      return { at: new Date().toISOString(), wallMs: performance.now(),
+        backend: s.backend, quality: s.quality, dpr: s.dpr,
+        viewport: { width: innerWidth, height: innerHeight } };
+    };
+    const begin = settings();
     let previous = 0;
     await new Promise((resolve) => {
       const frame = (now) => {
         const state = window.__vastness.inspect();
         if (previous) rows.push(now - previous);
-        if (Number.isFinite(state.gpuRenderMs)) gpu.push(state.gpuRenderMs);
-        if (Number.isFinite(state.gpuComputeMs)) compute.push(state.gpuComputeMs);
+        gpu.push(Number.isFinite(state.gpuRenderMs) ? state.gpuRenderMs : null);
+        compute.push(Number.isFinite(state.gpuComputeMs) ? state.gpuComputeMs : null);
         previous = now;
         if (rows.length < 180) requestAnimationFrame(frame);
         else resolve();
@@ -65,10 +77,14 @@ async function measure(name) {
       frames: rows,
       gpu,
       compute,
+      measurementWindow: { begin, end: settings(),
+        limitation: "Endpoint settings cannot exclude intermediate changes." },
       actual: { backend: state.backend, quality: state.quality, dpr: state.dpr, viewport: { width: innerWidth, height: innerHeight } },
     };
   });
-  const row = { name, frameMs: quantiles(result.frames), gpuRenderMs: quantiles(result.gpu), gpuComputeMs: quantiles(result.compute), ...result.actual };
+  const row = { name, frameMs: quantiles(result.frames), gpuRenderMs: quantiles(result.gpu), gpuComputeMs: quantiles(result.compute),
+    gpuObservations: { render: heldGpuReads(result.gpu), compute: heldGpuReads(result.compute) },
+    measurementWindow: result.measurementWindow, ...result.actual };
   performance.push(row);
   check(`${name} produces bounded frame samples`, row.frameMs?.samples === 180, row);
 }
@@ -315,7 +331,7 @@ try {
   check("Browser completion", false, String(error));
   try { await shot("failure"); } catch {}
 } finally {
-  const report = { url, testedAt: new Date().toISOString(), backend: webgl ? "webgl" : "normal", browser: await browser.version(), scenarios: [...requested], checks, performance, snapshots, errors };
+  const report = { url, testedAt: new Date().toISOString(), backend: webgl ? "webgl" : "normal", browser: await browser.version(), scenarios: [...requested], provenance, checks, performance, snapshots, errors };
   const encoded = JSON.stringify(report, null, 2);
   if (Buffer.byteLength(encoded) > 500_000) throw new Error("living-cosmos QA report exceeded 500KB");
   await fs.writeFile(path.join(root, "report.json"), encoded);
