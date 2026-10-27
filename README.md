@@ -1,14 +1,16 @@
 # OFFLINE // VASTNESS 3.0.0 — Living Cosmos
 
-A quiet, freely explorable sanctuary inside a persistent universe. **PILGRIM** opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same world. The stars beyond them remain reachable.
+A quiet, freely explorable WebGPU universe — procedural space exploration built with Next.js, Three.js, and TSL. **PILGRIM** opens over a mirror sea. Waterfalls, immense forests, clouds, and living skies share the same persistent world, and the stars beyond them remain reachable.
 
 No chapters, timer, score, account, analytics, or mandatory route. Movement always takes over from automatic travel. Sound starts off. A small light you leave behind is saved on this device.
+
+**What:** an immersive cosmos you fly, walk, and rest in. **Who:** stargazers, calm-game wanderers, and WebGPU/TSL readers looking for one complete real-world scene. **How:** `npm ci && npm run dev` → `http://localhost:3000` ([details](#run)).
 
 [Public edition](https://offline-vastness.vercel.app) · [Source](https://github.com/Dan-Seo/offline-event-horizon)
 
 ![Actual rendered mirror sea at The Last Light](public/poster.jpg)
 
-[Run](#run) · [Go. Rest. Carry me somewhere.](#go-rest-carry-me-somewhere) · [Places to stay](#places-to-stay) · [Start comfortably](#start-comfortably) · [Fly](#fly) · [Rendering and scale](#rendering-and-scale) · [Blender](#blender) · [Quality and fallback](#quality-and-fallback) · [Scientific and practical limits](#scientific-and-practical-limits) · [Verification and deployment](#verification-and-deployment)
+[Run](#run) · [Go. Rest. Carry me somewhere.](#go-rest-carry-me-somewhere) · [Places to stay](#places-to-stay) · [Start comfortably](#start-comfortably) · [Fly](#fly) · [Rendering and scale](#rendering-and-scale) · [Why this exists](#why-this-exists-and-when-to-reach-for-it) · [Questions](#questions-briefly-answered) · [Blender](#blender) · [Quality and fallback](#quality-and-fallback) · [Scientific and practical limits](#scientific-and-practical-limits) · [Verification and deployment](#verification-and-deployment)
 
 ## Run
 
@@ -98,6 +100,22 @@ Wander remains optional for free flight and stays with a place instead of cyclin
 ## Rendering and scale
 
 Next.js 16, TypeScript, raw Three.js r183, `WebGPURenderer`, TSL, and Web Audio. React owns the small interface; the renderer, input state, camera, and simulation run outside React's render loop. Double-precision global positions, 27 streamed neighboring sectors, shared procedural materials, and GPU-resident matter hold one continuous world from the sea floor to the far field. [Module-by-module detail](docs/ARCHITECTURE.md).
+
+## Why this exists, and when to reach for it
+
+Most WebGPU and TSL examples are single shaders or short tutorials; this is a whole world built with them — one continuous scene from the sea floor to the far field, explorable with no account and no backend. Reach for it when you want a complete, readable WebGPURenderer + TSL reference, a calm explorable space for rest or study, or a static site you can run and host yourself. It is art first: physics is inspirational rather than exact ([limits](docs/ARCHITECTURE.md#scientific-and-practical-limits)), and there is deliberately nothing to win.
+
+How it compares, factually: [WebGPU Samples](https://github.com/webgpu/webgpu-samples) demonstrates the raw WebGPU API technique by technique; [Three.js TSL Tutorials](https://github.com/cmhhelgeson/Threejs_TSL_Tutorials) and the [advanced TSL rendering guide](https://github.com/Makio64/advanced-threejs-tsl-webgpu-rendering) teach the shading language; [Singularity](https://github.com/MisterPrada/singularity) renders one black hole through Three.js TSL; [ProceduralUniverse](https://github.com/mifanbang/ProceduralUniverse) generates celestial-body textures in WebGL. VASTNESS instead joins mirror sea, forest, cloud field, living sky, planets, gravity experiments, and a synthetic-sensor research mode into one persistent, navigable universe with a WebGL2 fallback.
+
+## Questions, briefly answered
+
+**Do I need a GPU or an account?** No account, ever. A WebGPU-capable browser shows the full scene; without WebGPU, Three.js falls back to WebGL2 with reduced particle budgets ([details](#quality-and-fallback)).
+
+**What can I learn from the source?** A full-scale WebGPURenderer + TSL codebase: streamed sectors, shared procedural materials, per-tier quality budgets in one table (`QUALITY` in `universe/config.ts`), and Playwright QA that drives the real renderer — including on SwiftShader WebGPU in CI.
+
+**What is Research Lens?** The same engine and vehicle with synchronized synthetic sensors: an RGB-D visual-odometry baseline, a bounded local map, and downloadable 32-frame recordings you can replay outside the browser ([more](docs/PILGRIM.md)). A baseline for study, not a novel algorithm.
+
+**Can I use it to rest, or in a classroom?** Yes — that is the point of the quiet default: no score, no timer, opt-in sound, reduced-motion support. No therapeutic benefit has been established, and the docs say so plainly.
 
 ## Blender
 
